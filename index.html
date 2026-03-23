@@ -16,77 +16,44 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
-        :root {
-            --primary-color: #0055A5; 
-            --secondary-color: #F8B133; 
-            --bg-color: #F4F6F9;
-            --text-color: #333;
-            --kathie-color: #2E7D32; 
-        }
+        :root { --primary-color: #0055A5; --secondary-color: #F8B133; --bg-color: #F4F6F9; --text-color: #333; --kathie-color: #2E7D32; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); }
-        
         header { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; letter-spacing: 1px; }
         .nav-right { display: flex; align-items: center; gap: 20px; }
-        
         .wallet { background-color: #E8F5E9; color: var(--kathie-color); padding: 6px 12px; border-radius: 15px; font-weight: bold; display: flex; align-items: center; gap: 5px; border: 1px solid #A5D6A7; transition: transform 0.2s; }
         .wallet.bump { transform: scale(1.1); background-color: #C8E6C9; }
-        
         .btn-post { background-color: var(--secondary-color); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
         .btn-post:hover { opacity: 0.8; }
-        
-        /* Hero Section */
         .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('edited-image.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 4rem 2rem; }
         .hero h1.main-title { font-size: 4.5rem; margin: 0 0 10px 0; letter-spacing: 2px; text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--secondary-color); }
         .hero p.desc { color: var(--secondary-color); font-weight: bold; font-size: 1.2rem; }
-
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
         .tabs { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
         .tab { font-size: 1.1rem; cursor: pointer; padding: 8px 15px; color: #777; border-radius: 5px 5px 0 0; }
         .tab:hover { background-color: #e9ecef; }
         .tab.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); font-weight: bold; background-color: #fff; }
-        
-        /* Card Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-        .card { 
-            background: white; border-radius: 10px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: flex; flex-direction: column; 
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-            overflow: hidden; 
-            border: 1px solid #eee;
-        }
+        .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; border: 1px solid #eee; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
-        
         .card-img-top { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; background-color: #f8f9fa;}
-        
         .card-body { padding: 15px; }
         .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        
         .badge-new { font-size: 0.65rem; background: var(--secondary-color); color: black; padding: 3px 6px; border-radius: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;}
-        
         .post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #888; margin-bottom: 10px; }
         .card-desc { display: none; } 
         .card-price-summary { font-weight: bold; color: var(--text-color); font-size: 0.95rem; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;}
         .summary-kathie { color: var(--kathie-color); }
-
         .hidden { display: none !important; }
-
-        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 20px 0; backdrop-filter: blur(3px);}
         .modal { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 550px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin: auto; position: relative;}
-        
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #888; transition: color 0.2s;}
         .close-btn:hover { color: #000; }
-
-        /* Detail Modal Specifics */
         .detail-img-large { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background-color: #eee;}
         .detail-modal h2 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.6rem;}
         .detail-meta { display: flex; gap: 15px; font-size: 0.95rem; color: #666; margin-bottom: 15px; }
         .detail-modal p { font-size: 1.05rem; line-height: 1.5; color: #444; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;}
-        
         #detail-map-container { height: 150px; width: 100%; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; z-index: 1;}
-
         .pricing-box { background-color: #fff; border-radius: 8px; padding: 15px; border: 2px dashed #ddd; }
         .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .price-row:last-child { margin-bottom: 0; }
@@ -96,8 +63,6 @@
         .pay-btn:hover { background-color: #eee; }
         .pay-btn.kathie-btn { border-color: #A5D6A7; background-color: #E8F5E9; color: var(--kathie-color); }
         .pay-btn.kathie-btn:hover { background-color: #C8E6C9; }
-
-        /* Form Styles */
         .modal h2.form-title { margin-top: 0; margin-bottom: 20px; color: var(--primary-color); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem;}
@@ -107,6 +72,7 @@
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;}
         .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #888; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -117,7 +83,7 @@
         <div class="wallet" id="user-wallet" title="Your Community Credits">
             🪙 <span id="wallet-balance">500</span> KaTHie
         </div>
-        <button class="btn-post" onclick="openPostModal()">+ Post Request</button>
+        <button class="btn-post" onclick="window.openPostModal()">+ Post Request</button>
     </div>
 </header>
 
@@ -128,88 +94,21 @@
 
 <div class="container">
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('rent')">Item Rentals</div>
-        <div class="tab" onclick="switchTab('buy')">Second-Hand</div>
-        <div class="tab" onclick="switchTab('gigs')">Micro-Gigs</div>
-        <div class="tab" onclick="switchTab('skills')">Skill Exchange</div>
+        <div class="tab active" onclick="window.switchTab('rent')">Item Rentals</div>
+        <div class="tab" onclick="window.switchTab('buy')">Second-Hand</div>
+        <div class="tab" onclick="window.switchTab('gigs')">Micro-Gigs</div>
+        <div class="tab" onclick="window.switchTab('skills')">Skill Exchange</div>
     </div>
 
-    <div id="rent-section" class="grid tab-content">
-        <div class="card" onclick="openItemDetail(this)" data-lat="59.3663" data-lng="18.0583">
-            <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Power Drill">
-            <div class="card-body">
-                <h3 class="item-title">Power Drill <span class="badge-new">NEW</span></h3>
-                <div class="post-meta">
-                    <span class="location item-loc">📍 Lappis</span>
-                    <span class="post-time item-time">🕒 Today, 09:15</span>
-                </div>
-                <p class="card-desc item-desc">Perfect for weekend furniture assembly. Fully charged with all drill bits included. Can lend it for the whole weekend.</p>
-                <div class="card-price-summary">
-                    <span><span class="raw-sek">20</span> SEK</span>
-                    <span class="summary-kathie">🪙 <span class="raw-kathie">40</span></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="buy-section" class="grid tab-content hidden">
-        <div class="card" onclick="openItemDetail(this)" data-lat="59.3496" data-lng="18.0706">
-            <img src="https://images.unsplash.com/photo-1518455027359-f3f8164ba6ea?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="IKEA Desk">
-            <div class="card-body">
-                <h3 class="item-title">IKEA Desk</h3>
-                <div class="post-meta">
-                    <span class="location item-loc">📍 Teknikringen</span>
-                    <span class="post-time item-time">🕒 Yesterday</span>
-                </div>
-                <p class="card-desc item-desc">Graduation clearance. Great condition, standard 120x60cm white desk. You will need an extra hand to move it downstairs.</p>
-                <div class="card-price-summary">
-                    <span><span class="raw-sek">150</span> SEK</span>
-                    <span class="summary-kathie">🪙 <span class="raw-kathie">300</span></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="gigs-section" class="grid tab-content hidden">
-        <div class="card" onclick="openItemDetail(this)" data-lat="59.3654" data-lng="18.0543">
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Moving Boxes">
-            <div class="card-body">
-                <h3 class="item-title">Help moving 3 boxes</h3>
-                <div class="post-meta">
-                    <span class="location item-loc">📍 Universitetet Station</span>
-                    <span class="post-time item-time">🕒 Oct 22</span>
-                </div>
-                <p class="card-desc item-desc">Need strong arms to help me move 3 heavy boxes from the T-bana station to my corridor room. Should take about 20 mins.</p>
-                <div class="card-price-summary">
-                    <span><span class="raw-sek">50</span> SEK</span>
-                    <span class="summary-kathie">🪙 <span class="raw-kathie">100</span></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="skills-section" class="grid tab-content hidden">
-        <div class="card" onclick="openItemDetail(this)" data-lat="59.3481" data-lng="18.0725">
-            <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bfce8?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Coding">
-            <div class="card-body">
-                <h3 class="item-title">Python Debugging Help <span class="badge-new">NEW</span></h3>
-                <div class="post-meta">
-                    <span class="location item-loc">📍 KTH Library</span>
-                    <span class="post-time item-time">🕒 Today, 11:30</span>
-                </div>
-                <p class="card-desc item-desc">Stuck on a machine learning assignment. Need someone to sit with me for 1 hour to figure out where my array shapes are going wrong.</p>
-                <div class="card-price-summary">
-                    <span><span class="raw-sek">80</span> SEK</span>
-                    <span class="summary-kathie">🪙 <span class="raw-kathie">150</span></span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="rent-section" class="grid tab-content"><div class="empty-state">Loading amazing items...</div></div>
+    <div id="buy-section" class="grid tab-content hidden"><div class="empty-state">Loading amazing items...</div></div>
+    <div id="gigs-section" class="grid tab-content hidden"><div class="empty-state">Loading amazing items...</div></div>
+    <div id="skills-section" class="grid tab-content hidden"><div class="empty-state">Loading amazing items...</div></div>
 </div>
 
 <div id="detailModal" class="modal-overlay hidden">
     <div class="modal detail-modal">
-        <span class="close-btn" onclick="closeDetailModal()">&times;</span>
+        <span class="close-btn" onclick="window.closeDetailModal()">&times;</span>
         <img id="detailImg" class="detail-img-large" src="" alt="Item Image">
         <h2 id="detailTitle">Item Title</h2>
         <div class="detail-meta">
@@ -217,17 +116,15 @@
             <span id="detailTime">🕒 Time</span>
         </div>
         <p id="detailDesc">Full description goes here.</p>
-        
         <div id="detail-map-container"></div>
-
         <div class="pricing-box">
             <div class="price-row">
                 <span class="price-fiat" id="detailSek">0 SEK</span>
-                <button class="pay-btn" onclick="payFiatFromDetail()">Pay SEK</button>
+                <button class="pay-btn" onclick="window.payFiatFromDetail()">Pay SEK</button>
             </div>
             <div class="price-row">
                 <span class="price-kathie" id="detailKathie">🪙 0 KaTHie</span>
-                <button class="pay-btn kathie-btn" id="payKathieBtn" onclick="payKathieFromDetail()">Use Points</button>
+                <button class="pay-btn kathie-btn" id="payKathieBtn" onclick="window.payKathieFromDetail()">Use Points</button>
             </div>
         </div>
     </div>
@@ -235,7 +132,7 @@
 
 <div id="postModal" class="modal-overlay hidden">
     <div class="modal">
-        <span class="close-btn" onclick="closePostModal()">&times;</span>
+        <span class="close-btn" onclick="window.closePostModal()">&times;</span>
         <h2 class="form-title">Post a Request / Offer</h2>
         <form id="postForm">
             <div class="form-group">
@@ -257,7 +154,7 @@
             </div>
             <div class="form-group">
                 <label>Upload Photo (Optional)</label>
-                <input type="file" id="itemImage" accept="image/*" onchange="previewImage(event)">
+                <input type="file" id="itemImage" accept="image/*" onchange="window.previewImage(event)">
                 <img id="imagePreview" class="image-preview" src="" alt="Image Preview">
             </div>
             <div class="form-group">
@@ -276,65 +173,125 @@
                 </div>
             </div>
             <div class="form-actions">
-                <button type="button" class="btn-cancel" onclick="closePostModal()">Cancel</button>
-                <button type="submit" class="btn-submit">Post Now</button>
+                <button type="button" class="btn-cancel" onclick="window.closePostModal()">Cancel</button>
+                <button type="submit" class="btn-submit" id="submitBtn">Post Now</button>
             </div>
         </form>
     </div>
 </div>
 
-<script>
-    // PWA Service Worker Registration
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
+<script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJkfbQ9IPEkALSJwd5n0cXa74emO75idk",
+      authDomain: "dont-give-up-dde82.firebaseapp.com",
+      projectId: "dont-give-up-dde82",
+      storageBucket: "dont-give-up-dde82.firebasestorage.app",
+      messagingSenderId: "383953598715",
+      appId: "1:383953598715:web:4f98ebb23cdf08e38b585e",
+      measurementId: "G-QZ3E9X93R8"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Global App State
+    window.currentWalletBalance = 500;
+    window.allPosts = []; // Stores real-time posts from DB
+    
+    let postMap = null, postMarker = null;
+    let selectedLat = 59.3496, selectedLng = 18.0706; 
+    let detailMap = null, detailMarker = null;
+    let currentItemSek = 0, currentItemKathie = 0;
+    let currentCompressedImage = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
+
+    // --- REAL-TIME DATABASE LISTENER ---
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        window.allPosts = [];
+        snapshot.forEach((doc) => {
+            window.allPosts.push({ id: doc.id, ...doc.data() });
+        });
+        renderPosts();
+    });
+
+    // Helper: Format Time
+    function formatTime(timestamp) {
+        if (!timestamp) return "Just now";
+        const date = new Date(timestamp);
+        const now = new Date();
+        const isToday = date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+        if (isToday) return `Today, ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        return `${date.getDate()}/${date.getMonth()+1} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     }
 
-    let currentWalletBalance = 500;
-    
-    // Map variables
-    let postMap = null;
-    let postMarker = null;
-    let selectedLat = 59.3496; // Default KTH Main
-    let selectedLng = 18.0706; 
+    // --- RENDER POSTS TO UI ---
+    function renderPosts() {
+        const containers = {
+            'rent': document.getElementById('rent-section'),
+            'buy': document.getElementById('buy-section'),
+            'gigs': document.getElementById('gigs-section'),
+            'skills': document.getElementById('skills-section')
+        };
+        
+        // Clear containers
+        Object.values(containers).forEach(c => c.innerHTML = '');
 
-    let detailMap = null;
-    let detailMarker = null;
+        window.allPosts.forEach((post, index) => {
+            const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); // Created within last 24 hrs
+            const badgeHTML = isNew ? `<span class="badge-new">NEW</span>` : '';
+            const timeStr = formatTime(post.createdAt);
 
-    let currentItemSek = 0;
-    let currentItemKathie = 0;
+            const cardHTML = `
+                <div class="card" onclick="window.openItemDetail(${index})">
+                    <img src="${post.imageSrc}" class="card-img-top" alt="${post.title}">
+                    <div class="card-body">
+                        <h3 class="item-title">${post.title} ${badgeHTML}</h3>
+                        <div class="post-meta">
+                            <span class="location item-loc">📍 ${post.locName}</span>
+                            <span class="post-time item-time">🕒 ${timeStr}</span>
+                        </div>
+                        <p class="card-desc item-desc">${post.desc}</p>
+                        <div class="card-price-summary">
+                            <span><span class="raw-sek">${post.sek}</span> SEK</span>
+                            <span class="summary-kathie">🪙 <span class="raw-kathie">${post.kathie}</span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            if(containers[post.category]) containers[post.category].insertAdjacentHTML('beforeend', cardHTML);
+        });
 
-    function switchTab(tabId) {
+        // Add empty states if no posts
+        Object.values(containers).forEach(c => {
+            if(c.innerHTML === '') c.innerHTML = '<div class="empty-state">No requests yet. Be the first to post!</div>';
+        });
+    }
+
+    // --- UI FUNCTIONS (Attached to window so HTML can call them) ---
+    window.switchTab = function(tabId) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-        
         const tabMap = { 'rent': 0, 'buy': 1, 'gigs': 2, 'skills': 3 };
         document.querySelectorAll('.tab')[tabMap[tabId]].classList.add('active');
         document.getElementById(tabId + '-section').classList.remove('hidden');
-    }
+    };
 
-    function openItemDetail(cardElement) {
-        const imgSrc = cardElement.querySelector('.card-img-top').src;
-        const titleNode = cardElement.querySelector('.item-title').cloneNode(true);
-        const badge = titleNode.querySelector('.badge-new');
-        if (badge) titleNode.removeChild(badge);
+    window.openItemDetail = function(postIndex) {
+        const post = window.allPosts[postIndex];
         
-        const title = titleNode.innerText.trim();
-        const loc = cardElement.querySelector('.item-loc').innerText;
-        const time = cardElement.querySelector('.item-time').innerText;
-        const desc = cardElement.querySelector('.item-desc').innerText;
-        const sek = parseInt(cardElement.querySelector('.raw-sek').innerText);
-        const kathie = parseInt(cardElement.querySelector('.raw-kathie').innerText);
-        
-        const lat = parseFloat(cardElement.dataset.lat) || 59.3496;
-        const lng = parseFloat(cardElement.dataset.lng) || 18.0706;
-
-        document.getElementById('detailImg').src = imgSrc;
-        document.getElementById('detailTitle').innerText = title;
-        document.getElementById('detailLoc').innerText = loc;
-        document.getElementById('detailTime').innerText = time;
-        document.getElementById('detailDesc').innerText = desc;
-        document.getElementById('detailSek').innerText = `${sek} SEK`;
-        document.getElementById('detailKathie').innerText = `🪙 ${kathie} KaTHie`;
+        document.getElementById('detailImg').src = post.imageSrc;
+        document.getElementById('detailTitle').innerText = post.title;
+        document.getElementById('detailLoc').innerText = post.locName;
+        document.getElementById('detailTime').innerText = formatTime(post.createdAt);
+        document.getElementById('detailDesc').innerText = post.desc;
+        document.getElementById('detailSek').innerText = `${post.sek} SEK`;
+        document.getElementById('detailKathie').innerText = `🪙 ${post.kathie} KaTHie`;
         
         const kathieBtn = document.getElementById('payKathieBtn');
         kathieBtn.innerText = "Use Points";
@@ -342,150 +299,137 @@
         kathieBtn.style.backgroundColor = "#E8F5E9";
         kathieBtn.style.color = "var(--kathie-color)";
 
-        currentItemSek = sek;
-        currentItemKathie = kathie;
+        currentItemSek = post.sek;
+        currentItemKathie = post.kathie;
 
         document.getElementById('detailModal').classList.remove('hidden');
 
         if (!detailMap) {
-            detailMap = L.map('detail-map-container').setView([lat, lng], 15);
+            detailMap = L.map('detail-map-container').setView([post.lat, post.lng], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(detailMap);
-            detailMarker = L.marker([lat, lng]).addTo(detailMap);
+            detailMarker = L.marker([post.lat, post.lng]).addTo(detailMap);
         } else {
-            detailMap.setView([lat, lng], 15);
-            detailMarker.setLatLng([lat, lng]);
+            detailMap.setView([post.lat, post.lng], 15);
+            detailMarker.setLatLng([post.lat, post.lng]);
         }
         setTimeout(() => { detailMap.invalidateSize(); }, 200);
-    }
+    };
 
-    function closeDetailModal() { document.getElementById('detailModal').classList.add('hidden'); }
+    window.closeDetailModal = function() { document.getElementById('detailModal').classList.add('hidden'); };
 
-    function payFiatFromDetail() { alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK... (Simulated)`); }
+    window.payFiatFromDetail = function() { alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`); };
 
-    function payKathieFromDetail() {
-        if (currentWalletBalance >= currentItemKathie) {
-            currentWalletBalance -= currentItemKathie;
-            document.getElementById('wallet-balance').innerText = currentWalletBalance;
+    window.payKathieFromDetail = function() {
+        if (window.currentWalletBalance >= currentItemKathie) {
+            window.currentWalletBalance -= currentItemKathie;
+            document.getElementById('wallet-balance').innerText = window.currentWalletBalance;
             const walletUi = document.getElementById('user-wallet');
             walletUi.classList.add('bump');
             setTimeout(() => walletUi.classList.remove('bump'), 200);
             
-            const btnElement = document.getElementById('payKathieBtn');
-            btnElement.innerText = "Paid ✓";
-            btnElement.disabled = true;
-            btnElement.style.backgroundColor = "#ccc";
-            btnElement.style.borderColor = "#999";
-            btnElement.style.color = "#666";
-            
-            alert(`Success! 🪙 ${currentItemKathie} KaTHie transferred. Your circular economy credit is working!`);
+            const btn = document.getElementById('payKathieBtn');
+            btn.innerText = "Paid ✓"; btn.disabled = true; btn.style.backgroundColor = "#ccc"; btn.style.color = "#666";
+            alert(`Success! 🪙 ${currentItemKathie} KaTHie transferred.`);
         } else {
-            alert(`Not enough KaTHie points! You need 🪙 ${currentItemKathie} but only have 🪙 ${currentWalletBalance}.`);
+            alert(`Not enough points! You need 🪙 ${currentItemKathie} but only have 🪙 ${window.currentWalletBalance}.`);
         }
-    }
+    };
 
-    // --- Post Form & Reverse Geocoding Logic ---
-    function openPostModal() { 
+    window.openPostModal = function() { 
         document.getElementById('postModal').classList.remove('hidden'); 
-        
         if (!postMap) {
             postMap = L.map('post-map-container').setView([59.3496, 18.0706], 14);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(postMap);
-            
             postMap.on('click', function(e) {
                 if (postMarker) postMap.removeLayer(postMarker);
                 postMarker = L.marker(e.latlng).addTo(postMap);
-                
-                selectedLat = e.latlng.lat;
-                selectedLng = e.latlng.lng;
+                selectedLat = e.latlng.lat; selectedLng = e.latlng.lng;
                 
                 const locInput = document.getElementById('itemLoc');
-                locInput.value = "📍 Fetching location name..."; // Loading state
-
-                // REVERSE GEOCODING API CALL
+                locInput.value = "📍 Fetching location name...";
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedLat}&lon=${selectedLng}&zoom=18&addressdetails=1`)
-                    .then(response => response.json())
+                    .then(r => r.json())
                     .then(data => {
                         if (data && data.address) {
-                            // Prioritize finding the most relevant local building/street name
-                            const addr = data.address;
-                            const placeName = addr.amenity || addr.building || addr.road || addr.neighbourhood || addr.suburb || "Selected Location";
-                            locInput.value = placeName;
-                        } else {
-                            locInput.value = "Unknown Location";
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Geocoding failed", err);
-                        locInput.value = "Lat: " + Math.round(selectedLat*1000)/1000 + ", Lng: " + Math.round(selectedLng*1000)/1000;
-                    });
+                            locInput.value = data.address.amenity || data.address.building || data.address.road || data.address.neighbourhood || "Selected Location";
+                        } else locInput.value = "Unknown Location";
+                    }).catch(() => locInput.value = "Lat: " + Math.round(selectedLat*1000)/1000 );
             });
         }
         setTimeout(() => { postMap.invalidateSize(); }, 200);
-    }
+    };
 
-    function closePostModal() { 
+    window.closePostModal = function() { 
         document.getElementById('postModal').classList.add('hidden'); 
         document.getElementById('postForm').reset(); 
         document.getElementById('imagePreview').style.display = 'none';
         if(postMarker) { postMap.removeLayer(postMarker); postMarker = null; }
-        selectedLat = 59.3496; 
-        selectedLng = 18.0706;
-    }
+        selectedLat = 59.3496; selectedLng = 18.0706;
+        currentCompressedImage = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
+    };
 
-    function previewImage(event) {
+    // Image Compression Logic
+    window.previewImage = function(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const preview = document.getElementById('imagePreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 500; // Compress image to save Firestore space
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    currentCompressedImage = canvas.toDataURL('image/jpeg', 0.6); // 60% quality
+                    
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = currentCompressedImage;
+                    preview.style.display = 'block';
+                }
+                img.src = e.target.result;
             }
             reader.readAsDataURL(file);
         }
-    }
+    };
 
-    document.getElementById('postForm').addEventListener('submit', function(e) {
+    // --- FORM SUBMISSION (Write to DB) ---
+    document.getElementById('postForm').addEventListener('submit', async function(e) {
         e.preventDefault(); 
         
-        const cat = document.getElementById('itemCategory').value;
-        const title = document.getElementById('itemTitle').value;
-        const desc = document.getElementById('itemDesc').value;
-        const loc = document.getElementById('itemLoc').value; // Now uses the nicely fetched name
-        const sek = document.getElementById('itemSek').value;
-        const kathie = document.getElementById('itemKathie').value;
-        
-        let imageSrc = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
-        if (document.getElementById('imagePreview').style.display === 'block') {
-            imageSrc = document.getElementById('imagePreview').src;
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "Posting...";
+        btn.disabled = true;
+
+        const newPostData = {
+            category: document.getElementById('itemCategory').value,
+            title: document.getElementById('itemTitle').value,
+            desc: document.getElementById('itemDesc').value,
+            locName: document.getElementById('itemLoc').value,
+            lat: selectedLat,
+            lng: selectedLng,
+            sek: parseInt(document.getElementById('itemSek').value) || 0,
+            kathie: parseInt(document.getElementById('itemKathie').value) || 0,
+            imageSrc: currentCompressedImage,
+            createdAt: Date.now()
+        };
+
+        try {
+            // Send to Firebase
+            await addDoc(collection(db, "posts"), newPostData);
+            window.closePostModal();
+            alert('Success! Your post is now live across all devices.');
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("Oops! Something went wrong saving to the cloud.");
+        } finally {
+            btn.innerText = "Post Now";
+            btn.disabled = false;
         }
-
-        const now = new Date();
-        const timeString = `Today, ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-        const newCardHTML = `
-            <div class="card" onclick="openItemDetail(this)" data-lat="${selectedLat}" data-lng="${selectedLng}">
-                <img src="${imageSrc}" class="card-img-top" alt="${title}">
-                <div class="card-body">
-                    <h3 class="item-title">${title} <span class="badge-new">NEW</span></h3>
-                    <div class="post-meta">
-                        <span class="location item-loc">📍 ${loc}</span>
-                        <span class="post-time item-time">🕒 ${timeString}</span>
-                    </div>
-                    <p class="card-desc item-desc">${desc}</p>
-                    <div class="card-price-summary">
-                        <span><span class="raw-sek">${sek}</span> SEK</span>
-                        <span class="summary-kathie">🪙 <span class="raw-kathie">${kathie}</span></span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const section = document.getElementById(cat + '-section');
-        section.insertAdjacentHTML('afterbegin', newCardHTML); 
-
-        closePostModal();
-        alert('Your request has been posted! Switch to the correct tab to see it.');
     });
 </script>
 
