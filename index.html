@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DON'T GIVE UP - KTH Service Platform</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0055A5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DGU KTH">
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/KTH_Royal_Institute_of_Technology_logo.svg/1200px-KTH_Royal_Institute_of_Technology_logo.svg.png">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -56,10 +63,8 @@
         .card-body { padding: 15px; }
         .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        /* New Badge Style */
         .badge-new { font-size: 0.65rem; background: var(--secondary-color); color: black; padding: 3px 6px; border-radius: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;}
         
-        /* Meta Info (Location & Time) */
         .post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #888; margin-bottom: 10px; }
         .card-desc { display: none; } 
         .card-price-summary { font-weight: bold; color: var(--text-color); font-size: 0.95rem; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;}
@@ -75,11 +80,14 @@
         .close-btn:hover { color: #000; }
 
         /* Detail Modal Specifics */
-        .detail-img-large { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; background-color: #eee;}
-        .detail-modal h2 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.8rem;}
+        .detail-img-large { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background-color: #eee;}
+        .detail-modal h2 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.6rem;}
         .detail-meta { display: flex; gap: 15px; font-size: 0.95rem; color: #666; margin-bottom: 15px; }
-        .detail-modal p { font-size: 1.05rem; line-height: 1.5; color: #444; margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px;}
+        .detail-modal p { font-size: 1.05rem; line-height: 1.5; color: #444; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;}
         
+        /* New Detail Map Container */
+        #detail-map-container { height: 150px; width: 100%; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; z-index: 1;}
+
         .pricing-box { background-color: #fff; border-radius: 8px; padding: 15px; border: 2px dashed #ddd; }
         .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .price-row:last-child { margin-bottom: 0; }
@@ -95,7 +103,7 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem;}
         .form-group input[type="text"], .form-group input[type="number"], .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        #map-container { height: 200px; width: 100%; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px; z-index: 1;}
+        #post-map-container { height: 200px; width: 100%; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px; z-index: 1;}
         .image-preview { max-width: 100%; max-height: 150px; margin-top: 10px; display: none; border-radius: 6px; object-fit: cover;}
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;}
         .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
@@ -128,7 +136,7 @@
     </div>
 
     <div id="rent-section" class="grid tab-content">
-        <div class="card" onclick="openItemDetail(this)">
+        <div class="card" onclick="openItemDetail(this)" data-lat="59.3663" data-lng="18.0583">
             <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Power Drill">
             <div class="card-body">
                 <h3 class="item-title">Power Drill <span class="badge-new">NEW</span></h3>
@@ -146,7 +154,7 @@
     </div>
 
     <div id="buy-section" class="grid tab-content hidden">
-        <div class="card" onclick="openItemDetail(this)">
+        <div class="card" onclick="openItemDetail(this)" data-lat="59.3496" data-lng="18.0706">
             <img src="https://images.unsplash.com/photo-1518455027359-f3f8164ba6ea?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="IKEA Desk">
             <div class="card-body">
                 <h3 class="item-title">IKEA Desk</h3>
@@ -164,7 +172,7 @@
     </div>
 
     <div id="gigs-section" class="grid tab-content hidden">
-        <div class="card" onclick="openItemDetail(this)">
+        <div class="card" onclick="openItemDetail(this)" data-lat="59.3654" data-lng="18.0543">
             <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Moving Boxes">
             <div class="card-body">
                 <h3 class="item-title">Help moving 3 boxes</h3>
@@ -182,7 +190,7 @@
     </div>
 
     <div id="skills-section" class="grid tab-content hidden">
-        <div class="card" onclick="openItemDetail(this)">
+        <div class="card" onclick="openItemDetail(this)" data-lat="59.3481" data-lng="18.0725">
             <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bfce8?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Coding">
             <div class="card-body">
                 <h3 class="item-title">Python Debugging Help <span class="badge-new">NEW</span></h3>
@@ -190,7 +198,7 @@
                     <span class="location item-loc">📍 KTH Library</span>
                     <span class="post-time item-time">🕒 Today, 11:30</span>
                 </div>
-                <p class="card-desc item-desc">Stuck on a machine learning assignment (pandas/numpy). Need someone to sit with me for 1 hour to figure out where my array shapes are going wrong.</p>
+                <p class="card-desc item-desc">Stuck on a machine learning assignment. Need someone to sit with me for 1 hour to figure out where my array shapes are going wrong.</p>
                 <div class="card-price-summary">
                     <span><span class="raw-sek">80</span> SEK</span>
                     <span class="summary-kathie">🪙 <span class="raw-kathie">150</span></span>
@@ -211,6 +219,8 @@
         </div>
         <p id="detailDesc">Full description goes here.</p>
         
+        <div id="detail-map-container"></div>
+
         <div class="pricing-box">
             <div class="price-row">
                 <span class="price-fiat" id="detailSek">0 SEK</span>
@@ -254,7 +264,7 @@
             <div class="form-group">
                 <label>Location (Type name or Pin on Map)</label>
                 <input type="text" id="itemLoc" placeholder="e.g., Lappis, Main Campus" required>
-                <div id="map-container"></div>
+                <div id="post-map-container"></div>
             </div>
             <div style="display: flex; gap: 10px;">
                 <div class="form-group" style="flex: 1;">
@@ -275,14 +285,23 @@
 </div>
 
 <script>
-    // PWA Service Worker Registration (if you added sw.js)
+    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
     }
 
     let currentWalletBalance = 500;
-    let map = null;
-    let marker = null;
+    
+    // Map variables for Posting
+    let postMap = null;
+    let postMarker = null;
+    let selectedLat = 59.3496; // Default to KTH Main
+    let selectedLng = 18.0706; 
+
+    // Map variables for Detail View
+    let detailMap = null;
+    let detailMarker = null;
+
     let currentItemSek = 0;
     let currentItemKathie = 0;
 
@@ -295,9 +314,9 @@
         document.getElementById(tabId + '-section').classList.remove('hidden');
     }
 
+    // --- Detail Modal Logic ---
     function openItemDetail(cardElement) {
         const imgSrc = cardElement.querySelector('.card-img-top').src;
-        // Notice: We clone the title node and remove the NEW badge so it doesn't show in the detail title
         const titleNode = cardElement.querySelector('.item-title').cloneNode(true);
         const badge = titleNode.querySelector('.badge-new');
         if (badge) titleNode.removeChild(badge);
@@ -308,6 +327,10 @@
         const desc = cardElement.querySelector('.item-desc').innerText;
         const sek = parseInt(cardElement.querySelector('.raw-sek').innerText);
         const kathie = parseInt(cardElement.querySelector('.raw-kathie').innerText);
+        
+        // Extract Coordinates stored in the card HTML
+        const lat = parseFloat(cardElement.dataset.lat) || 59.3496;
+        const lng = parseFloat(cardElement.dataset.lng) || 18.0706;
 
         document.getElementById('detailImg').src = imgSrc;
         document.getElementById('detailTitle').innerText = title;
@@ -326,11 +349,26 @@
         currentItemSek = sek;
         currentItemKathie = kathie;
 
+        // Show Modal FIRST, so the map has a physical size to render into
         document.getElementById('detailModal').classList.remove('hidden');
+
+        // Initialize or Update Detail Map
+        if (!detailMap) {
+            detailMap = L.map('detail-map-container').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(detailMap);
+            detailMarker = L.marker([lat, lng]).addTo(detailMap);
+        } else {
+            detailMap.setView([lat, lng], 15);
+            detailMarker.setLatLng([lat, lng]);
+        }
+        
+        // Fix Leaflet gray box rendering bug in hidden modals
+        setTimeout(() => { detailMap.invalidateSize(); }, 200);
     }
 
     function closeDetailModal() { document.getElementById('detailModal').classList.add('hidden'); }
 
+    // --- Payment Logic ---
     function payFiatFromDetail() { alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK... (Simulated)`); }
 
     function payKathieFromDetail() {
@@ -354,25 +392,37 @@
         }
     }
 
+    // --- Post Form Logic ---
     function openPostModal() { 
         document.getElementById('postModal').classList.remove('hidden'); 
-        if (!map) {
-            map = L.map('map-container').setView([59.3496, 18.0706], 14);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
-            map.on('click', function(e) {
-                if (marker) map.removeLayer(marker);
-                marker = L.marker(e.latlng).addTo(map);
-                document.getElementById('itemLoc').value = "Map Pin (Lat: " + Math.round(e.latlng.lat*1000)/1000 + ")";
+        
+        // Initialize Post Map
+        if (!postMap) {
+            postMap = L.map('post-map-container').setView([59.3496, 18.0706], 14); // KTH Center
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(postMap);
+            
+            postMap.on('click', function(e) {
+                if (postMarker) postMap.removeLayer(postMarker);
+                postMarker = L.marker(e.latlng).addTo(postMap);
+                
+                // Store coordinates globally for submission
+                selectedLat = e.latlng.lat;
+                selectedLng = e.latlng.lng;
+                
+                document.getElementById('itemLoc').value = "Map Pin (Lat: " + Math.round(selectedLat*1000)/1000 + ")";
             });
         }
-        setTimeout(() => { map.invalidateSize(); }, 200);
+        setTimeout(() => { postMap.invalidateSize(); }, 200);
     }
 
     function closePostModal() { 
         document.getElementById('postModal').classList.add('hidden'); 
         document.getElementById('postForm').reset(); 
         document.getElementById('imagePreview').style.display = 'none';
-        if(marker) { map.removeLayer(marker); marker = null; }
+        if(postMarker) { postMap.removeLayer(postMarker); postMarker = null; }
+        // Reset default coordinates
+        selectedLat = 59.3496; 
+        selectedLng = 18.0706;
     }
 
     function previewImage(event) {
@@ -403,12 +453,12 @@
             imageSrc = document.getElementById('imagePreview').src;
         }
 
-        // Dynamically get current time for new posts
         const now = new Date();
         const timeString = `Today, ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
+        // Create new card and INJECT the latitude and longitude into the HTML (data-lat and data-lng)
         const newCardHTML = `
-            <div class="card" onclick="openItemDetail(this)">
+            <div class="card" onclick="openItemDetail(this)" data-lat="${selectedLat}" data-lng="${selectedLng}">
                 <img src="${imageSrc}" class="card-img-top" alt="${title}">
                 <div class="card-body">
                     <h3 class="item-title">${title} <span class="badge-new">NEW</span></h3>
