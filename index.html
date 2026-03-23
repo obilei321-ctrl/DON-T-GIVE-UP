@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DON'T GIVE UP - KTH Service Platform</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         :root {
             --primary-color: #0055A5; 
@@ -42,7 +46,6 @@
             align-items: center;
             gap: 20px;
         }
-        /* Wallet Style */
         .wallet {
             background-color: #E8F5E9;
             color: var(--kathie-color);
@@ -55,10 +58,7 @@
             border: 1px solid #A5D6A7;
             transition: transform 0.2s;
         }
-        .wallet.bump {
-            transform: scale(1.1);
-            background-color: #C8E6C9;
-        }
+        .wallet.bump { transform: scale(1.1); background-color: #C8E6C9; }
         .btn-post {
             background-color: var(--secondary-color);
             color: #000;
@@ -89,101 +89,69 @@
         }
         .hero p.desc { color: var(--secondary-color); font-weight: bold; font-size: 1.2rem; }
 
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-        /* Tabs Update */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
         .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
+            display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;
+            border-bottom: 2px solid #ddd; padding-bottom: 10px;
         }
-        .tab {
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 8px 15px;
-            color: #777;
-            border-radius: 5px 5px 0 0;
-        }
+        .tab { font-size: 1.1rem; cursor: pointer; padding: 8px 15px; color: #777; border-radius: 5px 5px 0 0; }
         .tab:hover { background-color: #e9ecef; }
-        .tab.active {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--primary-color);
-            font-weight: bold;
-            background-color: #fff;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
+        .tab.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); font-weight: bold; background-color: #fff; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
+            background: white; border-radius: 8px; padding: 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             border-top: 4px solid var(--primary-color);
         }
         .card h3 { margin-top: 0; color: var(--primary-color); margin-bottom: 10px;}
         .card p { flex-grow: 1; margin-top: 0; font-size: 0.95rem; color: #555;}
         .location { font-size: 0.85rem; color: #888; margin: 10px 0;}
         
+        /* Card Image Style */
+        .item-image {
+            width: 100%; height: 180px; object-fit: cover;
+            border-radius: 6px; margin-bottom: 15px;
+            background-color: #f0f0f0;
+        }
+
         /* Pricing */
-        .pricing-box {
-            background-color: #f9f9f9;
-            border-radius: 6px;
-            padding: 10px;
-            border: 1px dashed #ccc;
-        }
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
+        .pricing-box { background-color: #f9f9f9; border-radius: 6px; padding: 10px; border: 1px dashed #ccc; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .price-fiat { font-weight: bold; font-size: 0.9rem;}
         .price-kathie { font-weight: bold; color: var(--kathie-color); font-size: 0.9rem;}
-        .pay-btn {
-            background: white;
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
+        .pay-btn { background: white; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
         .pay-btn:hover { background-color: #eee; }
-        .pay-btn.kathie-btn {
-            border-color: #A5D6A7; background-color: #E8F5E9; color: var(--kathie-color);
-        }
+        .pay-btn.kathie-btn { border-color: #A5D6A7; background-color: #E8F5E9; color: var(--kathie-color); }
         .pay-btn.kathie-btn:hover { background-color: #C8E6C9; }
 
         .hidden { display: none !important; }
 
-        /* Modal (Popup Form) Styles */
+        /* Modal Styles */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000;
+            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+            z-index: 1000; overflow-y: auto; padding: 20px 0;
         }
         .modal {
             background: white; padding: 30px; border-radius: 10px;
-            width: 90%; max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 90%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin: auto;
         }
         .modal h2 { margin-top: 0; color: var(--primary-color); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem;}
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input[type="text"], .form-group input[type="number"], .form-group select, .form-group textarea {
             width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
         }
+        
+        /* Map and Image Preview Styles */
+        #map-container { height: 200px; width: 100%; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px; z-index: 1;}
+        .image-preview {
+            max-width: 100%; max-height: 150px; margin-top: 10px; display: none; border-radius: 4px;
+        }
+
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;}
         .btn-cancel { background: #eee; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;}
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;}
@@ -282,12 +250,21 @@
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea id="itemDesc" rows="3" placeholder="Briefly describe what you need or offer..." required></textarea>
+                <textarea id="itemDesc" rows="2" placeholder="Briefly describe what you need or offer..." required></textarea>
             </div>
+            
             <div class="form-group">
-                <label>Location</label>
-                <input type="text" id="itemLoc" placeholder="e.g., Lappis, Main Campus" required>
+                <label>Upload Photo (Optional)</label>
+                <input type="file" id="itemImage" accept="image/*" onchange="previewImage(event)">
+                <img id="imagePreview" class="image-preview" src="" alt="Image Preview">
             </div>
+
+            <div class="form-group">
+                <label>Location (Type name or Pin on Map)</label>
+                <input type="text" id="itemLoc" placeholder="e.g., Lappis, Main Campus" required>
+                <div id="map-container"></div>
+            </div>
+
             <div style="display: flex; gap: 10px;">
                 <div class="form-group" style="flex: 1;">
                     <label>Price (SEK)</label>
@@ -309,6 +286,8 @@
 <script>
     // System Variables
     let currentWalletBalance = 500;
+    let map = null;
+    let marker = null;
 
     // Tab Switching Logic
     function switchTab(tabId) {
@@ -320,14 +299,56 @@
         document.getElementById(tabId + '-section').classList.remove('hidden');
     }
 
-    // Modal Logic
-    function openModal() { document.getElementById('postModal').classList.remove('hidden'); }
-    function closeModal() { document.getElementById('postModal').classList.add('hidden'); document.getElementById('postForm').reset(); }
+    // Modal & Map Logic
+    function openModal() { 
+        document.getElementById('postModal').classList.remove('hidden'); 
+        
+        // Initialize map only once when modal opens
+        if (!map) {
+            // Set center to KTH Main Campus coordinates
+            map = L.map('map-container').setView([59.3496, 18.0706], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add click event to place marker
+            map.on('click', function(e) {
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = L.marker(e.latlng).addTo(map);
+                // Update text input to show coordinates simply
+                document.getElementById('itemLoc').value = "Selected on Map (Lat: " + Math.round(e.latlng.lat*1000)/1000 + ")";
+            });
+        }
+        
+        // Fix map rendering issue inside hidden divs
+        setTimeout(() => { map.invalidateSize(); }, 200);
+    }
+
+    function closeModal() { 
+        document.getElementById('postModal').classList.add('hidden'); 
+        document.getElementById('postForm').reset(); 
+        document.getElementById('imagePreview').style.display = 'none';
+        if(marker) { map.removeLayer(marker); marker = null; }
+    }
+
+    // Image Preview Logic
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
     // Payment Logic (Gamification)
-    function payFiat(amount) {
-        alert(`Taking you to Swish/Card payment for ${amount} SEK... (Simulated)`);
-    }
+    function payFiat(amount) { alert(`Taking you to Swish/Card payment for ${amount} SEK... (Simulated)`); }
 
     function payKathie(amount, btnElement) {
         if (currentWalletBalance >= amount) {
@@ -345,11 +366,11 @@
             
             alert(`Success! 🪙 ${amount} KaTHie transferred to the neighbour. Your circular economy credit is working!`);
         } else {
-            alert(`Not enough KaTHie points! You need 🪙 ${amount} but only have 🪙 ${currentWalletBalance}. Offer some help to earn more!`);
+            alert(`Not enough KaTHie points! You need 🪙 ${amount} but only have 🪙 ${currentWalletBalance}.`);
         }
     }
 
-    // Handle Form Submission
+    // Handle Form Submission with Image Processing
     document.getElementById('postForm').addEventListener('submit', function(e) {
         e.preventDefault(); 
         
@@ -359,6 +380,13 @@
         const loc = document.getElementById('itemLoc').value;
         const sek = document.getElementById('itemSek').value;
         const kathie = document.getElementById('itemKathie').value;
+        
+        // Check if image exists
+        const imageSrc = document.getElementById('imagePreview').src;
+        let imageHTML = '';
+        if (document.getElementById('imagePreview').style.display === 'block') {
+            imageHTML = `<img src="${imageSrc}" class="item-image" alt="User uploaded image">`;
+        }
 
         let borderColor = 'var(--primary-color)';
         if(cat === 'buy') borderColor = 'var(--secondary-color)';
@@ -367,6 +395,7 @@
 
         const newCardHTML = `
             <div class="card" style="border-top-color: ${borderColor}">
+                ${imageHTML}
                 <h3>${title} <span style="font-size:0.6rem; background:var(--secondary-color); color:black; padding:2px 5px; border-radius:10px;">NEW</span></h3>
                 <p>${desc}</p>
                 <div class="location">📍 ${loc}</div>
