@@ -26,28 +26,35 @@
         .btn-post { background-color: var(--secondary-color); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
         .btn-post:hover { opacity: 0.8; }
         
-        .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('edited-image.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 4rem 2rem; }
+        /* Hero Section */
+        .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('edited-image.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 4rem 2rem 5rem 2rem; }
         .hero h1.main-title { font-size: 4.5rem; margin: 0 0 10px 0; letter-spacing: 2px; text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--secondary-color); }
         .hero p.desc { color: var(--secondary-color); font-weight: bold; font-size: 1.2rem; }
         
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
-        /* Updated Tabs Style for Categories */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        
+        /* --- NEW: Search Bar Styles --- */
+        .search-container { margin-top: -2.5rem; margin-bottom: 2rem; position: relative; z-index: 10; padding: 0 2rem;}
+        .search-box { width: 100%; padding: 16px 25px; font-size: 1.15rem; border: 2px solid white; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); box-sizing: border-box; outline: none; transition: all 0.3s; background: white;}
+        .search-box:focus { border-color: var(--primary-color); box-shadow: 0 5px 20px rgba(0, 85, 165, 0.25); }
+
+        /* Tabs Style */
         .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
         .tab { font-size: 1.05rem; cursor: pointer; padding: 8px 15px; color: #666; border-radius: 20px; background: #eee; transition: all 0.2s;}
         .tab:hover { background-color: #ddd; }
         .tab.active { background-color: var(--primary-color); color: white; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-bottom: 3rem;}
         .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; border: 1px solid #eee; position: relative;}
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
         .card-img-top { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; background-color: #f8f9fa;}
         
-        /* Service Type Tags (Rent, Gig, etc.) */
         .type-tag { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: white; backdrop-filter: blur(4px); box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
-        .tag-rent { background: rgba(0, 85, 165, 0.85); } /* Primary Blue */
-        .tag-buy { background: rgba(248, 177, 51, 0.9); color: black;} /* Secondary Yellow */
-        .tag-gig { background: rgba(230, 74, 25, 0.85); } /* Orange */
-        .tag-skill { background: rgba(142, 36, 170, 0.85); } /* Purple */
+        .tag-rent { background: rgba(0, 85, 165, 0.85); }
+        .tag-buy { background: rgba(248, 177, 51, 0.9); color: black;} 
+        .tag-gig { background: rgba(230, 74, 25, 0.85); } 
+        .tag-skill { background: rgba(142, 36, 170, 0.85); } 
 
         .card-body { padding: 15px; }
         .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -105,6 +112,10 @@
     <h1 class="main-title">DON'T GIVE UP</h1>
     <p class="desc">The All-in-One Service Platform for the KTH Community</p>
 </section>
+
+<div class="container search-container" style="max-width: 800px;">
+    <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search for items, gigs, skills or locations..." oninput="window.renderPosts()">
+</div>
 
 <div class="container">
     <div class="tabs">
@@ -229,13 +240,13 @@
 
     window.currentWalletBalance = 500;
     
-// ==========================================
-    // 自动生成的 30 个高真实度校园测试数据 (去滤镜、高频场景版)
-    // ==========================================
+    // 真实的无图占位图
     const noPhotoImg = 'https://placehold.co/600x400/eeeeee/888888?text=No+Photo+Uploaded';
 
+    // ==========================================
+    // 自动生成的 30 个高真实度校园测试数据 (MVP Realistic Data)
+    // ==========================================
     const testData = [
-        // 🏠 居家生活 (Housing)
         { cat: 'housing', type: 'gig', title: 'URGENT: Laundry transfer!', locName: 'Lappis', sek: 30, kathie: 60, lat: 59.3663, lng: 18.0583, img: noPhotoImg, desc: 'Stuck at uni! Can someone please move my clothes from washer 2 to the dryer? My slot ends in 10 mins!' },
         { cat: 'housing', type: 'buy', title: '5 IKEA moving boxes', locName: 'Teknikringen', sek: 40, kathie: 80, lat: 59.3496, lng: 18.0706, img: 'https://images.unsplash.com/photo-1589935447067-5531094415d1?w=400', desc: 'Used once for moving in. Normal cardboard boxes.' },
         { cat: 'housing', type: 'rent', title: 'Need a Phillips screwdriver', locName: 'Osquldas väg', sek: 0, kathie: 15, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1550985543-f47f38aeeecf?w=400', desc: 'Just need it for 10 minutes to assemble a chair. Will pick up and return.' },
@@ -244,7 +255,6 @@
         { cat: 'housing', type: 'buy', title: 'Clas Ohlson Router', locName: 'Kista', sek: 100, kathie: 200, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?w=400', desc: 'Works perfectly. Comes with power cable.' },
         { cat: 'housing', type: 'gig', title: 'Take out my recycling please', locName: 'Lappis', sek: 20, kathie: 40, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'I twisted my ankle and live on the 3rd floor no elevator. 2 bags of cardboard.' },
 
-        // 🍔 饮食烹饪 (Food)
         { cat: 'food', type: 'buy', title: 'Lao Gan Ma & Soy Sauce (Moving out)', locName: 'Lappis', sek: 30, kathie: 60, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Half jar of Lao Gan Ma and almost full light soy sauce. Must go today.' },
         { cat: 'food', type: 'buy', title: 'Spices bundle', locName: 'Teknikringen', sek: 25, kathie: 50, lat: 59.349, lng: 18.070, img: noPhotoImg, desc: 'Salt, Pepper, Curry powder. Leaving Stockholm next week.' },
         { cat: 'food', type: 'buy', title: 'Unopened 1kg Barilla Pasta', locName: 'Kista', sek: 15, kathie: 30, lat: 59.404, lng: 17.955, img: noPhotoImg, desc: 'Bought too much. Spaghetti No.5.' },
@@ -253,7 +263,6 @@
         { cat: 'food', type: 'buy', title: 'Instant noodles (5 packs)', locName: 'Lappis', sek: 40, kathie: 80, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Shin Ramyun. Too spicy for me.' },
         { cat: 'food', type: 'rent', title: 'Digital Baking Scale', locName: 'Main Campus', sek: 0, kathie: 15, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1585848525049-5f21226500d4?w=400', desc: 'Need a scale for 30 mins to measure flour.' },
 
-        // 🚆 出行户外 (Transport)
         { cat: 'transport', type: 'rent', title: 'SL Card valid until Sunday', locName: 'T-Centralen', sek: 50, kathie: 100, lat: 59.330, lng: 18.058, img: noPhotoImg, desc: 'Going away for the weekend. You can borrow my physical SL card.' },
         { cat: 'transport', type: 'rent', title: 'SL Card for 3 hours', locName: 'Lappis', sek: 15, kathie: 30, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Just need to go to T-Centralen and back. Anyone not using their card right now?' },
         { cat: 'transport', type: 'gig', title: 'IKEA Barkarby Carpool (1 seat)', locName: 'KTH Entrance', sek: 30, kathie: 60, lat: 59.347, lng: 18.073, img: noPhotoImg, desc: 'Driving to IKEA tomorrow at 10 AM. Got space for 1 person.' },
@@ -261,14 +270,12 @@
         { cat: 'transport', type: 'buy', title: 'Used City Bike (Fixer-upper)', locName: 'Kista', sek: 200, kathie: 400, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400', desc: 'Chain is a bit rusty and needs air, but rides okay. Lock included.' },
         { cat: 'transport', type: 'gig', title: 'Arlanda ride sharing?', locName: 'Lappis', sek: 80, kathie: 160, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Anyone taking an Uber/Taxi to Arlanda tomorrow around 5 AM? Let’s split the cost.' },
 
-        // 📚 学习数码 (Study)
-        { cat: 'study', type: 'rent', title: 'Calculator for Exam!', locName: 'Main Campus', sek: 40, kathie: 80, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=400', desc: 'Desperate! Have a math exam tomorrow morning and mine broke. Need to borrow for 1 day.' },
+        { cat: 'study', type: 'rent', title: 'TI-84 Calculator for Exam!', locName: 'Main Campus', sek: 40, kathie: 80, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=400', desc: 'Desperate! Have a math exam tomorrow morning and mine broke. Need to borrow for 1 day.' },
         { cat: 'study', type: 'gig', title: 'Need MacBook USB-C Charger', locName: 'KTH Library', sek: 15, kathie: 30, lat: 59.348, lng: 18.072, img: noPhotoImg, desc: 'Sitting on the 2nd floor of the library. Laptop at 5%, forgot charger. Just need to charge for an hour.' },
         { cat: 'study', type: 'buy', title: 'Pack of A4 paper', locName: 'Osquldas väg', sek: 30, kathie: 60, lat: 59.349, lng: 18.068, img: noPhotoImg, desc: 'Almost full pack of printer paper (maybe used 20 sheets).' },
         { cat: 'study', type: 'skill', title: 'Need help installing MATLAB', locName: 'KTH Library', sek: 40, kathie: 80, lat: 59.348, lng: 18.072, img: noPhotoImg, desc: 'Keep getting a license error on my Mac. Can anyone help me fix it?' },
         { cat: 'study', type: 'rent', title: 'Lab coat (Size M) & goggles', locName: 'Chemistry Building', sek: 25, kathie: 50, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400', desc: 'Forgot your lab coat? Rent mine for your 13:00 session.' },
 
-        // 👕 衣物杂项 (Lifestyle)
         { cat: 'lifestyle', type: 'rent', title: 'Eriksdalsbadet Pool Card', locName: 'Skanstull', sek: 40, kathie: 80, lat: 59.307, lng: 18.075, img: noPhotoImg, desc: 'I have a 10-clip card with 2 clips left. Renting it out for a swim today.' },
         { cat: 'lifestyle', type: 'gig', title: 'Feed my cat for 2 days', locName: 'Lappis', sek: 100, kathie: 200, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400', desc: 'Need someone in Lappis to pop in once a day to feed Leo and clean his box.' },
         { cat: 'lifestyle', type: 'rent', title: 'KTH-Hallen Gym Card', locName: 'KTH-Hallen', sek: 30, kathie: 60, lat: 59.351, lng: 18.072, img: noPhotoImg, desc: 'Not going to the gym today, you can borrow my card for the evening.' },
@@ -276,19 +283,17 @@
         { cat: 'lifestyle', type: 'skill', title: 'Gym Spotter for Bench Press', locName: 'KTH-Hallen', sek: 0, kathie: 10, lat: 59.351, lng: 18.072, img: noPhotoImg, desc: 'Going for a PR today at 17:00. Need someone to spot me for 5 mins.' }
     ];
 
-    let liveFirebasePosts = []; // 存储云端的真实数据
+    let liveFirebasePosts = [];
 
-    // --- 实时监听云端数据库 ---
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
         liveFirebasePosts = [];
         snapshot.forEach((doc) => {
             liveFirebasePosts.push({ id: doc.id, ...doc.data() });
         });
-        renderPosts(); // 每次数据库更新时重新渲染
+        window.renderPosts(); 
     });
 
-    // 格式化时间
     function formatTime(timestamp) {
         if (!timestamp) return "Just now";
         const date = new Date(timestamp);
@@ -298,7 +303,6 @@
         return `${date.getDate()}/${date.getMonth()+1} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     }
 
-    // 获取对应的 Tag 颜色和文字
     function getTypeTagInfo(type) {
         switch(type) {
             case 'rent': return { class: 'tag-rent', text: 'Rent' };
@@ -309,8 +313,8 @@
         }
     }
 
-    // --- 核心逻辑：合并云端数据与测试数据，并分类渲染 ---
-    function renderPosts() {
+    // --- 核心更新：加入搜索过滤逻辑的渲染函数 ---
+    window.renderPosts = function() {
         const containers = {
             'housing': document.getElementById('housing-section'),
             'food': document.getElementById('food-section'),
@@ -321,25 +325,35 @@
         
         Object.values(containers).forEach(c => c.innerHTML = '');
 
-        // 1. 给 30 个本地测试数据添加虚拟时间（让它们显得更真实，比如 2 小时前）
         const processedTestData = testData.map((item, index) => {
             return {
                 ...item,
-                category: item.cat, // 统一字段名
+                category: item.cat, 
                 locName: item.locName,
                 imageSrc: item.img,
-                createdAt: Date.now() - (index * 45 * 60000), // 每个相差 45 分钟
+                createdAt: Date.now() - (index * 45 * 60000), 
                 isTest: true
             };
         });
 
-        // 2. 将 Firebase 的实时数据放在最前面，测试数据跟在后面
         window.allPosts = [...liveFirebasePosts, ...processedTestData];
 
-        // 3. 渲染卡片
+        // 获取搜索框里的文字，转为小写
+        const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+        // 记录每个分类渲染了多少张卡片
+        let renderedCount = { housing: 0, food: 0, transport: 0, study: 0, lifestyle: 0 };
+
         window.allPosts.forEach((post, index) => {
+            // 搜索过滤：如果标题、描述或地点包含关键词，则显示
+            const matchSearch = !searchQuery || 
+                                post.title.toLowerCase().includes(searchQuery) || 
+                                post.desc.toLowerCase().includes(searchQuery) || 
+                                post.locName.toLowerCase().includes(searchQuery);
+                                
+            if (!matchSearch) return; // 不符合搜索词则跳过
+
             const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); 
-            // 如果是假数据，随机去留 NEW 标签；如果是真发布的，24小时内必定有 NEW
             const showBadge = post.isTest ? (index % 3 === 0) : isNew; 
             const badgeHTML = showBadge ? `<span class="badge-new">NEW</span>` : '';
             
@@ -364,11 +378,21 @@
                     </div>
                 </div>
             `;
-            if(containers[post.category]) containers[post.category].insertAdjacentHTML('beforeend', cardHTML);
+            if(containers[post.category]) {
+                containers[post.category].insertAdjacentHTML('beforeend', cardHTML);
+                renderedCount[post.category]++;
+            }
         });
 
-        Object.values(containers).forEach(c => {
-            if(c.innerHTML === '') c.innerHTML = '<div class="empty-state">No items here yet. Be the first to post!</div>';
+        // 处理空状态：如果是搜索导致的没有结果，提示也会跟着变！
+        Object.keys(containers).forEach(cat => {
+            if(renderedCount[cat] === 0) {
+                if (searchQuery) {
+                    containers[cat].innerHTML = `<div class="empty-state">No matching results for "<b>${searchQuery}</b>" in this category.</div>`;
+                } else {
+                    containers[cat].innerHTML = '<div class="empty-state">No items here yet. Be the first to post!</div>';
+                }
+            }
         });
     }
 
@@ -377,7 +401,6 @@
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
         
-        // Find the correct tab button to highlight
         const tabs = document.querySelectorAll('.tab');
         if(tabId === 'housing') tabs[0].classList.add('active');
         if(tabId === 'food') tabs[1].classList.add('active');
@@ -471,7 +494,7 @@
         document.getElementById('imagePreview').style.display = 'none';
         if(postMarker) { postMap.removeLayer(postMarker); postMarker = null; }
         selectedLat = 59.3496; selectedLng = 18.0706;
-        currentCompressedImage = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
+        currentCompressedImage = noPhotoImg;
     };
 
     window.previewImage = function(event) {
