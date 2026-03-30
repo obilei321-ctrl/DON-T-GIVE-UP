@@ -25,26 +25,41 @@
         .wallet.bump { transform: scale(1.1); background-color: #C8E6C9; }
         .btn-post { background-color: var(--secondary-color); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
         .btn-post:hover { opacity: 0.8; }
+        
         .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('edited-image.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 4rem 2rem; }
         .hero h1.main-title { font-size: 4.5rem; margin: 0 0 10px 0; letter-spacing: 2px; text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--secondary-color); }
         .hero p.desc { color: var(--secondary-color); font-weight: bold; font-size: 1.2rem; }
+        
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
-        .tabs { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-        .tab { font-size: 1.1rem; cursor: pointer; padding: 8px 15px; color: #777; border-radius: 5px 5px 0 0; }
-        .tab:hover { background-color: #e9ecef; }
-        .tab.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); font-weight: bold; background-color: #fff; }
+        /* Updated Tabs Style for Categories */
+        .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+        .tab { font-size: 1.05rem; cursor: pointer; padding: 8px 15px; color: #666; border-radius: 20px; background: #eee; transition: all 0.2s;}
+        .tab:hover { background-color: #ddd; }
+        .tab.active { background-color: var(--primary-color); color: white; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+        
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; border: 1px solid #eee; }
+        .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; border: 1px solid #eee; position: relative;}
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
         .card-img-top { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; background-color: #f8f9fa;}
+        
+        /* Service Type Tags (Rent, Gig, etc.) */
+        .type-tag { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: white; backdrop-filter: blur(4px); box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .tag-rent { background: rgba(0, 85, 165, 0.85); } /* Primary Blue */
+        .tag-buy { background: rgba(248, 177, 51, 0.9); color: black;} /* Secondary Yellow */
+        .tag-gig { background: rgba(230, 74, 25, 0.85); } /* Orange */
+        .tag-skill { background: rgba(142, 36, 170, 0.85); } /* Purple */
+
         .card-body { padding: 15px; }
-        .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        .badge-new { font-size: 0.65rem; background: var(--secondary-color); color: black; padding: 3px 6px; border-radius: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;}
+        .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .badge-new { font-size: 0.65rem; background: #ff4757; color: white; padding: 2px 6px; border-radius: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;}
         .post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #888; margin-bottom: 10px; }
         .card-desc { display: none; } 
         .card-price-summary { font-weight: bold; color: var(--text-color); font-size: 0.95rem; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;}
         .summary-kathie { color: var(--kathie-color); }
         .hidden { display: none !important; }
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #888; font-size: 1.1rem; }
+
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 20px 0; backdrop-filter: blur(3px);}
         .modal { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 550px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin: auto; position: relative;}
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #888; transition: color 0.2s;}
@@ -63,16 +78,15 @@
         .pay-btn:hover { background-color: #eee; }
         .pay-btn.kathie-btn { border-color: #A5D6A7; background-color: #E8F5E9; color: var(--kathie-color); }
         .pay-btn.kathie-btn:hover { background-color: #C8E6C9; }
-        .modal h2.form-title { margin-top: 0; margin-bottom: 20px; color: var(--primary-color); }
+        
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem;}
-        .form-group input[type="text"], .form-group input[type="number"], .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         #post-map-container { height: 200px; width: 100%; border-radius: 6px; border: 1px solid #ccc; margin-top: 5px; z-index: 1;}
         .image-preview { max-width: 100%; max-height: 150px; margin-top: 10px; display: none; border-radius: 6px; object-fit: cover;}
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;}
         .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
-        .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #888; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -94,16 +108,18 @@
 
 <div class="container">
     <div class="tabs">
-        <div class="tab active" onclick="window.switchTab('rent')">Item Rentals</div>
-        <div class="tab" onclick="window.switchTab('buy')">Second-Hand</div>
-        <div class="tab" onclick="window.switchTab('gigs')">Micro-Gigs</div>
-        <div class="tab" onclick="window.switchTab('skills')">Skill Exchange</div>
+        <div class="tab active" onclick="window.switchTab('housing')">🏠 Home & Living</div>
+        <div class="tab" onclick="window.switchTab('food')">🍔 Food & Cooking</div>
+        <div class="tab" onclick="window.switchTab('transport')">🚆 Transport & Outdoors</div>
+        <div class="tab" onclick="window.switchTab('study')">📚 Study & Tech</div>
+        <div class="tab" onclick="window.switchTab('lifestyle')">👕 Clothing & Lifestyle</div>
     </div>
 
-    <div id="rent-section" class="grid tab-content"><div class="empty-state">Loading amazing items...</div></div>
-    <div id="buy-section" class="grid tab-content hidden"><div class="empty-state">Loading amazing items...</div></div>
-    <div id="gigs-section" class="grid tab-content hidden"><div class="empty-state">Loading amazing items...</div></div>
-    <div id="skills-section" class="grid tab-content hidden"><div class="empty-state">Loading amazing items...</div></div>
+    <div id="housing-section" class="grid tab-content"><div class="empty-state">Loading...</div></div>
+    <div id="food-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
+    <div id="transport-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
+    <div id="study-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
+    <div id="lifestyle-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
 </div>
 
 <div id="detailModal" class="modal-overlay hidden">
@@ -133,17 +149,31 @@
 <div id="postModal" class="modal-overlay hidden">
     <div class="modal">
         <span class="close-btn" onclick="window.closePostModal()">&times;</span>
-        <h2 class="form-title">Post a Request / Offer</h2>
+        <h2 class="form-title" style="margin-bottom: 5px;">Post a Request / Offer</h2>
+        <p style="color:#666; font-size:0.9rem; margin-top:0; margin-bottom: 20px;">What do you need help with or want to offer?</p>
         <form id="postForm">
-            <div class="form-group">
-                <label>Category</label>
-                <select id="itemCategory" required>
-                    <option value="rent">Item Rental</option>
-                    <option value="buy">Second-Hand</option>
-                    <option value="gigs">Micro-Gig (Need help)</option>
-                    <option value="skills">Skill Exchange</option>
-                </select>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Scenario (分类)</label>
+                    <select id="itemCategory" required>
+                        <option value="housing">🏠 Home & Living</option>
+                        <option value="food">🍔 Food & Cooking</option>
+                        <option value="transport">🚆 Transport & Outdoors</option>
+                        <option value="study">📚 Study & Tech</option>
+                        <option value="lifestyle">👕 Clothing & Lifestyle</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Type (形式)</label>
+                    <select id="itemType" required>
+                        <option value="rent">Item Rental</option>
+                        <option value="buy">Second-Hand</option>
+                        <option value="gig">Micro-Gig (Help needed)</option>
+                        <option value="skill">Skill Exchange</option>
+                    </select>
+                </div>
             </div>
+            
             <div class="form-group">
                 <label>Title</label>
                 <input type="text" id="itemTitle" placeholder="e.g., Need a baking scale" required>
@@ -181,11 +211,9 @@
 </div>
 
 <script type="module">
-    // Import Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    // Your Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDJkfbQ9IPEkALSJwd5n0cXa74emO75idk",
       authDomain: "dont-give-up-dde82.firebaseapp.com",
@@ -196,31 +224,69 @@
       measurementId: "G-QZ3E9X93R8"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Global App State
     window.currentWalletBalance = 500;
-    window.allPosts = []; // Stores real-time posts from DB
     
-    let postMap = null, postMarker = null;
-    let selectedLat = 59.3496, selectedLng = 18.0706; 
-    let detailMap = null, detailMarker = null;
-    let currentItemSek = 0, currentItemKathie = 0;
-    let currentCompressedImage = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
+    // ==========================================
+    // 自动生成的 30 个高质量测试数据 (A/B Test Mock Data)
+    // ==========================================
+    const testData = [
+        // 🏠 居家生活 (Housing)
+        { cat: 'housing', type: 'rent', title: 'Power Drill (Bosch)', locName: 'Lappis', sek: 20, kathie: 40, lat: 59.3663, lng: 18.0583, img: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400', desc: 'Fully charged with bits. Ideal for IKEA furniture.' },
+        { cat: 'housing', type: 'buy', title: 'IKEA Desk (120x60)', locName: 'Teknikringen', sek: 150, kathie: 300, lat: 59.3496, lng: 18.0706, img: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6ea?w=400', desc: 'White desk, good condition. You need to pick it up.' },
+        { cat: 'housing', type: 'gig', title: 'Help moving 3 boxes', locName: 'Universitetet Station', sek: 50, kathie: 100, lat: 59.3654, lng: 18.0543, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400', desc: 'Need strong arms to move boxes to my room (5 mins walk).' },
+        { cat: 'housing', type: 'rent', title: 'Vacuum Cleaner', locName: 'KTH Campus', sek: 15, kathie: 30, lat: 59.348, lng: 18.071, img: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=400', desc: 'Powerful vacuum, great for end-of-month cleaning.' },
+        { cat: 'housing', type: 'gig', title: 'Plant Watering Help', locName: 'Osquldas väg', sek: 30, kathie: 60, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1416879598555-220b8fa0a8a6?w=400', desc: 'Need someone to water my plants while I travel this weekend.' },
+        { cat: 'housing', type: 'rent', title: 'Toolbox Set', locName: 'Lappis', sek: 10, kathie: 20, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=400', desc: 'Contains hammer, screwdrivers, wrench, etc.' },
+        
+        // 🍔 饮食烹饪 (Food)
+        { cat: 'food', type: 'rent', title: 'Digital Baking Scale', locName: 'Kista', sek: 10, kathie: 15, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1585848525049-5f21226500d4?w=400', desc: 'Accurate to 1g. Perfect for baking.' },
+        { cat: 'food', type: 'rent', title: 'Hotpot Pot (Split)', locName: 'Lappis', sek: 25, kathie: 50, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400', desc: 'Yin-yang pot for hotpot night with friends.' },
+        { cat: 'food', type: 'buy', title: 'Unopened Rice (2kg)', locName: 'Main Campus', sek: 40, kathie: 80, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400', desc: 'Bought too much before moving out. Jasmine rice.' },
+        { cat: 'food', type: 'gig', title: 'Grocery Run Help', locName: 'ICA Supermarket', sek: 35, kathie: 70, lat: 59.364, lng: 18.055, img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400', desc: 'I am sick. Can someone grab me some soup and medicine?' },
+        { cat: 'food', type: 'skill', title: 'Learn to make Sushi', locName: 'Student Union', sek: 60, kathie: 120, lat: 59.346, lng: 18.072, img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400', desc: 'I will teach you how to roll perfect sushi. Ingredients provided (split cost).' },
+        { cat: 'food', type: 'rent', title: 'Air Fryer', locName: 'KTH Library', sek: 20, kathie: 40, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1626200419188-3caebc30761e?w=400', desc: 'Philips air fryer, clean and works great.' },
 
-    // --- REAL-TIME DATABASE LISTENER ---
+        // 🚆 出行户外 (Transport)
+        { cat: 'transport', type: 'rent', title: 'Weekend SL Pass', locName: 'T-Centralen', sek: 40, kathie: 80, lat: 59.330, lng: 18.058, img: 'https://images.unsplash.com/photo-1534008897995-27a23e859048?w=400', desc: 'I am out of town. You can borrow my physical SL card for Sat/Sun.' },
+        { cat: 'transport', type: 'buy', title: 'Used Bicycle', locName: 'Teknikringen', sek: 400, kathie: 800, lat: 59.349, lng: 18.070, img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400', desc: 'City bike. Needs some oiling but rides fine. Lock included.' },
+        { cat: 'transport', type: 'gig', title: 'IKEA Carpool (1 seat)', locName: 'KTH Entrance', sek: 30, kathie: 60, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400', desc: 'Driving to IKEA Barkarby tomorrow at 10 AM. One seat available.' },
+        { cat: 'transport', type: 'rent', title: 'Tennis Racket x2', locName: 'Kista', sek: 30, kathie: 60, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400', desc: 'Includes balls. Perfect for the courts near Kista.' },
+        { cat: 'transport', type: 'rent', title: 'Camping Tent (2-person)', locName: 'Lappis', sek: 50, kathie: 100, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1504280390227-68b8bf38f45a?w=400', desc: 'Waterproof tent for weekend hiking trips.' },
+        { cat: 'transport', type: 'gig', title: 'Help assemble bike', locName: 'Osquldas väg', sek: 60, kathie: 120, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1511994298241-608e28f14fde?w=400', desc: 'Bought a bike online, need help putting it together.' },
+
+        // 📚 学习数码 (Study)
+        { cat: 'study', type: 'skill', title: 'Python Debugging Help', locName: 'KTH Library', sek: 80, kathie: 150, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1526379095098-d400fd0bfce8?w=400', desc: 'Stuck on pandas/numpy? I can sit with you for an hour.' },
+        { cat: 'study', type: 'buy', title: 'Physics Textbook', locName: 'Main Campus', sek: 150, kathie: 300, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400', desc: 'Fundamentals of Physics 11th Ed. Good condition.' },
+        { cat: 'study', type: 'rent', title: 'Texas TI-84 Calculator', locName: 'Kista', sek: 20, kathie: 40, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=400', desc: 'Approved for exams. Borrow for the day.' },
+        { cat: 'study', type: 'skill', title: 'Essay Proofreading', locName: 'Online', sek: 50, kathie: 100, lat: 59.349, lng: 18.070, img: 'https://images.unsplash.com/photo-1455390582262-044cdead2708?w=400', desc: 'Native English speaker. I will review your 1500-word essay.' },
+        { cat: 'study', type: 'rent', title: 'MacBook USB-C Charger', locName: 'Library Cafe', sek: 10, kathie: 20, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400', desc: 'Forgot your charger? Sit next to me and borrow mine for 2 hours.' },
+        { cat: 'study', type: 'buy', title: '24" Dell Monitor', locName: 'Lappis', sek: 300, kathie: 600, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400', desc: 'Perfect for coding at home. HDMI cable included.' },
+
+        // 👕 衣物杂项 (Lifestyle)
+        { cat: 'lifestyle', type: 'gig', title: 'Laundry Room Swap', locName: 'Lappis Laundry', sek: 20, kathie: 40, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400', desc: 'Missed my booking. Can anyone trade their 19:00 slot with me?' },
+        { cat: 'lifestyle', type: 'rent', title: 'Winter Coat (Size M)', locName: 'Main Campus', sek: 60, kathie: 120, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=400', desc: 'Going to Kiruna? Rent my heavy winter parka for the weekend.' },
+        { cat: 'lifestyle', type: 'skill', title: 'Sewing / Hemming pants', locName: 'Teknikringen', sek: 40, kathie: 80, lat: 59.349, lng: 18.070, img: 'https://images.unsplash.com/photo-1605280263929-1c42c62ef169?w=400', desc: 'I have a sewing machine. Can help you hem jeans or fix buttons.' },
+        { cat: 'lifestyle', type: 'rent', title: 'Catan Board Game', locName: 'Lappis', sek: 15, kathie: 30, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffaed?w=400', desc: 'Base game. All pieces included. Perfect for game night.' },
+        { cat: 'lifestyle', type: 'skill', title: 'Gym Buddy / Spotter', locName: 'KTHhallen', sek: 0, kathie: 10, lat: 59.351, lng: 18.072, img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400', desc: 'Looking for someone to spot me for bench press at 17:00 today.' },
+        { cat: 'lifestyle', type: 'buy', title: 'H&M Suit (Size L)', locName: 'Kista', sek: 200, kathie: 400, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1594938298598-70f70fc67120?w=400', desc: 'Worn once for Arma career fair. Dark navy blue.' }
+    ];
+
+    let liveFirebasePosts = []; // 存储云端的真实数据
+
+    // --- 实时监听云端数据库 ---
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
-        window.allPosts = [];
+        liveFirebasePosts = [];
         snapshot.forEach((doc) => {
-            window.allPosts.push({ id: doc.id, ...doc.data() });
+            liveFirebasePosts.push({ id: doc.id, ...doc.data() });
         });
-        renderPosts();
+        renderPosts(); // 每次数据库更新时重新渲染
     });
 
-    // Helper: Format Time
+    // 格式化时间
     function formatTime(timestamp) {
         if (!timestamp) return "Just now";
         const date = new Date(timestamp);
@@ -230,26 +296,58 @@
         return `${date.getDate()}/${date.getMonth()+1} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     }
 
-    // --- RENDER POSTS TO UI ---
+    // 获取对应的 Tag 颜色和文字
+    function getTypeTagInfo(type) {
+        switch(type) {
+            case 'rent': return { class: 'tag-rent', text: 'Rent' };
+            case 'buy': return { class: 'tag-buy', text: 'Second-Hand' };
+            case 'gig': return { class: 'tag-gig', text: 'Gig' };
+            case 'skill': return { class: 'tag-skill', text: 'Skill' };
+            default: return { class: 'tag-rent', text: 'Offer' };
+        }
+    }
+
+    // --- 核心逻辑：合并云端数据与测试数据，并分类渲染 ---
     function renderPosts() {
         const containers = {
-            'rent': document.getElementById('rent-section'),
-            'buy': document.getElementById('buy-section'),
-            'gigs': document.getElementById('gigs-section'),
-            'skills': document.getElementById('skills-section')
+            'housing': document.getElementById('housing-section'),
+            'food': document.getElementById('food-section'),
+            'transport': document.getElementById('transport-section'),
+            'study': document.getElementById('study-section'),
+            'lifestyle': document.getElementById('lifestyle-section')
         };
         
-        // Clear containers
         Object.values(containers).forEach(c => c.innerHTML = '');
 
+        // 1. 给 30 个本地测试数据添加虚拟时间（让它们显得更真实，比如 2 小时前）
+        const processedTestData = testData.map((item, index) => {
+            return {
+                ...item,
+                category: item.cat, // 统一字段名
+                locName: item.locName,
+                imageSrc: item.img,
+                createdAt: Date.now() - (index * 45 * 60000), // 每个相差 45 分钟
+                isTest: true
+            };
+        });
+
+        // 2. 将 Firebase 的实时数据放在最前面，测试数据跟在后面
+        window.allPosts = [...liveFirebasePosts, ...processedTestData];
+
+        // 3. 渲染卡片
         window.allPosts.forEach((post, index) => {
-            const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); // Created within last 24 hrs
-            const badgeHTML = isNew ? `<span class="badge-new">NEW</span>` : '';
+            const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); 
+            // 如果是假数据，随机去留 NEW 标签；如果是真发布的，24小时内必定有 NEW
+            const showBadge = post.isTest ? (index % 3 === 0) : isNew; 
+            const badgeHTML = showBadge ? `<span class="badge-new">NEW</span>` : '';
+            
             const timeStr = formatTime(post.createdAt);
+            const tagInfo = getTypeTagInfo(post.type);
 
             const cardHTML = `
                 <div class="card" onclick="window.openItemDetail(${index})">
                     <img src="${post.imageSrc}" class="card-img-top" alt="${post.title}">
+                    <span class="type-tag ${tagInfo.class}">${tagInfo.text}</span>
                     <div class="card-body">
                         <h3 class="item-title">${post.title} ${badgeHTML}</h3>
                         <div class="post-meta">
@@ -267,20 +365,29 @@
             if(containers[post.category]) containers[post.category].insertAdjacentHTML('beforeend', cardHTML);
         });
 
-        // Add empty states if no posts
         Object.values(containers).forEach(c => {
-            if(c.innerHTML === '') c.innerHTML = '<div class="empty-state">No requests yet. Be the first to post!</div>';
+            if(c.innerHTML === '') c.innerHTML = '<div class="empty-state">No items here yet. Be the first to post!</div>';
         });
     }
 
-    // --- UI FUNCTIONS (Attached to window so HTML can call them) ---
+    // --- 全局交互函数 ---
     window.switchTab = function(tabId) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-        const tabMap = { 'rent': 0, 'buy': 1, 'gigs': 2, 'skills': 3 };
-        document.querySelectorAll('.tab')[tabMap[tabId]].classList.add('active');
+        
+        // Find the correct tab button to highlight
+        const tabs = document.querySelectorAll('.tab');
+        if(tabId === 'housing') tabs[0].classList.add('active');
+        if(tabId === 'food') tabs[1].classList.add('active');
+        if(tabId === 'transport') tabs[2].classList.add('active');
+        if(tabId === 'study') tabs[3].classList.add('active');
+        if(tabId === 'lifestyle') tabs[4].classList.add('active');
+        
         document.getElementById(tabId + '-section').classList.remove('hidden');
     };
+
+    let detailMap = null, detailMarker = null;
+    let currentItemSek = 0, currentItemKathie = 0;
 
     window.openItemDetail = function(postIndex) {
         const post = window.allPosts[postIndex];
@@ -294,13 +401,8 @@
         document.getElementById('detailKathie').innerText = `🪙 ${post.kathie} KaTHie`;
         
         const kathieBtn = document.getElementById('payKathieBtn');
-        kathieBtn.innerText = "Use Points";
-        kathieBtn.disabled = false;
-        kathieBtn.style.backgroundColor = "#E8F5E9";
-        kathieBtn.style.color = "var(--kathie-color)";
-
-        currentItemSek = post.sek;
-        currentItemKathie = post.kathie;
+        kathieBtn.innerText = "Use Points"; kathieBtn.disabled = false; kathieBtn.style.backgroundColor = "#E8F5E9"; kathieBtn.style.color = "var(--kathie-color)";
+        currentItemSek = post.sek; currentItemKathie = post.kathie;
 
         document.getElementById('detailModal').classList.remove('hidden');
 
@@ -316,16 +418,13 @@
     };
 
     window.closeDetailModal = function() { document.getElementById('detailModal').classList.add('hidden'); };
-
     window.payFiatFromDetail = function() { alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`); };
-
     window.payKathieFromDetail = function() {
         if (window.currentWalletBalance >= currentItemKathie) {
             window.currentWalletBalance -= currentItemKathie;
             document.getElementById('wallet-balance').innerText = window.currentWalletBalance;
             const walletUi = document.getElementById('user-wallet');
-            walletUi.classList.add('bump');
-            setTimeout(() => walletUi.classList.remove('bump'), 200);
+            walletUi.classList.add('bump'); setTimeout(() => walletUi.classList.remove('bump'), 200);
             
             const btn = document.getElementById('payKathieBtn');
             btn.innerText = "Paid ✓"; btn.disabled = true; btn.style.backgroundColor = "#ccc"; btn.style.color = "#666";
@@ -334,6 +433,11 @@
             alert(`Not enough points! You need 🪙 ${currentItemKathie} but only have 🪙 ${window.currentWalletBalance}.`);
         }
     };
+
+    // --- Post Form Logic ---
+    let postMap = null, postMarker = null;
+    let selectedLat = 59.3496, selectedLng = 18.0706; 
+    let currentCompressedImage = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
 
     window.openPostModal = function() { 
         document.getElementById('postModal').classList.remove('hidden'); 
@@ -368,7 +472,6 @@
         currentCompressedImage = 'https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=600&q=80';
     };
 
-    // Image Compression Logic
     window.previewImage = function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -377,19 +480,16 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500; // Compress image to save Firestore space
-                    let width = img.width;
-                    let height = img.height;
+                    const MAX_WIDTH = 500;
+                    let width = img.width, height = img.height;
                     if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                     canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    currentCompressedImage = canvas.toDataURL('image/jpeg', 0.6); // 60% quality
-                    
+                    currentCompressedImage = canvas.toDataURL('image/jpeg', 0.6); 
                     const preview = document.getElementById('imagePreview');
-                    preview.src = currentCompressedImage;
-                    preview.style.display = 'block';
+                    preview.src = currentCompressedImage; preview.style.display = 'block';
                 }
                 img.src = e.target.result;
             }
@@ -397,21 +497,18 @@
         }
     };
 
-    // --- FORM SUBMISSION (Write to DB) ---
     document.getElementById('postForm').addEventListener('submit', async function(e) {
         e.preventDefault(); 
-        
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "Posting...";
-        btn.disabled = true;
+        btn.innerText = "Posting..."; btn.disabled = true;
 
         const newPostData = {
             category: document.getElementById('itemCategory').value,
+            type: document.getElementById('itemType').value,
             title: document.getElementById('itemTitle').value,
             desc: document.getElementById('itemDesc').value,
             locName: document.getElementById('itemLoc').value,
-            lat: selectedLat,
-            lng: selectedLng,
+            lat: selectedLat, lng: selectedLng,
             sek: parseInt(document.getElementById('itemSek').value) || 0,
             kathie: parseInt(document.getElementById('itemKathie').value) || 0,
             imageSrc: currentCompressedImage,
@@ -419,16 +516,14 @@
         };
 
         try {
-            // Send to Firebase
             await addDoc(collection(db, "posts"), newPostData);
             window.closePostModal();
-            alert('Success! Your post is now live across all devices.');
+            alert('Success! Your post is now live.');
         } catch (error) {
             console.error("Error adding document: ", error);
             alert("Oops! Something went wrong saving to the cloud.");
         } finally {
-            btn.innerText = "Post Now";
-            btn.disabled = false;
+            btn.innerText = "Post Now"; btn.disabled = false;
         }
     });
 </script>
