@@ -25,9 +25,13 @@
         .wallet.bump { transform: scale(1.1); background-color: #C8E6C9; }
         .btn-post { background-color: var(--secondary-color); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
         .btn-bonus { background-color: #E3F2FD; color: var(--primary-color); padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #90CAF9; font-size: 0.95rem; }
+        .btn-tasks { background-color: #F3F7EA; color: #3f5e18; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #c6d9a0; font-size: 0.9rem; }
+        .btn-topup { background-color: #EAF8F2; color: #18633f; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #A7DABF; font-size: 0.9rem; }
         .btn-auth { background-color: #ECEFF1; color: #263238; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #CFD8DC; font-size: 0.9rem; }
         .user-chip { background: #F4F8FF; color: #234; border: 1px solid #C9DBFF; border-radius: 999px; font-size: 0.85rem; padding: 6px 10px; font-weight: 600; }
         .btn-bonus:hover { background-color: #D0E8FD; }
+        .btn-tasks:hover { background-color: #EAF2DC; }
+        .btn-topup:hover { background-color: #D8F1E7; }
         .btn-auth:hover { background-color: #E2E9ED; }
         .btn-post:hover { opacity: 0.8; }
         
@@ -49,13 +53,36 @@
         .bonus-status { font-size: 0.88rem; color: #DBF3FF; font-weight: bold; }
         .bonus-close-btn { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.55); background: rgba(255,255,255,0.15); color: white; font-size: 18px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
         .bonus-close-btn:hover { background: rgba(255,255,255,0.28); }
+
+        /* Daily Tasks */
+        .daily-tasks-section { max-width: 1200px; margin: 0 auto 1.4rem auto; padding: 0 2rem; }
+        .daily-tasks-card { background: white; border: 1px solid #dfe7ef; border-radius: 14px; box-shadow: 0 6px 16px rgba(14, 56, 95, 0.08); padding: 1rem 1.1rem; }
+        .daily-modal { max-width: 620px; }
+        .daily-modal .daily-tasks-card { border: none; box-shadow: none; padding: 0; margin-top: 8px; }
+        .daily-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .daily-title h3 { margin: 0; color: #1f3d5a; font-size: 1.05rem; }
+        .daily-date { font-size: 0.8rem; color: #5b6d80; background: #eef5fc; border: 1px solid #d3e4f5; padding: 4px 8px; border-radius: 999px; }
+        .daily-list { display: grid; gap: 8px; }
+        .daily-item { border: 1px solid #e5edf4; border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fbfdff; }
+        .daily-item.done { border-color: #b9dfc3; background: #f4fbf6; }
+        .daily-info { display: grid; gap: 2px; }
+        .daily-task-name { font-weight: 700; font-size: 0.95rem; color: #23384d; }
+        .daily-task-desc { font-size: 0.82rem; color: #5e6f81; }
+        .daily-task-meta { font-size: 0.8rem; color: #2e7d32; font-weight: 700; }
+        .daily-actions { display: flex; align-items: center; gap: 6px; }
+        .daily-btn { border: 1px solid #c7d8ea; background: #edf5fc; color: #274a6b; border-radius: 999px; padding: 6px 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
+        .daily-btn.claim { background: #ffe8b8; border-color: #f7ca6a; color: #6a4b00; }
+        .daily-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .daily-empty { color: #687b8f; font-size: 0.9rem; }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
         
         /* --- NEW: Search Bar Styles --- */
-        .search-container { margin-top: -2.5rem; margin-bottom: 2rem; position: relative; z-index: 10; padding: 0 2rem;}
+        .search-container { margin-top: -2.5rem; margin-bottom: 2rem; position: relative; z-index: 10; padding: 0 2rem; display: flex; gap: 10px; align-items: center;}
         .search-box { width: 100%; padding: 16px 25px; font-size: 1.15rem; border: 2px solid white; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); box-sizing: border-box; outline: none; transition: all 0.3s; background: white;}
         .search-box:focus { border-color: var(--primary-color); box-shadow: 0 5px 20px rgba(0, 85, 165, 0.25); }
+        .search-btn { height: 50px; border: none; border-radius: 999px; padding: 0 18px; font-weight: 700; color: white; background: var(--primary-color); cursor: pointer; box-shadow: 0 5px 14px rgba(0, 85, 165, 0.28); white-space: nowrap; }
+        .search-btn:hover { opacity: 0.92; }
 
         /* Tabs Style */
         .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
@@ -118,16 +145,28 @@
         .auth-form input { width: 100%; padding: 10px; border: 1px solid #cfd8dc; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; }
         .auth-submit { width: 100%; background: var(--primary-color); color: white; border: none; border-radius: 8px; padding: 10px; font-weight: bold; cursor: pointer; }
         .auth-error { color: #c62828; min-height: 1.1em; margin-top: 8px; font-size: 0.88rem; }
-
+        .topup-modal { max-width: 460px; }
+        .topup-form input { width: 100%; padding: 10px; border: 1px solid #cfd8dc; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; }
+        .topup-note { margin: 0; color: #5a6570; font-size: 0.9rem; }
+        .processing-box { background: #f6fbff; border: 1px solid #d7e8f7; border-radius: 10px; padding: 12px; margin-top: 12px; }
+        .processing-title { margin: 0 0 6px 0; color: #1d4d74; font-weight: 700; font-size: 1rem; }
+        .processing-text { margin: 0 0 12px 0; color: #49657f; font-size: 0.9rem; }
+        .btn-complete-pay { width: 100%; background: #1f7a49; color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 700; cursor: pointer; }
         @media (max-width: 760px) {
             .nav-right { gap: 10px; }
             .btn-bonus { font-size: 0.85rem; padding: 6px 10px; }
+            .btn-tasks { font-size: 0.82rem; padding: 6px 10px; }
+            .btn-topup { font-size: 0.82rem; padding: 6px 10px; }
             .btn-auth { font-size: 0.82rem; padding: 6px 10px; }
             .user-chip { display: none; }
             .bonus-section { margin-top: -1.2rem; }
             .bonus-card { padding: 1rem; }
             .bonus-copy h2 { font-size: 1.15rem; }
+            .daily-item { flex-direction: column; align-items: flex-start; }
+            .search-container { flex-direction: column; align-items: stretch; }
+            .search-btn { width: 100%; }
         }
+
     </style>
 </head>
 <body>
@@ -140,7 +179,9 @@
         <div class="wallet" id="user-wallet" title="Your Community Credits">
             🪙 <span id="wallet-balance">500</span> KaTHie
         </div>
-        <button class="btn-bonus" onclick="window.scrollToBonus()">+100 New User</button>
+        <button class="btn-topup" onclick="window.openTopupModal()">Top Up</button>
+        <button class="btn-tasks" onclick="window.openDailyTasksModal()">Daily Tasks</button>
+        <button class="btn-bonus" onclick="window.scrollToBonus()">New User</button>
         <button class="btn-post" onclick="window.openPostModal()">+ Post Request</button>
     </div>
 </header>
@@ -166,7 +207,8 @@
 </section>
 
 <div class="container search-container" style="max-width: 800px;">
-    <input type="search" id="searchInput" class="search-box" placeholder="🔍 Search for items, gigs, skills or locations..." oninput="window.renderPosts()">
+    <input type="search" id="searchInput" class="search-box" placeholder="Search for items, gigs, skills or locations..." onkeydown="window.handleSearchInputKey(event)">
+    <button class="search-btn" onclick="window.applySearch()">Search</button>
 </div>
 
 <div class="container">
@@ -217,7 +259,7 @@
         <form id="postForm">
             <div style="display: flex; gap: 10px;">
                 <div class="form-group" style="flex: 1;">
-                    <label>Scenario (分类)</label>
+                    <label>Scenario</label>
                     <select id="itemCategory" required>
                         <option value="housing">🏠 Home & Living</option>
                         <option value="food">🍔 Food & Cooking</option>
@@ -227,7 +269,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>Type (形式)</label>
+                    <label>Type</label>
                     <select id="itemType" required>
                         <option value="rent">Item Rental</option>
                         <option value="buy">Second-Hand</option>
@@ -287,6 +329,48 @@
     </div>
 </div>
 
+<div id="dailyTasksModal" class="modal-overlay hidden">
+    <div class="modal daily-modal">
+        <span class="close-btn" onclick="window.closeDailyTasksModal()">&times;</span>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Daily Tasks</h2>
+        <p style="margin:0; color:#5a6570; font-size:0.92rem;">Complete tasks and claim token rewards.</p>
+        <div class="daily-tasks-card">
+            <div class="daily-title">
+                <h3>Today's Missions</h3>
+                <span class="daily-date" id="dailyDateLabel">Today</span>
+            </div>
+            <div class="daily-list" id="dailyTasksList"></div>
+        </div>
+    </div>
+</div>
+
+<div id="topupModal" class="modal-overlay hidden">
+    <div class="modal topup-modal">
+        <span class="close-btn" onclick="window.closeTopupModal()">&times;</span>
+        <div id="topupEntryStep">
+            <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Top Up Wallet</h2>
+            <form id="topupForm" class="topup-form" style="margin-top: 12px;">
+                <input type="number" id="topupAmount" min="1" step="1" placeholder="Top-up amount (SEK)" required>
+                <input type="text" id="topupCardNumber" inputmode="numeric" maxlength="19" placeholder="Card number" required>
+                <div style="display:flex; gap: 10px;">
+                    <input type="text" id="topupCcv" inputmode="numeric" maxlength="4" placeholder="CCV" required>
+                    <input type="text" id="topupExpiry" inputmode="numeric" maxlength="5" placeholder="MM/YY" required>
+                </div>
+                <button type="submit" class="auth-submit">Confirm Payment</button>
+            </form>
+            <div class="auth-error" id="topupError"></div>
+        </div>
+        <div id="topupProcessingStep" class="hidden">
+            <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Processing Payment</h2>
+            <div class="processing-box">
+                <p class="processing-title">Payment in progress...</p>
+                <p class="processing-text" id="topupProcessingText">Please wait and then confirm completion.</p>
+                <button class="btn-complete-pay" id="completeTopupBtn" onclick="window.completeTopupPayment()">Payment Completed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -312,8 +396,17 @@
         { username: "kth002", password: "123456", displayName: "KTH User 002" },
         { username: "kth003", password: "123456", displayName: "KTH User 003" }
     ];
+    const DAILY_TASKS = [
+        { id: "post_once", name: "Publish One Post", desc: "Successfully publish 1 post today", reward: 20, target: 1 },
+        { id: "checkin_once", name: "Daily Check-in", desc: "Tap check-in once today", reward: 10, target: 1 },
+        { id: "purchase_once", name: "Buy One Service", desc: "Pay with SEK or tokens once today", reward: 30, target: 1 }
+    ];
+    const TOPUP_TOKEN_RATE = 1; // 1 SEK -> 1 KaTHie (simulation)
+    const DAILY_TASKS_KEY_PREFIX = "dgu_daily_tasks_v1";
     let currentUser = null;
     let bonusClaimedThisVisit = false;
+    let dailyTaskState = null;
+    let pendingTopupAmount = 0;
 
     function normalizeUsername(value) {
         return String(value || "").trim().toLowerCase();
@@ -387,7 +480,10 @@
         bonusClaimedThisVisit = false;
         window.updateAuthUi();
         window.updateBonusUi();
+        window.initDailyTasks();
         setBonusVisibility(true);
+        window.closeDailyTasksModal();
+        window.closeTopupModal();
         window.closePostModal();
         alert("You have logged out.");
     };
@@ -398,6 +494,68 @@
             return;
         }
         window.openAuthModal();
+    };
+
+    function setTopupError(message) {
+        document.getElementById('topupError').innerText = message || "";
+    }
+
+    function resetTopupModalState(clearFields = false) {
+        document.getElementById('topupEntryStep').classList.remove('hidden');
+        document.getElementById('topupProcessingStep').classList.add('hidden');
+        setTopupError("");
+        if (clearFields) {
+            document.getElementById('topupForm').reset();
+        }
+        pendingTopupAmount = 0;
+    }
+
+    function isValidExpiry(mmYY) {
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(mmYY)) return false;
+        const [mmText, yyText] = mmYY.split("/");
+        const mm = Number(mmText);
+        const yy = Number(yyText);
+        const now = new Date();
+        const currentYY = now.getFullYear() % 100;
+        const currentMM = now.getMonth() + 1;
+        if (yy < currentYY) return false;
+        if (yy === currentYY && mm < currentMM) return false;
+        return true;
+    }
+
+    function digitsOnly(value) {
+        return String(value || "").replace(/\D/g, "");
+    }
+
+    window.openTopupModal = function() {
+        if (!window.ensureAuthenticated("top up wallet")) return;
+        resetTopupModalState(true);
+        document.getElementById('topupModal').classList.remove('hidden');
+        document.getElementById('topupAmount').focus();
+    };
+
+    window.closeTopupModal = function() {
+        document.getElementById('topupModal').classList.add('hidden');
+        resetTopupModalState(false);
+    };
+
+    window.completeTopupPayment = function() {
+        if (!window.ensureAuthenticated("complete top-up")) return;
+        if (pendingTopupAmount <= 0) return;
+        const tokenAmount = pendingTopupAmount * TOPUP_TOKEN_RATE;
+        setWalletBalance(window.currentWalletBalance + tokenAmount, true);
+        alert(`Top-up completed. +${tokenAmount} KaTHie added to your wallet.`);
+        window.closeTopupModal();
+    };
+
+    window.openDailyTasksModal = function() {
+        if (!window.ensureAuthenticated("open daily tasks")) return;
+        document.getElementById('dailyTasksModal').classList.remove('hidden');
+        window.renderDailyTasks();
+    };
+
+    window.closeDailyTasksModal = function() {
+        document.getElementById('dailyTasksModal').classList.add('hidden');
     };
 
     function readWalletBalance() {
@@ -419,6 +577,142 @@
         localStorage.setItem(WALLET_BALANCE_KEY, String(safeBalance));
         if (shouldAnimate) animateWallet();
     }
+
+    function getTodayKey() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, "0");
+        const d = String(now.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+    }
+
+    function getDailyTaskStorageKey() {
+        const userKey = currentUser ? normalizeUsername(currentUser.username) : "guest";
+        return `${DAILY_TASKS_KEY_PREFIX}_${userKey}`;
+    }
+
+    function createDefaultDailyTaskState(dateKey) {
+        const state = { dateKey, tasks: {} };
+        DAILY_TASKS.forEach((task) => {
+            state.tasks[task.id] = { progress: 0, completed: false, claimed: false };
+        });
+        return state;
+    }
+
+    function saveDailyTaskState() {
+        if (!currentUser || !dailyTaskState) return;
+        localStorage.setItem(getDailyTaskStorageKey(), JSON.stringify(dailyTaskState));
+    }
+
+    function getTaskRecord(taskId) {
+        if (!dailyTaskState || !dailyTaskState.tasks) return null;
+        return dailyTaskState.tasks[taskId] || null;
+    }
+
+    window.renderDailyTasks = function() {
+        const listEl = document.getElementById('dailyTasksList');
+        const dateEl = document.getElementById('dailyDateLabel');
+        dateEl.innerText = new Date().toLocaleDateString();
+
+        if (!currentUser) {
+            listEl.innerHTML = `<div class="daily-empty">Login to enable daily tasks. <button class="daily-btn" onclick="window.openAuthModal()">Login</button></div>`;
+            return;
+        }
+        if (!dailyTaskState) {
+            listEl.innerHTML = `<div class="daily-empty">Preparing tasks...</div>`;
+            return;
+        }
+
+        const rows = DAILY_TASKS.map((task) => {
+            const record = getTaskRecord(task.id) || { progress: 0, completed: false, claimed: false };
+            const isDone = record.completed;
+            const canClaim = isDone && !record.claimed;
+            const statusText = record.claimed ? "Reward claimed" : (isDone ? "Completed" : `Progress ${record.progress}/${task.target}`);
+            const checkinAction = task.id === "checkin_once" && !isDone
+                ? `<button class="daily-btn" onclick="window.performDailyCheckin()">Check In</button>`
+                : "";
+            const claimLabel = record.claimed ? `Claimed +${task.reward}` : `Claim +${task.reward}`;
+            return `
+                <div class="daily-item ${isDone ? "done" : ""}">
+                    <div class="daily-info">
+                        <div class="daily-task-name">${task.name}</div>
+                        <div class="daily-task-desc">${task.desc}</div>
+                        <div class="daily-task-meta">${statusText}</div>
+                    </div>
+                    <div class="daily-actions">
+                        ${checkinAction}
+                        <button class="daily-btn claim" onclick="window.claimDailyTaskReward('${task.id}')" ${canClaim ? "" : "disabled"}>${claimLabel}</button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        listEl.innerHTML = rows;
+    };
+
+    window.initDailyTasks = function() {
+        if (!currentUser) {
+            dailyTaskState = null;
+            window.renderDailyTasks();
+            return;
+        }
+        const todayKey = getTodayKey();
+        const raw = localStorage.getItem(getDailyTaskStorageKey());
+        if (!raw) {
+            dailyTaskState = createDefaultDailyTaskState(todayKey);
+            saveDailyTaskState();
+            window.renderDailyTasks();
+            return;
+        }
+        try {
+            const parsed = JSON.parse(raw);
+            if (!parsed || parsed.dateKey !== todayKey || !parsed.tasks) {
+                dailyTaskState = createDefaultDailyTaskState(todayKey);
+            } else {
+                dailyTaskState = parsed;
+            }
+        } catch (_) {
+            dailyTaskState = createDefaultDailyTaskState(todayKey);
+        }
+        saveDailyTaskState();
+        window.renderDailyTasks();
+    };
+
+    window.markDailyTaskProgress = function(taskId, amount = 1) {
+        if (!currentUser || !dailyTaskState) return;
+        const config = DAILY_TASKS.find((task) => task.id === taskId);
+        if (!config) return;
+        const record = getTaskRecord(taskId);
+        if (!record || record.completed) return;
+
+        record.progress = Math.min(config.target, (record.progress || 0) + amount);
+        if (record.progress >= config.target) record.completed = true;
+        saveDailyTaskState();
+        window.renderDailyTasks();
+    };
+
+    window.performDailyCheckin = function() {
+        if (!window.ensureAuthenticated("check in")) return;
+        window.markDailyTaskProgress("checkin_once", 1);
+    };
+
+    window.claimDailyTaskReward = function(taskId) {
+        if (!window.ensureAuthenticated("claim daily rewards")) return;
+        const config = DAILY_TASKS.find((task) => task.id === taskId);
+        const record = getTaskRecord(taskId);
+        if (!config || !record) return;
+        if (!record.completed) {
+            alert("Task not completed yet.");
+            return;
+        }
+        if (record.claimed) return;
+
+        record.claimed = true;
+        saveDailyTaskState();
+        setWalletBalance(window.currentWalletBalance + config.reward, true);
+        window.renderDailyTasks();
+        alert(`Reward received: +${config.reward} KaTHie`);
+    };
 
     function isBonusClaimed() {
         return bonusClaimedThisVisit;
@@ -474,13 +768,14 @@
     currentUser = loadAuthSession();
     window.updateAuthUi();
     window.updateBonusUi();
+    window.initDailyTasks();
     setBonusVisibility(true);
     
-    // 真实的无图占位图
+    // Placeholder image when no photo is provided
     const noPhotoImg = 'https://placehold.co/600x400/eeeeee/888888?text=No+Photo+Uploaded';
 
     // ==========================================
-    // 自动生成的 30 个高真实度校园测试数据 (MVP Realistic Data)
+    // Auto-generated realistic MVP seed data (30 items)
     // ==========================================
     const testData = [
         { cat: 'housing', type: 'gig', title: 'URGENT: Laundry transfer!', locName: 'Lappis', sek: 30, kathie: 60, lat: 59.3663, lng: 18.0583, img: noPhotoImg, desc: 'Stuck at uni! Can someone please move my clothes from washer 2 to the dryer? My slot ends in 10 mins!' },
@@ -549,7 +844,21 @@
         }
     }
 
-    // --- 核心更新：加入搜索过滤逻辑的渲染函数 ---
+        window.activeSearchQuery = "";
+
+    window.applySearch = function() {
+        const inputEl = document.getElementById('searchInput');
+        window.activeSearchQuery = String(inputEl ? inputEl.value : "").trim();
+        window.renderPosts();
+    };
+
+    window.handleSearchInputKey = function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            window.applySearch();
+        }
+    };
+// Core rendering function with search filtering
     window.renderPosts = function() {
         const containers = {
             'housing': document.getElementById('housing-section'),
@@ -574,20 +883,30 @@
 
         window.allPosts = [...liveFirebasePosts, ...processedTestData];
 
-        // 获取搜索框里的文字，转为小写
-        const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        // Read search text and normalize for fuzzy matching
+        const searchQuery = String(window.activeSearchQuery || "").trim();
+        const normalizeSearchText = (text) => String(text || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const normalizedQuery = normalizeSearchText(searchQuery);
+        const isFuzzySubsequence = (query, target) => {
+            if (!query) return true;
+            let qi = 0;
+            for (let i = 0; i < target.length && qi < query.length; i++) {
+                if (target[i] === query[qi]) qi++;
+            }
+            return qi === query.length;
+        };
 
-        // 记录每个分类渲染了多少张卡片
+        // Track rendered cards in each category
         let renderedCount = { housing: 0, food: 0, transport: 0, study: 0, lifestyle: 0 };
 
         window.allPosts.forEach((post, index) => {
-            // 搜索过滤：如果标题、描述或地点包含关键词，则显示
-            const matchSearch = !searchQuery || 
-                                post.title.toLowerCase().includes(searchQuery) || 
-                                post.desc.toLowerCase().includes(searchQuery) || 
-                                post.locName.toLowerCase().includes(searchQuery);
+            // Search filter: title-only with case-insensitive fuzzy matching
+            const normalizedTitle = normalizeSearchText(post.title);
+            const matchSearch = !normalizedQuery ||
+                                normalizedTitle.includes(normalizedQuery) ||
+                                isFuzzySubsequence(normalizedQuery, normalizedTitle);
                                 
-            if (!matchSearch) return; // 不符合搜索词则跳过
+            if (!matchSearch) return; // Skip items that do not match search
 
             const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); 
             const showBadge = post.isTest ? (index % 3 === 0) : isNew; 
@@ -620,7 +939,7 @@
             }
         });
 
-        // 处理空状态：如果是搜索导致的没有结果，提示也会跟着变！
+        // Empty-state handling
         Object.keys(containers).forEach(cat => {
             if(renderedCount[cat] === 0) {
                 if (searchQuery) {
@@ -632,7 +951,7 @@
         });
     }
 
-    // --- 全局交互函数 ---
+    // Global interaction functions
     window.switchTab = function(tabId) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
@@ -682,6 +1001,7 @@
     window.payFiatFromDetail = function() {
         if (!window.ensureAuthenticated("pay with SEK")) return;
         alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`);
+        window.markDailyTaskProgress("purchase_once", 1);
     };
     window.payKathieFromDetail = function() {
         if (!window.ensureAuthenticated("pay with KaTHie")) return;
@@ -691,6 +1011,7 @@
             const btn = document.getElementById('payKathieBtn');
             btn.innerText = "Paid ✓"; btn.disabled = true; btn.style.backgroundColor = "#ccc"; btn.style.color = "#666";
             alert(`Success! 🪙 ${currentItemKathie} KaTHie transferred.`);
+            window.markDailyTaskProgress("purchase_once", 1);
         } else {
             alert(`Not enough points! You need 🪙 ${currentItemKathie} but only have 🪙 ${window.currentWalletBalance}.`);
         }
@@ -760,6 +1081,58 @@
         }
     };
 
+    document.getElementById('topupCardNumber').addEventListener('input', function(e) {
+        const digits = digitsOnly(e.target.value).slice(0, 19);
+        e.target.value = digits;
+    });
+
+    document.getElementById('topupCcv').addEventListener('input', function(e) {
+        e.target.value = digitsOnly(e.target.value).slice(0, 4);
+    });
+
+    document.getElementById('topupExpiry').addEventListener('input', function(e) {
+        const digits = digitsOnly(e.target.value).slice(0, 4);
+        if (digits.length <= 2) {
+            e.target.value = digits;
+            return;
+        }
+        e.target.value = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+    });
+
+    document.getElementById('topupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!window.ensureAuthenticated("top up wallet")) return;
+
+        const amountValue = Number(document.getElementById('topupAmount').value);
+        const cardNumber = digitsOnly(document.getElementById('topupCardNumber').value);
+        const ccv = digitsOnly(document.getElementById('topupCcv').value);
+        const expiry = String(document.getElementById('topupExpiry').value).trim();
+
+        if (!Number.isFinite(amountValue) || amountValue <= 0) {
+            setTopupError("Please enter a valid top-up amount.");
+            return;
+        }
+        if (cardNumber.length < 12 || cardNumber.length > 19) {
+            setTopupError("Please enter a valid card number.");
+            return;
+        }
+        if (ccv.length < 3 || ccv.length > 4) {
+            setTopupError("Please enter a valid CCV.");
+            return;
+        }
+        if (!isValidExpiry(expiry)) {
+            setTopupError("Please enter a valid expiry date (MM/YY).");
+            return;
+        }
+
+        setTopupError("");
+        pendingTopupAmount = Math.floor(amountValue);
+        document.getElementById('topupEntryStep').classList.add('hidden');
+        document.getElementById('topupProcessingStep').classList.remove('hidden');
+        document.getElementById('topupProcessingText').innerText =
+            `Charging ${pendingTopupAmount} SEK in simulation mode. Click "Payment Completed" to finish.`;
+    });
+
     document.getElementById('authForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const username = document.getElementById('authUsername').value;
@@ -780,6 +1153,7 @@
         currentUser = { username: existingUser.username, displayName: existingUser.displayName };
         saveAuthSession(currentUser);
         window.updateAuthUi();
+        window.initDailyTasks();
         document.getElementById('authForm').reset();
         window.closeAuthModal();
         alert(`Welcome, ${currentUser.displayName}!`);
@@ -806,6 +1180,7 @@
 
         try {
             await addDoc(collection(db, "posts"), newPostData);
+            window.markDailyTaskProgress("post_once", 1);
             window.closePostModal();
             alert('Success! Your post is now live.');
         } catch (error) {
@@ -819,3 +1194,7 @@
 
 </body>
 </html>
+
+
+
+
