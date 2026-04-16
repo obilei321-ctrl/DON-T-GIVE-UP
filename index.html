@@ -24,12 +24,31 @@
         .wallet { background-color: #E8F5E9; color: var(--kathie-color); padding: 6px 12px; border-radius: 15px; font-weight: bold; display: flex; align-items: center; gap: 5px; border: 1px solid #A5D6A7; transition: transform 0.2s; }
         .wallet.bump { transform: scale(1.1); background-color: #C8E6C9; }
         .btn-post { background-color: var(--secondary-color); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
+        .btn-bonus { background-color: #E3F2FD; color: var(--primary-color); padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #90CAF9; font-size: 0.95rem; }
+        .btn-auth { background-color: #ECEFF1; color: #263238; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #CFD8DC; font-size: 0.9rem; }
+        .user-chip { background: #F4F8FF; color: #234; border: 1px solid #C9DBFF; border-radius: 999px; font-size: 0.85rem; padding: 6px 10px; font-weight: 600; }
+        .btn-bonus:hover { background-color: #D0E8FD; }
+        .btn-auth:hover { background-color: #E2E9ED; }
         .btn-post:hover { opacity: 0.8; }
         
         /* Hero Section */
         .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('edited-image.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 4rem 2rem 5rem 2rem; }
         .hero h1.main-title { font-size: 4.5rem; margin: 0 0 10px 0; letter-spacing: 2px; text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--secondary-color); }
         .hero p.desc { color: var(--secondary-color); font-weight: bold; font-size: 1.2rem; }
+
+        /* New User Bonus Campaign */
+        .bonus-section { max-width: 1200px; margin: -2rem auto 1.5rem auto; padding: 0 2rem; position: relative; z-index: 20; }
+        .bonus-card { background: linear-gradient(135deg, #0055A5 0%, #0D74D1 100%); color: white; border-radius: 16px; box-shadow: 0 10px 20px rgba(0, 45, 90, 0.25); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; position: relative; }
+        .bonus-copy h2 { margin: 0.2rem 0; font-size: 1.4rem; }
+        .bonus-copy p { margin: 0; font-size: 0.95rem; color: #E3F2FD; }
+        .bonus-badge { display: inline-block; background: rgba(248, 177, 51, 0.95); color: #1D1D1D; font-size: 0.72rem; font-weight: bold; border-radius: 999px; padding: 0.25rem 0.55rem; letter-spacing: 0.3px; }
+        .bonus-actions { display: flex; align-items: center; gap: 10px; }
+        .btn-claim-bonus { background: #F8B133; color: #111; border: none; border-radius: 999px; padding: 10px 16px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: transform 0.2s, opacity 0.2s; }
+        .btn-claim-bonus:hover { transform: translateY(-1px); }
+        .btn-claim-bonus:disabled { cursor: not-allowed; opacity: 0.6; transform: none; }
+        .bonus-status { font-size: 0.88rem; color: #DBF3FF; font-weight: bold; }
+        .bonus-close-btn { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.55); background: rgba(255,255,255,0.15); color: white; font-size: 18px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .bonus-close-btn:hover { background: rgba(255,255,255,0.28); }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
         
@@ -94,6 +113,21 @@
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;}
         .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;}
+        .auth-modal { max-width: 440px; }
+        .auth-form { margin-top: 12px; }
+        .auth-form input { width: 100%; padding: 10px; border: 1px solid #cfd8dc; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; }
+        .auth-submit { width: 100%; background: var(--primary-color); color: white; border: none; border-radius: 8px; padding: 10px; font-weight: bold; cursor: pointer; }
+        .auth-error { color: #c62828; min-height: 1.1em; margin-top: 8px; font-size: 0.88rem; }
+
+        @media (max-width: 760px) {
+            .nav-right { gap: 10px; }
+            .btn-bonus { font-size: 0.85rem; padding: 6px 10px; }
+            .btn-auth { font-size: 0.82rem; padding: 6px 10px; }
+            .user-chip { display: none; }
+            .bonus-section { margin-top: -1.2rem; }
+            .bonus-card { padding: 1rem; }
+            .bonus-copy h2 { font-size: 1.15rem; }
+        }
     </style>
 </head>
 <body>
@@ -101,9 +135,12 @@
 <header>
     <a href="#" class="logo">DON'T GIVE UP</a>
     <div class="nav-right">
+        <span class="user-chip" id="authUserChip">Guest</span>
+        <button class="btn-auth" id="authActionBtn" onclick="window.handleAuthAction()">Login</button>
         <div class="wallet" id="user-wallet" title="Your Community Credits">
             🪙 <span id="wallet-balance">500</span> KaTHie
         </div>
+        <button class="btn-bonus" onclick="window.scrollToBonus()">+100 New User</button>
         <button class="btn-post" onclick="window.openPostModal()">+ Post Request</button>
     </div>
 </header>
@@ -111,6 +148,21 @@
 <section class="hero">
     <h1 class="main-title">DON'T GIVE UP</h1>
     <p class="desc">The All-in-One Service Platform for the KTH Community</p>
+</section>
+
+<section class="bonus-section" id="new-user-bonus">
+    <div class="bonus-card">
+        <button class="bonus-close-btn" id="bonusCloseBtn" onclick="window.closeBonusPopup()" aria-label="Close bonus popup" title="Close bonus popup">&times;</button>
+        <div class="bonus-copy">
+            <span class="bonus-badge">NEW USER EVENT</span>
+            <h2>Claim 100 KaTHie Welcome Bonus</h2>
+            <p>One-time reward for new users. Claim now and start trading in the community.</p>
+        </div>
+        <div class="bonus-actions">
+            <button class="btn-claim-bonus" id="claimBonusBtn" onclick="window.claimNewUserBonus()">Claim +100 KaTHie</button>
+            <span class="bonus-status" id="bonusStatus">Status: Unclaimed</span>
+        </div>
+    </div>
 </section>
 
 <div class="container search-container" style="max-width: 800px;">
@@ -221,6 +273,20 @@
     </div>
 </div>
 
+<div id="authModal" class="modal-overlay hidden">
+    <div class="modal auth-modal">
+        <span class="close-btn" onclick="window.closeAuthModal()">&times;</span>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Login</h2>
+        <p style="margin:0; color:#5a6570; font-size:0.92rem;">Please enter your account and password.</p>
+        <form id="authForm" class="auth-form">
+            <input type="text" id="authUsername" placeholder="Username" autocomplete="username" required>
+            <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password" required>
+            <button type="submit" class="auth-submit">Sign In</button>
+        </form>
+        <div class="auth-error" id="authError"></div>
+    </div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -238,7 +304,177 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.currentWalletBalance = 500;
+    const BONUS_AMOUNT = 100;
+    const WALLET_BALANCE_KEY = "dgu_wallet_balance";
+    const AUTH_SESSION_KEY = "dgu_auth_session";
+    const PRESET_USERS = [
+        { username: "kth001", password: "123456", displayName: "KTH User 001" },
+        { username: "kth002", password: "123456", displayName: "KTH User 002" },
+        { username: "kth003", password: "123456", displayName: "KTH User 003" }
+    ];
+    let currentUser = null;
+    let bonusClaimedThisVisit = false;
+
+    function normalizeUsername(value) {
+        return String(value || "").trim().toLowerCase();
+    }
+
+    function setAuthError(message) {
+        document.getElementById('authError').innerText = message || "";
+    }
+
+    function loadAuthSession() {
+        const raw = localStorage.getItem(AUTH_SESSION_KEY);
+        if (!raw) return null;
+        try {
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.username && parsed.displayName) {
+                return { username: String(parsed.username), displayName: String(parsed.displayName) };
+            }
+        } catch (_) {}
+        return null;
+    }
+
+    function saveAuthSession(user) {
+        if (!user) {
+            localStorage.removeItem(AUTH_SESSION_KEY);
+            return;
+        }
+        localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({
+            username: user.username,
+            displayName: user.displayName
+        }));
+    }
+
+    function findPresetUser(username, password) {
+        const id = normalizeUsername(username);
+        return PRESET_USERS.find((u) => normalizeUsername(u.username) === id && u.password === password);
+    }
+
+    window.updateAuthUi = function() {
+        const chip = document.getElementById('authUserChip');
+        const btn = document.getElementById('authActionBtn');
+        if (currentUser) {
+            chip.innerText = `👤 ${currentUser.displayName}`;
+            btn.innerText = "Logout";
+            return;
+        }
+        chip.innerText = "Guest";
+        btn.innerText = "Login";
+    };
+
+    window.openAuthModal = function() {
+        setAuthError("");
+        document.getElementById('authModal').classList.remove('hidden');
+        document.getElementById('authUsername').focus();
+    };
+
+    window.closeAuthModal = function() {
+        document.getElementById('authModal').classList.add('hidden');
+        setAuthError("");
+    };
+
+    window.ensureAuthenticated = function(actionLabel) {
+        if (currentUser) return true;
+        window.openAuthModal();
+        if (actionLabel) alert(`Please login first to ${actionLabel}.`);
+        return false;
+    };
+
+    window.logout = function() {
+        currentUser = null;
+        saveAuthSession(null);
+        bonusClaimedThisVisit = false;
+        window.updateAuthUi();
+        window.updateBonusUi();
+        setBonusVisibility(true);
+        window.closePostModal();
+        alert("You have logged out.");
+    };
+
+    window.handleAuthAction = function() {
+        if (currentUser) {
+            window.logout();
+            return;
+        }
+        window.openAuthModal();
+    };
+
+    function readWalletBalance() {
+        const stored = Number(localStorage.getItem(WALLET_BALANCE_KEY));
+        if (Number.isFinite(stored) && stored >= 0) return Math.floor(stored);
+        return 500;
+    }
+
+    function animateWallet() {
+        const walletUi = document.getElementById('user-wallet');
+        walletUi.classList.add('bump');
+        setTimeout(() => walletUi.classList.remove('bump'), 200);
+    }
+
+    function setWalletBalance(nextBalance, shouldAnimate = false) {
+        const safeBalance = Math.max(0, Math.floor(Number(nextBalance) || 0));
+        window.currentWalletBalance = safeBalance;
+        document.getElementById('wallet-balance').innerText = safeBalance;
+        localStorage.setItem(WALLET_BALANCE_KEY, String(safeBalance));
+        if (shouldAnimate) animateWallet();
+    }
+
+    function isBonusClaimed() {
+        return bonusClaimedThisVisit;
+    }
+
+    function setBonusVisibility(isVisible) {
+        const bonusSection = document.getElementById('new-user-bonus');
+        bonusSection.classList.toggle('hidden', !isVisible);
+    }
+
+    window.updateBonusUi = function() {
+        const claimBtn = document.getElementById('claimBonusBtn');
+        const statusEl = document.getElementById('bonusStatus');
+        if (isBonusClaimed()) {
+            claimBtn.disabled = true;
+            claimBtn.innerText = "Already Claimed";
+            statusEl.innerText = "Status: Claimed";
+            return;
+        }
+        claimBtn.disabled = false;
+        claimBtn.innerText = "Claim +100 KaTHie";
+        statusEl.innerText = "Status: Unclaimed";
+    };
+
+    window.closeBonusPopup = function() {
+        setBonusVisibility(false);
+    };
+
+    window.claimNewUserBonus = function() {
+        if (!window.ensureAuthenticated("claim the bonus")) return;
+        if (isBonusClaimed()) {
+            window.updateBonusUi();
+            alert("This welcome bonus has already been claimed on this device.");
+            return;
+        }
+        bonusClaimedThisVisit = true;
+        setWalletBalance(window.currentWalletBalance + BONUS_AMOUNT, true);
+        window.updateBonusUi();
+        alert("Welcome! You received 100 KaTHie.");
+        window.closeBonusPopup();
+    };
+
+    window.scrollToBonus = function() {
+        const bonusSection = document.getElementById('new-user-bonus');
+        if (bonusSection.classList.contains('hidden')) {
+            setBonusVisibility(true);
+        }
+        bonusSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    window.currentWalletBalance = readWalletBalance();
+    setWalletBalance(window.currentWalletBalance);
+    currentUser = loadAuthSession();
+    window.updateAuthUi();
+    window.updateBonusUi();
+    setBonusVisibility(true);
     
     // 真实的无图占位图
     const noPhotoImg = 'https://placehold.co/600x400/eeeeee/888888?text=No+Photo+Uploaded';
@@ -443,13 +679,14 @@
     };
 
     window.closeDetailModal = function() { document.getElementById('detailModal').classList.add('hidden'); };
-    window.payFiatFromDetail = function() { alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`); };
+    window.payFiatFromDetail = function() {
+        if (!window.ensureAuthenticated("pay with SEK")) return;
+        alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`);
+    };
     window.payKathieFromDetail = function() {
+        if (!window.ensureAuthenticated("pay with KaTHie")) return;
         if (window.currentWalletBalance >= currentItemKathie) {
-            window.currentWalletBalance -= currentItemKathie;
-            document.getElementById('wallet-balance').innerText = window.currentWalletBalance;
-            const walletUi = document.getElementById('user-wallet');
-            walletUi.classList.add('bump'); setTimeout(() => walletUi.classList.remove('bump'), 200);
+            setWalletBalance(window.currentWalletBalance - currentItemKathie, true);
             
             const btn = document.getElementById('payKathieBtn');
             btn.innerText = "Paid ✓"; btn.disabled = true; btn.style.backgroundColor = "#ccc"; btn.style.color = "#666";
@@ -465,6 +702,7 @@
     let currentCompressedImage = noPhotoImg;
 
     window.openPostModal = function() { 
+        if (!window.ensureAuthenticated("post a request")) return;
         document.getElementById('postModal').classList.remove('hidden'); 
         if (!postMap) {
             postMap = L.map('post-map-container').setView([59.3496, 18.0706], 14);
@@ -522,8 +760,34 @@
         }
     };
 
+    document.getElementById('authForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('authUsername').value;
+        const password = document.getElementById('authPassword').value;
+        const normalizedUsername = normalizeUsername(username);
+        const existingUser = PRESET_USERS.find((u) => normalizeUsername(u.username) === normalizedUsername);
+        if (!existingUser) {
+            setAuthError("Account does not exist.");
+            alert("Login failed: account does not exist.");
+            return;
+        }
+        if (password !== existingUser.password) {
+            setAuthError("Wrong password.");
+            alert("Login failed: wrong password.");
+            return;
+        }
+        setAuthError("");
+        currentUser = { username: existingUser.username, displayName: existingUser.displayName };
+        saveAuthSession(currentUser);
+        window.updateAuthUi();
+        document.getElementById('authForm').reset();
+        window.closeAuthModal();
+        alert(`Welcome, ${currentUser.displayName}!`);
+    });
+
     document.getElementById('postForm').addEventListener('submit', async function(e) {
         e.preventDefault(); 
+        if (!window.ensureAuthenticated("post a request")) return;
         const btn = document.getElementById('submitBtn');
         btn.innerText = "Posting..."; btn.disabled = true;
 
