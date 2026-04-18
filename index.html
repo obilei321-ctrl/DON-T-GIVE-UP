@@ -83,6 +83,10 @@
         .search-box:focus { border-color: var(--primary-color); box-shadow: 0 5px 20px rgba(0, 85, 165, 0.25); }
         .search-btn { height: 50px; border: none; border-radius: 999px; padding: 0 18px; font-weight: 700; color: white; background: var(--primary-color); cursor: pointer; box-shadow: 0 5px 14px rgba(0, 85, 165, 0.28); white-space: nowrap; }
         .search-btn:hover { opacity: 0.92; }
+        .service-filter-bar { max-width: 800px; margin: -1.1rem auto 1.2rem auto; padding: 0 2rem; display: flex; gap: 8px; flex-wrap: wrap; }
+        .service-filter-btn { border: 1px solid #d4deea; background: #f3f7fc; color: #31506e; border-radius: 999px; padding: 7px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+        .service-filter-btn.active { background: #0055A5; color: white; border-color: #0055A5; }
+        .service-filter-btn:hover { opacity: 0.92; }
 
         /* Tabs Style */
         .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
@@ -101,6 +105,21 @@
         .tag-buy { background: rgba(248, 177, 51, 0.9); color: black;} 
         .tag-gig { background: rgba(230, 74, 25, 0.85); } 
         .tag-skill { background: rgba(142, 36, 170, 0.85); } 
+        .flash-countdown {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #ff1744 0%, #ff6d00 100%);
+            box-shadow: 0 6px 14px rgba(211, 47, 47, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .flash-timer { font-weight: 800; color: #fffde7; }
 
         .card-body { padding: 15px; }
         .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -108,6 +127,20 @@
         .post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #888; margin-bottom: 10px; }
         .card-desc { display: none; } 
         .card-price-summary { font-weight: bold; color: var(--text-color); font-size: 0.95rem; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;}
+        .flash-deal-pricing { display: grid; gap: 8px; }
+        .price-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .price-old { text-decoration: line-through; color: #8a8f99; font-weight: 700; }
+        .price-new { color: #d32f2f; font-size: 1.06rem; font-weight: 900; }
+        .price-new-kathie { color: var(--kathie-color); font-size: 1.06rem; font-weight: 900; }
+        .price-discount-rate {
+            font-size: 0.78rem;
+            font-weight: 900;
+            color: #d32f2f;
+            background: #ffe6e6;
+            border: 1px solid #ffc6c6;
+            border-radius: 999px;
+            padding: 2px 6px;
+        }
         .summary-kathie { color: var(--kathie-color); }
         .hidden { display: none !important; }
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #888; font-size: 1.1rem; }
@@ -127,6 +160,19 @@
         .price-row:last-child { margin-bottom: 0; }
         .price-fiat { font-weight: bold; font-size: 1.1rem;}
         .price-kathie { font-weight: bold; color: var(--kathie-color); font-size: 1.1rem;}
+        .detail-old-price { text-decoration: line-through; color: #8a8f99; margin-right: 8px; }
+        .detail-new-price { color: #d32f2f; font-weight: 900; }
+        .detail-new-kathie { color: var(--kathie-color); font-weight: 900; }
+        .detail-discount-rate {
+            margin-left: 8px;
+            font-size: 0.78rem;
+            font-weight: 900;
+            color: #d32f2f;
+            background: #ffe6e6;
+            border: 1px solid #ffc6c6;
+            border-radius: 999px;
+            padding: 2px 6px;
+        }
         .pay-btn { background: white; border: 1px solid #ccc; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: all 0.2s;}
         .pay-btn:hover { background-color: #eee; }
         .pay-btn.kathie-btn { border-color: #A5D6A7; background-color: #E8F5E9; color: var(--kathie-color); }
@@ -165,6 +211,7 @@
             .daily-item { flex-direction: column; align-items: flex-start; }
             .search-container { flex-direction: column; align-items: stretch; }
             .search-btn { width: 100%; }
+            .service-filter-bar { padding: 0 2rem; }
         }
 
     </style>
@@ -177,7 +224,7 @@
         <span class="user-chip" id="authUserChip">Guest</span>
         <button class="btn-auth" id="authActionBtn" onclick="window.handleAuthAction()">Login</button>
         <div class="wallet" id="user-wallet" title="Your Community Credits">
-            🪙 <span id="wallet-balance">500</span> KaTHie
+            Credits <span id="wallet-balance">500</span> KaTHie
         </div>
         <button class="btn-topup" onclick="window.openTopupModal()">Top Up</button>
         <button class="btn-tasks" onclick="window.openDailyTasksModal()">Daily Tasks</button>
@@ -210,14 +257,19 @@
     <input type="search" id="searchInput" class="search-box" placeholder="Search for items, gigs, skills or locations..." onkeydown="window.handleSearchInputKey(event)">
     <button class="search-btn" onclick="window.applySearch()">Search</button>
 </div>
+<div class="service-filter-bar">
+    <button class="service-filter-btn active" data-flow-filter="all" onclick="window.setServiceFlowFilter('all')">All Posts</button>
+    <button class="service-filter-btn" data-flow-filter="need_service" onclick="window.setServiceFlowFilter('need_service')">Need Service</button>
+    <button class="service-filter-btn" data-flow-filter="offer_service" onclick="window.setServiceFlowFilter('offer_service')">Service Offer</button>
+</div>
 
 <div class="container">
     <div class="tabs">
-        <div class="tab active" onclick="window.switchTab('housing')">🏠 Home & Living</div>
-        <div class="tab" onclick="window.switchTab('food')">🍔 Food & Cooking</div>
-        <div class="tab" onclick="window.switchTab('transport')">🚆 Transport & Outdoors</div>
-        <div class="tab" onclick="window.switchTab('study')">📚 Study & Tech</div>
-        <div class="tab" onclick="window.switchTab('lifestyle')">👕 Clothing & Lifestyle</div>
+        <div class="tab active" onclick="window.switchTab('housing')">Home & Living</div>
+        <div class="tab" onclick="window.switchTab('food')">Food & Cooking</div>
+        <div class="tab" onclick="window.switchTab('transport')">Transport & Outdoors</div>
+        <div class="tab" onclick="window.switchTab('study')">Study & Tech</div>
+        <div class="tab" onclick="window.switchTab('lifestyle')">Clothing & Lifestyle</div>
     </div>
 
     <div id="housing-section" class="grid tab-content"><div class="empty-state">Loading...</div></div>
@@ -233,18 +285,18 @@
         <img id="detailImg" class="detail-img-large" src="" alt="Item Image">
         <h2 id="detailTitle">Item Title</h2>
         <div class="detail-meta">
-            <span id="detailLoc">📍 Location</span>
-            <span id="detailTime">🕒 Time</span>
+            <span id="detailLoc">Location</span>
+            <span id="detailTime">Time</span>
         </div>
         <p id="detailDesc">Full description goes here.</p>
         <div id="detail-map-container"></div>
         <div class="pricing-box">
             <div class="price-row">
-                <span class="price-fiat" id="detailSek">0 SEK</span>
-                <button class="pay-btn" onclick="window.payFiatFromDetail()">Pay SEK</button>
+                <span class="price-fiat" id="detailSek">-- SEK</span>
+                <button class="pay-btn" id="payFiatBtn" onclick="window.payFiatFromDetail()">Pay SEK</button>
             </div>
             <div class="price-row">
-                <span class="price-kathie" id="detailKathie">🪙 0 KaTHie</span>
+                <span class="price-kathie" id="detailKathie">KaTHie 0</span>
                 <button class="pay-btn kathie-btn" id="payKathieBtn" onclick="window.payKathieFromDetail()">Use Points</button>
             </div>
         </div>
@@ -261,11 +313,11 @@
                 <div class="form-group" style="flex: 1;">
                     <label>Scenario</label>
                     <select id="itemCategory" required>
-                        <option value="housing">🏠 Home & Living</option>
-                        <option value="food">🍔 Food & Cooking</option>
-                        <option value="transport">🚆 Transport & Outdoors</option>
-                        <option value="study">📚 Study & Tech</option>
-                        <option value="lifestyle">👕 Clothing & Lifestyle</option>
+                        <option value="housing">Home & Living</option>
+                        <option value="food">Food & Cooking</option>
+                        <option value="transport">Transport & Outdoors</option>
+                        <option value="study">Study & Tech</option>
+                        <option value="lifestyle">Clothing & Lifestyle</option>
                     </select>
                 </div>
                 <div class="form-group" style="flex: 1;">
@@ -277,6 +329,13 @@
                         <option value="skill">Skill Exchange</option>
                     </select>
                 </div>
+            </div>
+            <div class="form-group" id="serviceFlowGroup">
+                <label>Service Direction</label>
+                <select id="itemFlow">
+                    <option value="need_service">Need service (I pay helper)</option>
+                    <option value="offer_service">Offer service (buyer pays me)</option>
+                </select>
             </div>
             
             <div class="form-group">
@@ -300,11 +359,11 @@
             <div style="display: flex; gap: 10px;">
                 <div class="form-group" style="flex: 1;">
                     <label>Price (SEK)</label>
-                    <input type="number" id="itemSek" placeholder="0" required>
+                    <input type="number" id="itemSek" placeholder="1" min="1" step="1" required>
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>Price (KaTHie 🪙)</label>
-                    <input type="number" id="itemKathie" placeholder="0" required>
+                    <label>Price (KaTHie Credits)</label>
+                    <input type="number" id="itemKathie" placeholder="0" min="0" step="1" required>
                 </div>
             </div>
             <div class="form-actions">
@@ -403,10 +462,17 @@
     ];
     const TOPUP_TOKEN_RATE = 1; // 1 SEK -> 1 KaTHie (simulation)
     const DAILY_TASKS_KEY_PREFIX = "dgu_daily_tasks_v1";
+    const FLASH_DEAL_KEY_PREFIX = "dgu_flash_deals_v1";
+    const FLASH_DEAL_DISCOUNT_MIN = 30;
+    const FLASH_DEAL_DISCOUNT_MAX = 50;
+    const FLASH_DEAL_DISCOUNT_STEP = 5;
+    const FLASH_DEAL_DURATION_MIN_MINUTES = 30;
+    const FLASH_DEAL_DURATION_MAX_MINUTES = 120;
     let currentUser = null;
     let bonusClaimedThisVisit = false;
     let dailyTaskState = null;
     let pendingTopupAmount = 0;
+    let flashDealTicker = null;
 
     function normalizeUsername(value) {
         return String(value || "").trim().toLowerCase();
@@ -448,7 +514,7 @@
         const chip = document.getElementById('authUserChip');
         const btn = document.getElementById('authActionBtn');
         if (currentUser) {
-            chip.innerText = `👤 ${currentUser.displayName}`;
+            chip.innerText = `User ${currentUser.displayName}`;
             btn.innerText = "Logout";
             return;
         }
@@ -481,6 +547,7 @@
         window.updateAuthUi();
         window.updateBonusUi();
         window.initDailyTasks();
+        window.renderPosts();
         setBonusVisibility(true);
         window.closeDailyTasksModal();
         window.closeTopupModal();
@@ -589,6 +656,267 @@
     function getDailyTaskStorageKey() {
         const userKey = currentUser ? normalizeUsername(currentUser.username) : "guest";
         return `${DAILY_TASKS_KEY_PREFIX}_${userKey}`;
+    }
+
+    function getFlashDealStorageKey() {
+        const userKey = currentUser ? normalizeUsername(currentUser.username) : "guest";
+        return `${FLASH_DEAL_KEY_PREFIX}_${userKey}`;
+    }
+
+    function randomIntInclusive(min, max) {
+        const safeMin = Math.ceil(Number(min) || 0);
+        const safeMax = Math.floor(Number(max) || 0);
+        if (safeMax <= safeMin) return safeMin;
+        return Math.floor(Math.random() * (safeMax - safeMin + 1)) + safeMin;
+    }
+
+    function getAllowedDiscountPercents() {
+        const values = [];
+        for (let v = FLASH_DEAL_DISCOUNT_MIN; v <= FLASH_DEAL_DISCOUNT_MAX; v += FLASH_DEAL_DISCOUNT_STEP) {
+            values.push(v);
+        }
+        return values.length ? values : [FLASH_DEAL_DISCOUNT_MIN];
+    }
+
+    function pickRandomDiscountPercent() {
+        const allowed = getAllowedDiscountPercents();
+        const idx = Math.floor(Math.random() * allowed.length);
+        return allowed[idx];
+    }
+
+    function normalizeDiscountPercent(value) {
+        const target = Number(value);
+        const allowed = getAllowedDiscountPercents();
+        if (!Number.isFinite(target)) return pickRandomDiscountPercent();
+        let best = allowed[0];
+        let bestDistance = Math.abs(target - best);
+        for (let i = 1; i < allowed.length; i++) {
+            const distance = Math.abs(target - allowed[i]);
+            if (distance < bestDistance) {
+                best = allowed[i];
+                bestDistance = distance;
+            }
+        }
+        return best;
+    }
+
+    function shuffleArray(source) {
+        const arr = source.slice();
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+        return arr;
+    }
+
+    function getPostStableKey(post, index) {
+        if (post && post.postKey) return String(post.postKey);
+        if (post && post.id) return `live_${post.id}`;
+        return `idx_${index}`;
+    }
+
+    function isServiceType(type) {
+        const normalized = String(type || "").toLowerCase();
+        return normalized === "gig" || normalized === "skill";
+    }
+
+    const SERVICE_FLOW_TITLE_OVERRIDES = {
+        "urgent: laundry transfer!": "need_service",
+        "help carry mattress from t-bana": "need_service",
+        "take out my recycling please": "need_service",
+        "willys grocery run?": "need_service",
+        "ikea barkarby carpool (1 seat)": "offer_service",
+        "arlanda ride sharing?": "need_service",
+        "need macbook usb-c charger": "need_service",
+        "need help installing matlab": "need_service",
+        "feed my cat for 2 days": "need_service",
+        "gym spotter for bench press": "need_service"
+    };
+
+    function isValidServiceFlow(flowValue) {
+        const normalized = String(flowValue || "").toLowerCase();
+        return normalized === "need_service" || normalized === "offer_service";
+    }
+
+    function inferServiceFlowFromText(title, desc) {
+        const text = `${String(title || "")} ${String(desc || "")}`.toLowerCase();
+
+        const needHints = [
+            "need ", "help ", "urgent", "desperate", "forgot", "can someone", "anyone ",
+            "looking for", "please", "request", "stuck", "need help", "need a", "need to"
+        ];
+        const offerHints = [
+            "i have", "you can borrow", "got space", "driving to", "available",
+            "i can help", "offering", "i can teach", "offering help", "for clients"
+        ];
+
+        let needScore = 0;
+        let offerScore = 0;
+        needHints.forEach((hint) => { if (text.includes(hint)) needScore++; });
+        offerHints.forEach((hint) => { if (text.includes(hint)) offerScore++; });
+
+        return offerScore > needScore ? "offer_service" : "need_service";
+    }
+
+    function resolvePostFlow(post) {
+        if (!post) return "standard";
+        const type = String(post.type || "").toLowerCase();
+        if (!isServiceType(type)) return "standard";
+
+        const rawFlow = String(post.flow || "").toLowerCase();
+        if (isValidServiceFlow(rawFlow)) return rawFlow;
+
+        const titleKey = String(post.title || "").trim().toLowerCase();
+        if (SERVICE_FLOW_TITLE_OVERRIDES[titleKey]) return SERVICE_FLOW_TITLE_OVERRIDES[titleKey];
+
+        return inferServiceFlowFromText(post.title, post.desc);
+    }
+
+    function normalizeFlowValue(type, flowValue) {
+        const normalized = String(flowValue || "").toLowerCase();
+        if (normalized === "offer_service") return "offer_service";
+        if (normalized === "need_service") return "need_service";
+        return isServiceType(type) ? "need_service" : "standard";
+    }
+
+    function isServiceRequestPost(post) {
+        if (!post) return false;
+        return resolvePostFlow(post) === "need_service";
+    }
+
+    function getTypeTagTextForPost(post, fallbackText) {
+        const type = String(post && post.type ? post.type : "").toLowerCase();
+        if (!isServiceType(type)) return fallbackText;
+        return isServiceRequestPost(post) ? "Need Service" : "Service Offer";
+    }
+
+    function normalizeSekValue(value) {
+        const parsed = Math.floor(Number(value) || 0);
+        return parsed > 0 ? parsed : 1;
+    }
+
+    function calculateDiscountedPrice(originalValue, discountRate) {
+        const raw = Math.max(0, Number(originalValue) || 0);
+        if (raw <= 0) return 0;
+        if (raw <= 1) return 1;
+        const discounted = Math.floor(raw * (1 - discountRate));
+        return Math.max(1, Math.min(raw - 1, discounted));
+    }
+
+    function formatDealRemaining(msLeft) {
+        const totalSec = Math.max(0, Math.floor(msLeft / 1000));
+        const hours = Math.floor(totalSec / 3600);
+        const minutes = Math.floor((totalSec % 3600) / 60);
+        const seconds = totalSec % 60;
+        if (hours > 0) {
+            return `${hours}h ${String(minutes).padStart(2, "0")}m ${String(seconds).padStart(2, "0")}s`;
+        }
+        return `${String(minutes).padStart(2, "0")}m ${String(seconds).padStart(2, "0")}s`;
+    }
+
+    function loadFlashDealState() {
+        const raw = localStorage.getItem(getFlashDealStorageKey());
+        if (!raw) return { deals: {} };
+        try {
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object" || typeof parsed.deals !== "object") {
+                return { deals: {} };
+            }
+            return parsed;
+        } catch (_) {
+            return { deals: {} };
+        }
+    }
+
+    function saveFlashDealState(state) {
+        localStorage.setItem(getFlashDealStorageKey(), JSON.stringify(state));
+    }
+
+    function buildFlashDealsForCurrentUser(posts) {
+        const now = Date.now();
+        const candidates = posts.filter((post) => {
+            if (isServiceRequestPost(post)) return false;
+            const sek = Math.max(0, Number(post.sek) || 0);
+            const kathie = Math.max(0, Number(post.kathie) || 0);
+            return sek > 0 || kathie > 0;
+        });
+        const candidateKeys = new Set(candidates.map((post, index) => getPostStableKey(post, index)));
+
+        const state = loadFlashDealState();
+        const deals = state.deals || {};
+        let hasChanged = false;
+
+        Object.keys(deals).forEach((postKey) => {
+            const record = deals[postKey];
+            const endsAt = Number(record && record.endsAt);
+            if (!candidateKeys.has(postKey) || !Number.isFinite(endsAt) || endsAt <= now) {
+                delete deals[postKey];
+                hasChanged = true;
+                return;
+            }
+            const normalizedPercent = normalizeDiscountPercent(record && record.discountPercent);
+            const normalizedRate = normalizedPercent / 100;
+            if (Number(record.discountPercent) !== normalizedPercent || Number(record.discountRate) !== normalizedRate) {
+                deals[postKey] = {
+                    ...record,
+                    discountPercent: normalizedPercent,
+                    discountRate: normalizedRate
+                };
+                hasChanged = true;
+            }
+        });
+
+        if (Object.keys(deals).length === 0 && candidates.length > 0) {
+            const maxDeals = Math.max(1, Math.ceil(candidates.length * 0.4));
+            const minDeals = Math.min(maxDeals, Math.max(1, Math.floor(candidates.length * 0.15)));
+            const dealCount = randomIntInclusive(minDeals, maxDeals);
+            const picked = shuffleArray(candidates).slice(0, dealCount);
+            picked.forEach((post, pickedIndex) => {
+                const postKey = getPostStableKey(post, pickedIndex);
+                const discountPercent = pickRandomDiscountPercent();
+                const durationMinutes = randomIntInclusive(FLASH_DEAL_DURATION_MIN_MINUTES, FLASH_DEAL_DURATION_MAX_MINUTES);
+                deals[postKey] = {
+                    discountPercent,
+                    discountRate: discountPercent / 100,
+                    startsAt: now,
+                    endsAt: now + durationMinutes * 60 * 1000
+                };
+            });
+            hasChanged = true;
+        }
+
+        if (hasChanged) {
+            state.deals = deals;
+            saveFlashDealState(state);
+        }
+        return deals;
+    }
+
+    function refreshFlashDealCountdowns() {
+        const now = Date.now();
+        let hasExpired = false;
+        document.querySelectorAll('.flash-countdown[data-flash-ends-at]').forEach((badge) => {
+            const endsAt = Number(badge.getAttribute('data-flash-ends-at'));
+            const timerEl = badge.querySelector('.flash-timer');
+            if (!Number.isFinite(endsAt)) return;
+            const msLeft = endsAt - now;
+            if (msLeft <= 0) {
+                hasExpired = true;
+                if (timerEl) timerEl.innerText = "Expired";
+                return;
+            }
+            if (timerEl) timerEl.innerText = formatDealRemaining(msLeft);
+        });
+        if (hasExpired) {
+            window.renderPosts();
+        }
+    }
+
+    function startFlashDealTicker() {
+        if (flashDealTicker) return;
+        flashDealTicker = setInterval(refreshFlashDealCountdowns, 1000);
     }
 
     function createDefaultDailyTaskState(dateKey) {
@@ -780,8 +1108,8 @@
     const testData = [
         { cat: 'housing', type: 'gig', title: 'URGENT: Laundry transfer!', locName: 'Lappis', sek: 30, kathie: 60, lat: 59.3663, lng: 18.0583, img: noPhotoImg, desc: 'Stuck at uni! Can someone please move my clothes from washer 2 to the dryer? My slot ends in 10 mins!' },
         { cat: 'housing', type: 'buy', title: '5 IKEA moving boxes', locName: 'Teknikringen', sek: 40, kathie: 80, lat: 59.3496, lng: 18.0706, img: 'https://images.unsplash.com/photo-1589935447067-5531094415d1?w=400', desc: 'Used once for moving in. Normal cardboard boxes.' },
-        { cat: 'housing', type: 'rent', title: 'Need a Phillips screwdriver', locName: 'Osquldas väg', sek: 0, kathie: 15, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1550985543-f47f38aeeecf?w=400', desc: 'Just need it for 10 minutes to assemble a chair. Will pick up and return.' },
-        { cat: 'housing', type: 'buy', title: 'Half bottle of Laundry Detergent', locName: 'Lappis', sek: 15, kathie: 30, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Via Color liquid. Moving out tomorrow, taking whatever I can’t pack.' },
+        { cat: 'housing', type: 'rent', title: 'Need a Phillips screwdriver', locName: 'Osquldas vag', sek: 0, kathie: 15, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1550985543-f47f38aeeecf?w=400', desc: 'Just need it for 10 minutes to assemble a chair. Will pick up and return.' },
+        { cat: 'housing', type: 'buy', title: 'Half bottle of Laundry Detergent', locName: 'Lappis', sek: 15, kathie: 30, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Via Color liquid. Moving out tomorrow, taking whatever I cannot pack.' },
         { cat: 'housing', type: 'gig', title: 'Help carry mattress from T-bana', locName: 'Universitetet Station', sek: 50, kathie: 100, lat: 59.3654, lng: 18.0543, img: noPhotoImg, desc: 'Bought a mattress on Facebook. Need 1 person to help me carry it 500m to my building.' },
         { cat: 'housing', type: 'buy', title: 'Clas Ohlson Router', locName: 'Kista', sek: 100, kathie: 200, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?w=400', desc: 'Works perfectly. Comes with power cable.' },
         { cat: 'housing', type: 'gig', title: 'Take out my recycling please', locName: 'Lappis', sek: 20, kathie: 40, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'I twisted my ankle and live on the 3rd floor no elevator. 2 bags of cardboard.' },
@@ -790,7 +1118,7 @@
         { cat: 'food', type: 'buy', title: 'Spices bundle', locName: 'Teknikringen', sek: 25, kathie: 50, lat: 59.349, lng: 18.070, img: noPhotoImg, desc: 'Salt, Pepper, Curry powder. Leaving Stockholm next week.' },
         { cat: 'food', type: 'buy', title: 'Unopened 1kg Barilla Pasta', locName: 'Kista', sek: 15, kathie: 30, lat: 59.404, lng: 17.955, img: noPhotoImg, desc: 'Bought too much. Spaghetti No.5.' },
         { cat: 'food', type: 'gig', title: 'Willys grocery run?', locName: 'Lappis', sek: 25, kathie: 50, lat: 59.364, lng: 18.055, img: noPhotoImg, desc: 'Sick in bed with fever. If anyone is going to Willys, can you grab me milk and bread? Will pay.' },
-        { cat: 'food', type: 'rent', title: 'Need a big pot for corridor dinner', locName: 'Osquldas väg', sek: 10, kathie: 20, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400', desc: 'Making soup for 8 people, my pots are too small. Just need it for tonight.' },
+        { cat: 'food', type: 'rent', title: 'Need a big pot for corridor dinner', locName: 'Osquldas vag', sek: 10, kathie: 20, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400', desc: 'Making soup for 8 people, my pots are too small. Just need it for tonight.' },
         { cat: 'food', type: 'buy', title: 'Instant noodles (5 packs)', locName: 'Lappis', sek: 40, kathie: 80, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Shin Ramyun. Too spicy for me.' },
         { cat: 'food', type: 'rent', title: 'Digital Baking Scale', locName: 'Main Campus', sek: 0, kathie: 15, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1585848525049-5f21226500d4?w=400', desc: 'Need a scale for 30 mins to measure flour.' },
 
@@ -799,11 +1127,11 @@
         { cat: 'transport', type: 'gig', title: 'IKEA Barkarby Carpool (1 seat)', locName: 'KTH Entrance', sek: 30, kathie: 60, lat: 59.347, lng: 18.073, img: noPhotoImg, desc: 'Driving to IKEA tomorrow at 10 AM. Got space for 1 person.' },
         { cat: 'transport', type: 'rent', title: 'IKEA blue bags (FRAKTA) x3', locName: 'Teknikringen', sek: 10, kathie: 20, lat: 59.349, lng: 18.070, img: 'https://images.unsplash.com/photo-1555529733-0e67056058e3?w=400', desc: 'Doing laundry or moving? Borrow my big blue bags.' },
         { cat: 'transport', type: 'buy', title: 'Used City Bike (Fixer-upper)', locName: 'Kista', sek: 200, kathie: 400, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400', desc: 'Chain is a bit rusty and needs air, but rides okay. Lock included.' },
-        { cat: 'transport', type: 'gig', title: 'Arlanda ride sharing?', locName: 'Lappis', sek: 80, kathie: 160, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Anyone taking an Uber/Taxi to Arlanda tomorrow around 5 AM? Let’s split the cost.' },
+        { cat: 'transport', type: 'gig', title: 'Arlanda ride sharing?', locName: 'Lappis', sek: 80, kathie: 160, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Anyone taking an Uber/Taxi to Arlanda tomorrow around 5 AM? Lets split the cost.' },
 
         { cat: 'study', type: 'rent', title: 'Calculator for Exam!', locName: 'Main Campus', sek: 40, kathie: 80, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=400', desc: 'Desperate! Have a math exam tomorrow morning and mine broke. Need to borrow for 1 day.' },
         { cat: 'study', type: 'gig', title: 'Need MacBook USB-C Charger', locName: 'KTH Library', sek: 15, kathie: 30, lat: 59.348, lng: 18.072, img: noPhotoImg, desc: 'Sitting on the 2nd floor of the library. Laptop at 5%, forgot charger. Just need to charge for an hour.' },
-        { cat: 'study', type: 'buy', title: 'Pack of A4 paper', locName: 'Osquldas väg', sek: 30, kathie: 60, lat: 59.349, lng: 18.068, img: noPhotoImg, desc: 'Almost full pack of printer paper (maybe used 20 sheets).' },
+        { cat: 'study', type: 'buy', title: 'Pack of A4 paper', locName: 'Osquldas vag', sek: 30, kathie: 60, lat: 59.349, lng: 18.068, img: noPhotoImg, desc: 'Almost full pack of printer paper (maybe used 20 sheets).' },
         { cat: 'study', type: 'skill', title: 'Need help installing MATLAB', locName: 'KTH Library', sek: 40, kathie: 80, lat: 59.348, lng: 18.072, img: noPhotoImg, desc: 'Keep getting a license error on my Mac. Can anyone help me fix it?' },
         { cat: 'study', type: 'rent', title: 'Lab coat (Size M) & goggles', locName: 'Chemistry Building', sek: 25, kathie: 50, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400', desc: 'Forgot your lab coat? Rent mine for your 13:00 session.' },
 
@@ -844,7 +1172,20 @@
         }
     }
 
-        window.activeSearchQuery = "";
+    window.activeSearchQuery = "";
+    window.activeServiceFlowFilter = "all";
+
+    window.setServiceFlowFilter = function(filterValue) {
+        const allowed = new Set(["all", "need_service", "offer_service"]);
+        const nextFilter = allowed.has(String(filterValue || "")) ? String(filterValue) : "all";
+        window.activeServiceFlowFilter = nextFilter;
+
+        document.querySelectorAll('.service-filter-btn[data-flow-filter]').forEach((btn) => {
+            const isActive = btn.getAttribute('data-flow-filter') === nextFilter;
+            btn.classList.toggle('active', isActive);
+        });
+        window.renderPosts();
+    };
 
     window.applySearch = function() {
         const inputEl = document.getElementById('searchInput');
@@ -877,14 +1218,24 @@
                 locName: item.locName,
                 imageSrc: item.img,
                 createdAt: Date.now() - (index * 45 * 60000), 
-                isTest: true
+                isTest: true,
+                flow: resolvePostFlow(item),
+                postKey: `test_${index}`
             };
         });
 
-        window.allPosts = [...liveFirebasePosts, ...processedTestData];
+        const normalizedLivePosts = liveFirebasePosts.map((item, liveIndex) => ({
+            ...item,
+            flow: resolvePostFlow(item),
+            postKey: item.id ? `live_${item.id}` : `live_idx_${liveIndex}`
+        }));
+
+        window.allPosts = [...normalizedLivePosts, ...processedTestData];
+        const activeFlashDeals = buildFlashDealsForCurrentUser(window.allPosts);
 
         // Read search text and normalize for fuzzy matching
         const searchQuery = String(window.activeSearchQuery || "").trim();
+        const activeFlowFilter = String(window.activeServiceFlowFilter || "all");
         const normalizeSearchText = (text) => String(text || "").toLowerCase().replace(/[^a-z0-9]/g, "");
         const normalizedQuery = normalizeSearchText(searchQuery);
         const isFuzzySubsequence = (query, target) => {
@@ -907,6 +1258,10 @@
                                 isFuzzySubsequence(normalizedQuery, normalizedTitle);
                                 
             if (!matchSearch) return; // Skip items that do not match search
+            const normalizedFlow = resolvePostFlow(post);
+            const matchFlowFilter = activeFlowFilter === "all" ||
+                (isServiceType(post.type) && normalizedFlow === activeFlowFilter);
+            if (!matchFlowFilter) return;
 
             const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); 
             const showBadge = post.isTest ? (index % 3 === 0) : isNew; 
@@ -914,21 +1269,39 @@
             
             const timeStr = formatTime(post.createdAt);
             const tagInfo = getTypeTagInfo(post.type);
+            const isServiceRequest = isServiceRequestPost(post);
+            const postKey = getPostStableKey(post, index);
+            const flashDeal = activeFlashDeals[postKey];
+            const hasFlashDeal = !isServiceRequest && !!(flashDeal && Number(flashDeal.endsAt) > Date.now());
+            const baseSek = normalizeSekValue(post.sek);
+            const finalSek = hasFlashDeal ? calculateDiscountedPrice(baseSek, flashDeal.discountRate) : baseSek;
+            const finalKathie = hasFlashDeal ? calculateDiscountedPrice(post.kathie, flashDeal.discountRate) : Math.max(0, Number(post.kathie) || 0);
+            const flashBadgeHTML = hasFlashDeal
+                ? `<div class="flash-countdown" data-flash-ends-at="${flashDeal.endsAt}">Ends in <span class="flash-timer">${formatDealRemaining(flashDeal.endsAt - Date.now())}</span></div>`
+                : "";
+            const priceBlockClass = hasFlashDeal ? "card-price-summary flash-deal-pricing" : "card-price-summary";
+            const sekPriceHTML = hasFlashDeal
+                ? `<span class="price-line"><span class="price-old">${baseSek} SEK</span><span class="price-new">${finalSek} SEK</span><span class="price-discount-rate">-${flashDeal.discountPercent}%</span></span>`
+                : `<span>${isServiceRequest ? 'Reward ' : ''}<span class="raw-sek">${baseSek}</span> SEK</span>`;
+            const kathiePriceHTML = hasFlashDeal
+                ? `<span class="price-line summary-kathie"><span class="price-old">${post.kathie} KaTHie</span><span class="price-new-kathie">${finalKathie} KaTHie</span></span>`
+                : `<span class="summary-kathie">${isServiceRequest ? 'Reward ' : ''}KaTHie <span class="raw-kathie">${post.kathie}</span></span>`;
 
             const cardHTML = `
                 <div class="card" onclick="window.openItemDetail(${index})">
                     <img src="${post.imageSrc}" class="card-img-top" alt="${post.title}">
+                    ${flashBadgeHTML}
                     <span class="type-tag ${tagInfo.class}">${tagInfo.text}</span>
                     <div class="card-body">
                         <h3 class="item-title">${post.title} ${badgeHTML}</h3>
                         <div class="post-meta">
-                            <span class="location item-loc">📍 ${post.locName}</span>
-                            <span class="post-time item-time">🕒 ${timeStr}</span>
+                            <span class="location item-loc">Loc: ${post.locName}</span>
+                            <span class="post-time item-time">Time: ${timeStr}</span>
                         </div>
                         <p class="card-desc item-desc">${post.desc}</p>
-                        <div class="card-price-summary">
-                            <span><span class="raw-sek">${post.sek}</span> SEK</span>
-                            <span class="summary-kathie">🪙 <span class="raw-kathie">${post.kathie}</span></span>
+                        <div class="${priceBlockClass}">
+                            ${sekPriceHTML}
+                            ${kathiePriceHTML}
                         </div>
                     </div>
                 </div>
@@ -944,11 +1317,17 @@
             if(renderedCount[cat] === 0) {
                 if (searchQuery) {
                     containers[cat].innerHTML = `<div class="empty-state">No matching results for "<b>${searchQuery}</b>" in this category.</div>`;
+                } else if (activeFlowFilter === "need_service") {
+                    containers[cat].innerHTML = '<div class="empty-state">No "Need Service" posts in this category yet.</div>';
+                } else if (activeFlowFilter === "offer_service") {
+                    containers[cat].innerHTML = '<div class="empty-state">No "Service Offer" posts in this category yet.</div>';
                 } else {
                     containers[cat].innerHTML = '<div class="empty-state">No items here yet. Be the first to post!</div>';
                 }
             }
         });
+        startFlashDealTicker();
+        refreshFlashDealCountdowns();
     }
 
     // Global interaction functions
@@ -968,21 +1347,62 @@
 
     let detailMap = null, detailMarker = null;
     let currentItemSek = 0, currentItemKathie = 0;
+    let currentDetailPost = null, currentItemIsServiceRequest = false;
 
     window.openItemDetail = function(postIndex) {
         const post = window.allPosts[postIndex];
+        currentDetailPost = post;
+        currentItemIsServiceRequest = isServiceRequestPost(post);
         
         document.getElementById('detailImg').src = post.imageSrc;
         document.getElementById('detailTitle').innerText = post.title;
         document.getElementById('detailLoc').innerText = post.locName;
         document.getElementById('detailTime').innerText = formatTime(post.createdAt);
         document.getElementById('detailDesc').innerText = post.desc;
-        document.getElementById('detailSek').innerText = `${post.sek} SEK`;
-        document.getElementById('detailKathie').innerText = `🪙 ${post.kathie} KaTHie`;
-        
+        const postKey = getPostStableKey(post, postIndex);
+        const activeFlashDeals = buildFlashDealsForCurrentUser(window.allPosts || []);
+        const flashDeal = activeFlashDeals[postKey];
+        const hasFlashDeal = !currentItemIsServiceRequest && !!(flashDeal && Number(flashDeal.endsAt) > Date.now());
+        const baseSek = normalizeSekValue(post.sek);
+        const finalSek = hasFlashDeal ? calculateDiscountedPrice(baseSek, flashDeal.discountRate) : baseSek;
+        const finalKathie = hasFlashDeal ? calculateDiscountedPrice(post.kathie, flashDeal.discountRate) : Math.max(0, Number(post.kathie) || 0);
+
+        const detailSekEl = document.getElementById('detailSek');
+        const detailKathieEl = document.getElementById('detailKathie');
+        if (hasFlashDeal) {
+            detailSekEl.innerHTML = `<span class="detail-old-price">${baseSek} SEK</span><span class="detail-new-price">${finalSek} SEK</span><span class="detail-discount-rate">-${flashDeal.discountPercent}%</span>`;
+            detailKathieEl.innerHTML = `<span class="detail-old-price">${post.kathie} KaTHie</span><span class="detail-new-kathie">${finalKathie} KaTHie</span>`;
+        } else if (currentItemIsServiceRequest) {
+            detailSekEl.innerText = `Reward ${baseSek} SEK`;
+            detailKathieEl.innerText = `Reward ${post.kathie} KaTHie`;
+        } else {
+            detailSekEl.innerText = `${baseSek} SEK`;
+            detailKathieEl.innerText = `${post.kathie} KaTHie`;
+        }
+        const fiatBtn = document.getElementById('payFiatBtn');
         const kathieBtn = document.getElementById('payKathieBtn');
-        kathieBtn.innerText = "Use Points"; kathieBtn.disabled = false; kathieBtn.style.backgroundColor = "#E8F5E9"; kathieBtn.style.color = "var(--kathie-color)";
-        currentItemSek = post.sek; currentItemKathie = post.kathie;
+        if (currentItemIsServiceRequest) {
+            fiatBtn.innerText = "Accept Task";
+            fiatBtn.disabled = false;
+            fiatBtn.style.backgroundColor = "#E8F5E9";
+            fiatBtn.style.color = "#1f7a49";
+
+            kathieBtn.innerText = "Discuss Details";
+            kathieBtn.disabled = false;
+            kathieBtn.style.backgroundColor = "#E3F2FD";
+            kathieBtn.style.color = "#0D47A1";
+        } else {
+            fiatBtn.innerText = "Pay SEK";
+            fiatBtn.disabled = false;
+            fiatBtn.style.backgroundColor = "white";
+            fiatBtn.style.color = "inherit";
+
+            kathieBtn.innerText = "Use Points";
+            kathieBtn.disabled = false;
+            kathieBtn.style.backgroundColor = "#E8F5E9";
+            kathieBtn.style.color = "var(--kathie-color)";
+        }
+        currentItemSek = finalSek; currentItemKathie = finalKathie;
 
         document.getElementById('detailModal').classList.remove('hidden');
 
@@ -999,21 +1419,33 @@
 
     window.closeDetailModal = function() { document.getElementById('detailModal').classList.add('hidden'); };
     window.payFiatFromDetail = function() {
+        if (currentItemIsServiceRequest) {
+            if (!window.ensureAuthenticated("accept this task")) return;
+            const title = currentDetailPost ? currentDetailPost.title : "this service";
+            alert(`You accepted "${title}". Reward offered: ${currentItemSek} SEK / ${currentItemKathie} KaTHie.`);
+            return;
+        }
         if (!window.ensureAuthenticated("pay with SEK")) return;
         alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`);
         window.markDailyTaskProgress("purchase_once", 1);
     };
     window.payKathieFromDetail = function() {
+        if (currentItemIsServiceRequest) {
+            if (!window.ensureAuthenticated("discuss task details")) return;
+            const title = currentDetailPost ? currentDetailPost.title : "this service";
+            alert(`Start chatting with the requester about "${title}" (time, scope, and delivery).`);
+            return;
+        }
         if (!window.ensureAuthenticated("pay with KaTHie")) return;
         if (window.currentWalletBalance >= currentItemKathie) {
             setWalletBalance(window.currentWalletBalance - currentItemKathie, true);
             
             const btn = document.getElementById('payKathieBtn');
-            btn.innerText = "Paid ✓"; btn.disabled = true; btn.style.backgroundColor = "#ccc"; btn.style.color = "#666";
-            alert(`Success! 🪙 ${currentItemKathie} KaTHie transferred.`);
+            btn.innerText = "Paid"; btn.disabled = true; btn.style.backgroundColor = "#ccc"; btn.style.color = "#666";
+            alert(`Success! ${currentItemKathie} KaTHie transferred.`);
             window.markDailyTaskProgress("purchase_once", 1);
         } else {
-            alert(`Not enough points! You need 🪙 ${currentItemKathie} but only have 🪙 ${window.currentWalletBalance}.`);
+            alert(`Not enough points! You need ${currentItemKathie} but only have ${window.currentWalletBalance}.`);
         }
     };
 
@@ -1022,9 +1454,23 @@
     let selectedLat = 59.3496, selectedLng = 18.0706; 
     let currentCompressedImage = noPhotoImg;
 
+    function syncPostFlowUi() {
+        const flowGroupEl = document.getElementById('serviceFlowGroup');
+        const flowEl = document.getElementById('itemFlow');
+        if (!flowGroupEl || !flowEl) return;
+
+        flowGroupEl.classList.remove('hidden');
+        flowEl.disabled = false;
+        flowEl.required = true;
+        const currentValue = String(flowEl.value || "").toLowerCase();
+        const isValid = currentValue === "need_service" || currentValue === "offer_service";
+        if (!isValid) flowEl.value = "need_service";
+    }
+
     window.openPostModal = function() { 
         if (!window.ensureAuthenticated("post a request")) return;
         document.getElementById('postModal').classList.remove('hidden'); 
+        syncPostFlowUi();
         if (!postMap) {
             postMap = L.map('post-map-container').setView([59.3496, 18.0706], 14);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(postMap);
@@ -1034,7 +1480,7 @@
                 selectedLat = e.latlng.lat; selectedLng = e.latlng.lng;
                 
                 const locInput = document.getElementById('itemLoc');
-                locInput.value = "📍 Fetching location name...";
+                locInput.value = "Fetching location name...";
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedLat}&lon=${selectedLng}&zoom=18&addressdetails=1`)
                     .then(r => r.json())
                     .then(data => {
@@ -1050,6 +1496,7 @@
     window.closePostModal = function() { 
         document.getElementById('postModal').classList.add('hidden'); 
         document.getElementById('postForm').reset(); 
+        syncPostFlowUi();
         document.getElementById('imagePreview').style.display = 'none';
         if(postMarker) { postMap.removeLayer(postMarker); postMarker = null; }
         selectedLat = 59.3496; selectedLng = 18.0706;
@@ -1080,6 +1527,11 @@
             reader.readAsDataURL(file);
         }
     };
+
+    document.getElementById('itemType').addEventListener('change', function() {
+        syncPostFlowUi();
+    });
+    syncPostFlowUi();
 
     document.getElementById('topupCardNumber').addEventListener('input', function(e) {
         const digits = digitsOnly(e.target.value).slice(0, 19);
@@ -1154,6 +1606,7 @@
         saveAuthSession(currentUser);
         window.updateAuthUi();
         window.initDailyTasks();
+        window.renderPosts();
         document.getElementById('authForm').reset();
         window.closeAuthModal();
         alert(`Welcome, ${currentUser.displayName}!`);
@@ -1162,18 +1615,33 @@
     document.getElementById('postForm').addEventListener('submit', async function(e) {
         e.preventDefault(); 
         if (!window.ensureAuthenticated("post a request")) return;
+        const selectedType = document.getElementById('itemType').value;
+        const flowInputEl = document.getElementById('itemFlow');
+        const rawFlow = String(flowInputEl ? flowInputEl.value : "").toLowerCase();
+        if (rawFlow !== "need_service" && rawFlow !== "offer_service") {
+            alert("Please choose whether this is Need Service or Service Offer.");
+            return;
+        }
+        const normalizedFlow = normalizeFlowValue(selectedType, rawFlow);
+        const parsedSek = Math.floor(Number(document.getElementById('itemSek').value) || 0);
+        if (parsedSek <= 0) {
+            alert("SEK price must be at least 1.");
+            return;
+        }
+        const parsedKathie = Math.max(0, Math.floor(Number(document.getElementById('itemKathie').value) || 0));
         const btn = document.getElementById('submitBtn');
         btn.innerText = "Posting..."; btn.disabled = true;
 
         const newPostData = {
             category: document.getElementById('itemCategory').value,
-            type: document.getElementById('itemType').value,
+            type: selectedType,
+            flow: normalizedFlow,
             title: document.getElementById('itemTitle').value,
             desc: document.getElementById('itemDesc').value,
             locName: document.getElementById('itemLoc').value,
             lat: selectedLat, lng: selectedLng,
-            sek: parseInt(document.getElementById('itemSek').value) || 0,
-            kathie: parseInt(document.getElementById('itemKathie').value) || 0,
+            sek: parsedSek,
+            kathie: parsedKathie,
             imageSrc: currentCompressedImage,
             createdAt: Date.now()
         };
@@ -1194,6 +1662,10 @@
 
 </body>
 </html>
+
+
+
+
 
 
 
