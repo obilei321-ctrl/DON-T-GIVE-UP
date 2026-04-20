@@ -1187,11 +1187,38 @@
         window.renderPosts();
     };
 
-    window.applySearch = function() {
-        const inputEl = document.getElementById('searchInput');
-        window.activeSearchQuery = String(inputEl ? inputEl.value : "").trim();
-        window.renderPosts();
-    };
+    // 👇 --- 新增：搜索和回车触发逻辑 --- 👇
+window.applySearch = function() {
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+    
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    // 你的代码里帖子所在的区域使用了 grid 和 tab-content
+    const tabContents = document.querySelectorAll('.tab-content'); 
+    
+    tabContents.forEach(container => {
+        const posts = container.querySelectorAll('.card'); // 获取所有帖子卡片
+        posts.forEach(post => {
+            const postText = post.innerText.toLowerCase();
+            if (postText.includes(searchTerm)) {
+                post.style.display = ""; // 匹配成功，显示
+            } else {
+                post.style.display = "none"; // 匹配失败，隐藏
+            }
+        });
+    });
+};
+
+// 让用户在搜索框按回车也能直接触发搜索
+const searchInputEl = document.getElementById('searchInput');
+if(searchInputEl) {
+    searchInputEl.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            window.applySearch();
+        }
+    });
+}
+// 👆 --- 新增代码结束 --- 👆
 
     window.handleSearchInputKey = function(event) {
         if (event.key === "Enter") {
@@ -1649,6 +1676,18 @@
         try {
             await addDoc(collection(db, "posts"), newPostData);
             window.markDailyTaskProgress("post_once", 1);
+            // 👇 --- 从这里开始是你新增的清空表单代码 --- 👇
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemDesc').value = '';
+            document.getElementById('itemSek').value = '';
+            document.getElementById('itemKathie').value = '';
+            document.getElementById('itemLoc').value = '';
+            const imgPreview = document.getElementById('imagePreview');
+            if(imgPreview) imgPreview.src = '';
+            if (typeof currentCompressedImage !== 'undefined') {
+                currentCompressedImage = null; 
+            }
+            // 👆 --- 新增代码结束 --- 👆
             window.closePostModal();
             alert('Success! Your post is now live.');
         } catch (error) {
