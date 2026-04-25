@@ -102,6 +102,7 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-bottom: 3rem;}
         .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; border: 1px solid #eee; position: relative;}
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .card-media { position: relative; }
         .card-img-top { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; background-color: #f8f9fa;}
         
         .type-tag { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: white; backdrop-filter: blur(4px); box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
@@ -111,8 +112,8 @@
         .tag-skill { background: rgba(142, 36, 170, 0.85); } 
         .flash-countdown {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            right: 10px;
+            bottom: 10px;
             z-index: 2;
             padding: 4px 8px;
             border-radius: 999px;
@@ -127,7 +128,25 @@
 
         .card-body { padding: 15px; }
         .card h3 { margin: 0 0 8px 0; color: var(--primary-color); font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        .badge-new { font-size: 0.65rem; background: #ff4757; color: white; padding: 2px 6px; border-radius: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;}
+        .badge-new {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 3;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #ff4757;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            letter-spacing: 0.2px;
+        }
         .post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #888; margin-bottom: 10px; }
         .card-desc { display: none; } 
         .card-price-summary { font-weight: bold; color: var(--text-color); font-size: 0.95rem; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;}
@@ -205,6 +224,14 @@
         .messages-modal { max-width: 700px; }
         .messages-summary { margin: 0 0 10px 0; color: #4f6173; font-size: 0.9rem; }
         .messages-list { display: grid; gap: 10px; max-height: 62vh; overflow-y: auto; padding-right: 2px; }
+        .messages-section-title {
+            margin: 2px 0 0 0;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #436280;
+            letter-spacing: 0.25px;
+            text-transform: uppercase;
+        }
         .order-card { border: 1px solid #dde7f2; border-radius: 10px; background: #fbfdff; padding: 12px; display: grid; gap: 8px; }
         .order-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
         .order-title { margin: 0; font-size: 1rem; color: #1e3854; }
@@ -220,7 +247,84 @@
         .order-btn.primary { background: #eaf8f2; border-color: #9fd6b5; color: #1b6d45; }
         .order-btn.warn { background: #fff2d8; border-color: #f0cb7b; color: #784800; }
         .order-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .chat-card {
+            border: 1px solid #d9e5f2;
+            border-radius: 10px;
+            background: #fdfefe;
+            padding: 10px 12px;
+            display: grid;
+            gap: 7px;
+        }
+        .chat-head { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+        .chat-title { margin: 0; font-size: 0.95rem; color: #234565; }
+        .chat-peer { font-size: 0.8rem; color: #58708a; }
+        .chat-preview {
+            font-size: 0.86rem;
+            color: #30495f;
+            background: #f5f9fc;
+            border: 1px solid #dce8f3;
+            border-radius: 8px;
+            padding: 7px 8px;
+        }
+        .chat-time { font-size: 0.76rem; color: #6d8298; }
         .messages-empty { color: #6c7f92; font-size: 0.92rem; background: #f7fafc; border: 1px dashed #cfdbe8; border-radius: 10px; padding: 14px; text-align: center; }
+        .discuss-modal { max-width: 700px; }
+        .discuss-participants { margin: 0 0 10px 0; color: #4d6075; font-size: 0.9rem; }
+        .discuss-thread {
+            max-height: 42vh;
+            overflow-y: auto;
+            border: 1px solid #dbe6f2;
+            border-radius: 10px;
+            background: #f8fbff;
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+        }
+        .discuss-msg {
+            max-width: 86%;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+            line-height: 1.35;
+            border: 1px solid #d7e3ef;
+            background: #ffffff;
+            justify-self: start;
+        }
+        .discuss-msg.me {
+            justify-self: end;
+            background: #eaf8f2;
+            border-color: #b9dfc8;
+        }
+        .discuss-msg.system {
+            max-width: 100%;
+            justify-self: center;
+            background: #eef5fc;
+            border-color: #d1e0ef;
+            color: #3d5975;
+            font-size: 0.82rem;
+        }
+        .discuss-meta { font-size: 0.75rem; color: #667b92; margin-bottom: 4px; }
+        .discuss-text { word-break: break-word; }
+        .discuss-form { display: flex; gap: 8px; margin-top: 10px; }
+        .discuss-input {
+            flex: 1;
+            border: 1px solid #cfdbe8;
+            border-radius: 8px;
+            padding: 9px 10px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+        .discuss-send {
+            border: 1px solid #b8cde3;
+            background: #edf5fc;
+            color: #254b6d;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .discuss-actions { margin-top: 10px; display: flex; justify-content: flex-end; gap: 8px; }
         @media (max-width: 760px) {
             .nav-right { gap: 10px; }
             .btn-bonus { font-size: 0.85rem; padding: 6px 10px; }
@@ -252,7 +356,7 @@
         </div>
         <button class="btn-topup" onclick="window.openTopupModal()">Top Up</button>
         <button class="btn-tasks" onclick="window.openDailyTasksModal()">Daily Tasks</button>
-        <button class="btn-messages" id="messagesBtn" onclick="window.openMessagesModal()">Messages <span class="msg-badge" id="messagesUnreadBadge">0</span></button>
+        <button class="btn-messages" id="messagesBtn" onclick="window.openMessagesModal()">Progress <span class="msg-badge" id="messagesUnreadBadge">0</span></button>
         <button class="btn-bonus" onclick="window.scrollToBonus()">New User</button>
         <button class="btn-post" onclick="window.openPostModal()">+ Post Request</button>
     </div>
@@ -434,9 +538,26 @@
 <div id="messagesModal" class="modal-overlay hidden">
     <div class="modal messages-modal">
         <span class="close-btn" onclick="window.closeMessagesModal()">&times;</span>
-        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Service Messages</h2>
-        <p class="messages-summary" id="messagesSummaryText">Orders and escrow updates will appear here.</p>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Progress Center</h2>
+        <p class="messages-summary" id="messagesSummaryText">Orders, escrow updates, and chats will appear here.</p>
         <div class="messages-list" id="messagesList"></div>
+    </div>
+</div>
+
+<div id="discussModal" class="modal-overlay hidden">
+    <div class="modal discuss-modal">
+        <span class="close-btn" onclick="window.closeDiscussModal()">&times;</span>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Discuss Details</h2>
+        <p class="discuss-participants" id="discussParticipantsText">Open a conversation with the requester.</p>
+        <div class="discuss-thread" id="discussThreadList"></div>
+        <form id="discussForm" class="discuss-form">
+            <input type="text" id="discussInput" class="discuss-input" placeholder="Type your message..." maxlength="300" required>
+            <button type="submit" class="discuss-send">Send</button>
+        </form>
+        <div class="discuss-actions">
+            <button type="button" class="order-btn primary" id="discussAcceptBtn" onclick="window.acceptNeedServiceFromDiscuss()">Accept Task</button>
+            <button type="button" class="order-btn" onclick="window.closeDiscussModal()">Close</button>
+        </div>
     </div>
 </div>
 
@@ -502,6 +623,8 @@
     const DAILY_TASKS_KEY_PREFIX = "dgu_daily_tasks_v1";
     const FLASH_DEAL_KEY_PREFIX = "dgu_flash_deals_v1";
     const SERVICE_ORDERS_STORAGE_KEY = "dgu_service_orders_v1";
+    const SYSTEM_ESCROW_POOL_KEY = "dgu_system_escrow_pool_v1";
+    const DISCUSSIONS_STORAGE_KEY = "dgu_discussions_v1";
     const MESSAGE_SEEN_KEY_PREFIX = "dgu_message_seen_v1";
     const ORDER_STATUS = {
         PAID_FROZEN: "paid_frozen",
@@ -520,6 +643,7 @@
     let pendingTopupAmount = 0;
     let flashDealTicker = null;
     let serviceOrdersState = [];
+    let currentDiscussContext = null;
 
     function normalizeUsername(value) {
         return String(value || "").trim().toLowerCase();
@@ -552,6 +676,23 @@
             setWalletBalance(safeBalance, true);
         }
         return safeBalance;
+    }
+
+    function readSystemEscrowPool() {
+        const stored = Number(localStorage.getItem(SYSTEM_ESCROW_POOL_KEY));
+        if (Number.isFinite(stored) && stored >= 0) return Math.floor(stored);
+        return 0;
+    }
+
+    function writeSystemEscrowPool(nextAmount) {
+        const safeAmount = Math.max(0, Math.floor(Number(nextAmount) || 0));
+        localStorage.setItem(SYSTEM_ESCROW_POOL_KEY, String(safeAmount));
+        return safeAmount;
+    }
+
+    function increaseSystemEscrowPool(deltaAmount) {
+        const next = readSystemEscrowPool() + Math.max(0, Math.floor(Number(deltaAmount) || 0));
+        return writeSystemEscrowPool(next);
     }
 
     function setAuthError(message) {
@@ -636,6 +777,7 @@
         setBonusVisibility(true);
         window.closeDailyTasksModal();
         window.closeMessagesModal();
+        window.closeDiscussModal();
         window.closeTopupModal();
         window.closePostModal();
         window.updateMessageUi();
@@ -890,11 +1032,6 @@
         return resolvePostFlow(post) === "need_service";
     }
 
-    function getTypeTagTextForPost(post, fallbackText) {
-        if (!post) return fallbackText;
-        return isServiceRequestPost(post) ? "Need Service" : "Service Offer";
-    }
-
     function normalizeSekValue(value) {
         const parsed = Math.floor(Number(value) || 0);
         return parsed > 0 ? parsed : 1;
@@ -1048,6 +1185,11 @@
         return { ownerUsername, ownerDisplayName };
     }
 
+    function isCurrentUserPostOwner(post) {
+        if (!currentUser || !post) return false;
+        return normalizeUsername(currentUser.username) === normalizeUsername(post.ownerUsername);
+    }
+
     function loadServiceOrdersFromStorage() {
         const raw = localStorage.getItem(SERVICE_ORDERS_STORAGE_KEY);
         if (!raw) return [];
@@ -1090,6 +1232,303 @@
         return modal && !modal.classList.contains('hidden');
     }
 
+    function loadDiscussionState() {
+        const raw = localStorage.getItem(DISCUSSIONS_STORAGE_KEY);
+        if (!raw) return {};
+        try {
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+            return parsed;
+        } catch (_) {
+            return {};
+        }
+    }
+
+    function saveDiscussionState(state) {
+        localStorage.setItem(DISCUSSIONS_STORAGE_KEY, JSON.stringify(state && typeof state === "object" ? state : {}));
+    }
+
+    function getDiscussionThreadKey(postKey, usernameA, usernameB) {
+        const participants = [normalizeUsername(usernameA), normalizeUsername(usernameB)]
+            .filter(Boolean)
+            .sort();
+        if (participants.length < 2) return "";
+        return `${String(postKey || "post")}__${participants.join("__")}`;
+    }
+
+    function parseDiscussionThreadKey(threadKey) {
+        const parts = String(threadKey || "").split("__");
+        if (parts.length < 3) return null;
+        const usernameA = normalizeUsername(parts[parts.length - 2]);
+        const usernameB = normalizeUsername(parts[parts.length - 1]);
+        const postKey = parts.slice(0, -2).join("__");
+        if (!usernameA || !usernameB || !postKey) return null;
+        return { postKey, participants: [usernameA, usernameB] };
+    }
+
+    function getDisplayNameForUsername(username) {
+        const normalized = normalizeUsername(username);
+        if (!normalized) return "Unknown User";
+        const preset = PRESET_USERS.find((u) => normalizeUsername(u.username) === normalized);
+        return preset ? preset.displayName : normalized;
+    }
+
+    function findPostByPostKey(postKey) {
+        const targetKey = String(postKey || "");
+        if (!targetKey || !Array.isArray(window.allPosts)) return null;
+        for (let i = 0; i < window.allPosts.length; i++) {
+            const post = window.allPosts[i];
+            if (getPostStableKey(post, i) === targetKey) return post;
+        }
+        return null;
+    }
+
+    function getDiscussionThreadsForCurrentUser() {
+        if (!currentUser) return [];
+        const me = normalizeUsername(currentUser.username);
+        const state = loadDiscussionState();
+        return Object.keys(state).map((threadKey) => {
+            const parsed = parseDiscussionThreadKey(threadKey);
+            const messages = Array.isArray(state[threadKey]) ? state[threadKey] : [];
+            if (!parsed || !messages.length) return null;
+            if (!parsed.participants.includes(me)) return null;
+            const peerUsername = parsed.participants.find((u) => u !== me) || "";
+            const latest = messages[messages.length - 1] || {};
+            const postTitleFromSystem = messages.find((m) => String(m.kind || "") === "system" && String(m.text || "").startsWith('Discussion started for "'));
+            let postTitle = "Service";
+            if (postTitleFromSystem) {
+                const matched = String(postTitleFromSystem.text).match(/Discussion started for "(.+)"\./);
+                if (matched && matched[1]) postTitle = matched[1];
+            }
+            const peerDisplayNameFromMsgs = messages.find((m) =>
+                String(m.kind || "") === "user" &&
+                normalizeUsername(m.senderUsername) === peerUsername &&
+                m.senderDisplayName
+            );
+            const peerDisplayName = peerDisplayNameFromMsgs
+                ? String(peerDisplayNameFromMsgs.senderDisplayName)
+                : getDisplayNameForUsername(peerUsername);
+            return {
+                threadKey,
+                postKey: parsed.postKey,
+                postTitle,
+                peerUsername,
+                peerDisplayName,
+                updatedAt: Number(latest.createdAt || 0),
+                previewText: String(latest.text || ""),
+                latestKind: String(latest.kind || "user")
+            };
+        }).filter(Boolean).sort((a, b) => b.updatedAt - a.updatedAt);
+    }
+
+    function updateDiscussAcceptButton() {
+        const btn = document.getElementById('discussAcceptBtn');
+        if (!btn) return;
+        const canAccept = !!(currentDiscussContext && currentDiscussContext.canAccept);
+        btn.disabled = !canAccept;
+        btn.classList.toggle('hidden', !canAccept);
+    }
+
+    function buildDiscussContextForCurrentDetail() {
+        if (!currentUser || !currentDetailPost) return null;
+        const helperUsername = normalizeUsername(currentUser.username);
+        const requesterUsername = normalizeUsername(currentDetailPost.ownerUsername);
+        if (!helperUsername || !requesterUsername) return null;
+        const threadKey = getDiscussionThreadKey(
+            String(currentDetailPost.postKey || currentDetailPost.id || currentDetailPost.title || "post"),
+            helperUsername,
+            requesterUsername
+        );
+        if (!threadKey) return null;
+        return {
+            threadKey,
+            postTitle: String(currentDetailPost.title || "Service"),
+            requesterUsername,
+            requesterDisplayName: String(currentDetailPost.ownerDisplayName || requesterUsername),
+            helperUsername,
+            helperDisplayName: String(currentUser.displayName || helperUsername),
+            participantsText: `Requester: ${String(currentDetailPost.ownerDisplayName || requesterUsername)} | Helper: ${String(currentUser.displayName || helperUsername)}`,
+            canAccept: true
+        };
+    }
+
+    function seedDiscussThreadIfEmpty(context) {
+        if (!context) return;
+        const state = loadDiscussionState();
+        const existing = Array.isArray(state[context.threadKey]) ? state[context.threadKey] : [];
+        if (existing.length) return;
+        state[context.threadKey] = [
+            {
+                kind: "system",
+                text: `Discussion started for "${context.postTitle}".`,
+                createdAt: Date.now()
+            },
+            {
+                kind: "user",
+                senderUsername: context.requesterUsername,
+                senderDisplayName: context.requesterDisplayName,
+                text: "Hi! Let us confirm schedule, scope, and delivery details first.",
+                createdAt: Date.now()
+            }
+        ];
+        saveDiscussionState(state);
+    }
+
+    function appendDiscussMessage(threadKey, message) {
+        if (!threadKey || !message) return;
+        const state = loadDiscussionState();
+        const current = Array.isArray(state[threadKey]) ? state[threadKey] : [];
+        current.push(message);
+        state[threadKey] = current.slice(-120);
+        saveDiscussionState(state);
+    }
+
+    window.renderDiscussThread = function() {
+        const listEl = document.getElementById('discussThreadList');
+        const participantsEl = document.getElementById('discussParticipantsText');
+        if (!listEl || !participantsEl) return;
+        if (!currentDiscussContext) {
+            participantsEl.innerText = "Open a conversation with the requester.";
+            listEl.innerHTML = `<div class="messages-empty">No discussion selected.</div>`;
+            updateDiscussAcceptButton();
+            return;
+        }
+
+        participantsEl.innerText = String(
+            currentDiscussContext.participantsText ||
+            `Requester: ${currentDiscussContext.requesterDisplayName} | Helper: ${currentDiscussContext.helperDisplayName}`
+        );
+        const state = loadDiscussionState();
+        const messages = Array.isArray(state[currentDiscussContext.threadKey]) ? state[currentDiscussContext.threadKey] : [];
+        if (!messages.length) {
+            listEl.innerHTML = `<div class="messages-empty">No messages yet.</div>`;
+            updateDiscussAcceptButton();
+            return;
+        }
+
+        const myUsername = currentUser ? normalizeUsername(currentUser.username) : "";
+        listEl.innerHTML = messages.map((msg) => {
+            const kind = String(msg.kind || "user");
+            if (kind === "system") {
+                return `<div class="discuss-msg system"><div class="discuss-text">${escapeHtml(msg.text || "")}</div></div>`;
+            }
+            const senderUsername = normalizeUsername(msg.senderUsername);
+            const senderLabel = escapeHtml(msg.senderDisplayName || senderUsername || "User");
+            const isMe = !!myUsername && senderUsername === myUsername;
+            return `
+                <div class="discuss-msg ${isMe ? "me" : ""}">
+                    <div class="discuss-meta">${senderLabel} | ${formatTime(msg.createdAt)}</div>
+                    <div class="discuss-text">${escapeHtml(msg.text || "")}</div>
+                </div>
+            `;
+        }).join("");
+        listEl.scrollTop = listEl.scrollHeight;
+        updateDiscussAcceptButton();
+    };
+
+    window.openDiscussModal = function() {
+        if (!window.ensureAuthenticated("discuss task details")) return;
+        if (!currentDetailPost || !isServiceRequestPost(currentDetailPost)) {
+            alert("Discussion is available for Need Service posts.");
+            return;
+        }
+        const context = buildDiscussContextForCurrentDetail();
+        if (!context) {
+            alert("Unable to open discussion for this post.");
+            return;
+        }
+        if (context.helperUsername === context.requesterUsername) {
+            alert("You cannot discuss with yourself on your own request.");
+            return;
+        }
+        currentDiscussContext = context;
+        seedDiscussThreadIfEmpty(context);
+        document.getElementById('discussModal').classList.remove('hidden');
+        window.renderDiscussThread();
+        document.getElementById('discussInput').focus();
+    };
+
+    window.openDiscussModalFromThread = function(threadKey) {
+        if (!window.ensureAuthenticated("open chat")) return;
+        const parsed = parseDiscussionThreadKey(threadKey);
+        if (!parsed) {
+            alert("Invalid chat thread.");
+            return;
+        }
+        const me = currentUser ? normalizeUsername(currentUser.username) : "";
+        if (!parsed.participants.includes(me)) {
+            alert("You do not have permission to open this chat.");
+            return;
+        }
+        const peerUsername = parsed.participants.find((u) => u !== me) || "";
+        const state = loadDiscussionState();
+        const messages = Array.isArray(state[threadKey]) ? state[threadKey] : null;
+        if (!messages) {
+            alert("Chat thread not found.");
+            return;
+        }
+        const postTitleFromSystem = messages.find((m) => String(m.kind || "") === "system" && String(m.text || "").startsWith('Discussion started for "'));
+        let postTitle = "Service";
+        if (postTitleFromSystem) {
+            const matched = String(postTitleFromSystem.text).match(/Discussion started for "(.+)"\./);
+            if (matched && matched[1]) postTitle = matched[1];
+        }
+        const linkedPost = findPostByPostKey(parsed.postKey);
+        const requesterUsername = normalizeUsername(linkedPost && linkedPost.ownerUsername);
+        const canAcceptNeedTask = !!(
+            linkedPost &&
+            isServiceRequestPost(linkedPost) &&
+            requesterUsername &&
+            requesterUsername !== me
+        );
+        if (canAcceptNeedTask) {
+            currentDetailPost = linkedPost;
+            currentItemSek = normalizeSekValue(linkedPost.sek);
+            currentItemKathie = Math.max(0, Math.floor(Number(linkedPost.kathie) || 0));
+        }
+        const helperUsername = parsed.participants.find((u) => u !== requesterUsername) || me;
+        const requesterDisplayName = requesterUsername ? getDisplayNameForUsername(requesterUsername) : "";
+        const helperDisplayName = helperUsername ? getDisplayNameForUsername(helperUsername) : "";
+        currentDiscussContext = {
+            threadKey,
+            postTitle,
+            requesterUsername,
+            requesterDisplayName,
+            helperUsername,
+            helperDisplayName,
+            participantsText: `Participants: ${getDisplayNameForUsername(me)} and ${getDisplayNameForUsername(peerUsername)} | Topic: ${postTitle}`,
+            canAccept: canAcceptNeedTask
+        };
+        document.getElementById('discussModal').classList.remove('hidden');
+        window.renderDiscussThread();
+        document.getElementById('discussInput').focus();
+    };
+
+    window.closeDiscussModal = function() {
+        document.getElementById('discussModal').classList.add('hidden');
+        currentDiscussContext = null;
+        const inputEl = document.getElementById('discussInput');
+        if (inputEl) inputEl.value = "";
+    };
+
+    window.sendDiscussMessage = function() {
+        if (!window.ensureAuthenticated("send message")) return;
+        if (!currentDiscussContext) return;
+        const inputEl = document.getElementById('discussInput');
+        if (!inputEl) return;
+        const text = String(inputEl.value || "").trim();
+        if (!text) return;
+        appendDiscussMessage(currentDiscussContext.threadKey, {
+            kind: "user",
+            senderUsername: normalizeUsername(currentUser.username),
+            senderDisplayName: String(currentUser.displayName || currentUser.username),
+            text,
+            createdAt: Date.now()
+        });
+        inputEl.value = "";
+        window.renderDiscussThread();
+    };
+
     function getOrdersForCurrentUser() {
         if (!currentUser) return [];
         const userKey = normalizeUsername(currentUser.username);
@@ -1118,16 +1557,41 @@
 
     function getOrderRoleNote(order, role) {
         if (!order) return "";
+        const isNeedRequestOrder = String(order.payMethod || "") === "escrow_need_service";
         if (role === "seller") {
-            if (order.status === ORDER_STATUS.PAID_FROZEN) return "Your service was purchased. Complete the task, then click ship.";
-            if (order.status === ORDER_STATUS.SELLER_COMPLETED) return "Task marked complete. Click ship to notify the buyer.";
-            if (order.status === ORDER_STATUS.SHIPPED) return "Shipped. Waiting for buyer confirmation to release funds.";
+            if (order.status === ORDER_STATUS.PAID_FROZEN) {
+                return isNeedRequestOrder
+                    ? "You accepted this request. Complete the task, then click ship."
+                    : "Your service was purchased. Complete the task, then click ship.";
+            }
+            if (order.status === ORDER_STATUS.SELLER_COMPLETED) {
+                return isNeedRequestOrder
+                    ? "You marked this request as completed. Click ship to notify the requester."
+                    : "Task marked complete. Click ship to notify the buyer.";
+            }
+            if (order.status === ORDER_STATUS.SHIPPED) {
+                return isNeedRequestOrder
+                    ? "Marked as shipped. Waiting for requester confirmation to release funds."
+                    : "Shipped. Waiting for buyer confirmation to release funds.";
+            }
             if (order.status === ORDER_STATUS.RECEIVED) return `Funds released. +${Math.floor(Number(order.escrowKathie) || 0)} KaTHie credited to your wallet.`;
         }
         if (role === "buyer") {
-            if (order.status === ORDER_STATUS.PAID_FROZEN) return "Payment is frozen in escrow until delivery is confirmed.";
-            if (order.status === ORDER_STATUS.SELLER_COMPLETED) return "Seller completed the service and is preparing shipment.";
-            if (order.status === ORDER_STATUS.SHIPPED) return "Seller has shipped. Please confirm receipt when done.";
+            if (order.status === ORDER_STATUS.PAID_FROZEN) {
+                return isNeedRequestOrder
+                    ? "Your reward payment was deducted and frozen in system escrow until the helper delivers."
+                    : "Payment is frozen in escrow until delivery is confirmed.";
+            }
+            if (order.status === ORDER_STATUS.SELLER_COMPLETED) {
+                return isNeedRequestOrder
+                    ? "Helper completed the task and is preparing shipment."
+                    : "Seller completed the service and is preparing shipment.";
+            }
+            if (order.status === ORDER_STATUS.SHIPPED) {
+                return isNeedRequestOrder
+                    ? "Helper has shipped. Please confirm receipt when done."
+                    : "Seller has shipped. Please confirm receipt when done.";
+            }
             if (order.status === ORDER_STATUS.RECEIVED) return "You confirmed receipt. Escrow has been released to the seller.";
         }
         return "Order update available.";
@@ -1186,11 +1650,98 @@
         return order;
     }
 
-    function refreshMessageSummary(orders) {
+    function createServiceOrderForNeedRequest() {
+        if (!currentUser || !currentDetailPost || !isServiceRequestPost(currentDetailPost)) return null;
+        const sellerUsername = normalizeUsername(currentUser.username);
+        const buyerUsername = normalizeUsername(currentDetailPost.ownerUsername);
+        if (!buyerUsername) {
+            alert("Requester account information is missing.");
+            return null;
+        }
+        if (buyerUsername === sellerUsername) {
+            alert("You cannot accept your own request.");
+            return null;
+        }
+
+        const escrowKathie = Math.max(1, Math.floor(Number(currentItemKathie) || Number(currentItemSek) || 1));
+        const buyerBalance = readWalletBalanceByUsername(buyerUsername);
+        if (buyerBalance < escrowKathie) {
+            alert(`Requester does not have enough balance for escrow (${escrowKathie} KaTHie required).`);
+            return null;
+        }
+
+        const postKey = String(currentDetailPost.postKey || `legacy_${Date.now()}`);
+        const orders = refreshServiceOrdersState();
+        const hasActiveOrder = orders.some((row) =>
+            String(row.postKey) === postKey &&
+            row.buyerUsername === buyerUsername &&
+            row.sellerUsername === sellerUsername &&
+            row.status !== ORDER_STATUS.RECEIVED
+        );
+        if (hasActiveOrder) {
+            alert("You already have an active order for this request.");
+            return null;
+        }
+
+        writeWalletBalanceByUsername(buyerUsername, buyerBalance - escrowKathie);
+        increaseSystemEscrowPool(escrowKathie);
+
+        const now = Date.now();
+        const order = {
+            id: `ord_${now}_${Math.floor(Math.random() * 100000)}`,
+            postKey,
+            postTitle: String(currentDetailPost.title || "Service"),
+            sellerUsername,
+            sellerDisplayName: String(currentUser.displayName || sellerUsername),
+            buyerUsername,
+            buyerDisplayName: String(currentDetailPost.ownerDisplayName || buyerUsername),
+            payMethod: "escrow_need_service",
+            paidSek: Math.max(1, Math.floor(Number(currentItemSek) || 1)),
+            paidKathie: Math.max(0, Math.floor(Number(currentItemKathie) || 0)),
+            escrowKathie,
+            status: ORDER_STATUS.PAID_FROZEN,
+            escrowState: "frozen",
+            escrowHolder: "system",
+            frozenFromUsername: buyerUsername,
+            createdAt: now,
+            updatedAt: now,
+            releasedAt: null
+        };
+
+        orders.push(order);
+        saveServiceOrdersToStorage(orders);
+        serviceOrdersState = orders;
+        markMessagesSeenNow();
+        window.updateMessageUi();
+        if (isMessagesModalOpen()) window.renderMessages();
+        return order;
+    }
+
+    window.acceptNeedServiceFromDiscuss = function() {
+        if (!window.ensureAuthenticated("accept this task")) return;
+        if (!currentDiscussContext || !currentDiscussContext.canAccept || !currentDetailPost || !isServiceRequestPost(currentDetailPost)) {
+            alert("Please open a request discussion first.");
+            return;
+        }
+        const createdOrder = createServiceOrderForNeedRequest();
+        if (!createdOrder) return;
+
+        appendDiscussMessage(currentDiscussContext.threadKey, {
+            kind: "system",
+            text: `${String(currentUser.displayName || currentUser.username)} accepted this task.`,
+            createdAt: Date.now()
+        });
+        window.renderDiscussThread();
+        window.closeDiscussModal();
+        window.closeDetailModal();
+        alert("Task accepted. Requester funds were deducted and frozen in system escrow.");
+    };
+
+    function refreshMessageSummary(orders, chatThreads = []) {
         const summaryEl = document.getElementById('messagesSummaryText');
         if (!summaryEl) return;
         if (!currentUser) {
-            summaryEl.innerText = "Please login to view service messages.";
+            summaryEl.innerText = "Please login to view progress and chats.";
             return;
         }
         const userKey = normalizeUsername(currentUser.username);
@@ -1202,30 +1753,33 @@
             o.buyerUsername === userKey &&
             o.status === ORDER_STATUS.SHIPPED
         ).length;
-        summaryEl.innerText = `Seller todo: ${sellerTodo} | Buyer confirmations: ${buyerTodo}`;
+        summaryEl.innerText = `Seller todo: ${sellerTodo} | Buyer confirmations: ${buyerTodo} | Chats: ${chatThreads.length}`;
     }
 
     window.renderMessages = function() {
         const listEl = document.getElementById('messagesList');
         if (!listEl) return;
         if (!currentUser) {
-            listEl.innerHTML = `<div class="messages-empty">Login to check service orders and escrow status.</div>`;
-            refreshMessageSummary([]);
+            listEl.innerHTML = `<div class="messages-empty">Login to check order progress and chat history.</div>`;
+            refreshMessageSummary([], []);
             return;
         }
         const orders = getOrdersForCurrentUser();
-        refreshMessageSummary(orders);
-        if (!orders.length) {
-            listEl.innerHTML = `<div class="messages-empty">No service orders yet.</div>`;
+        const chatThreads = getDiscussionThreadsForCurrentUser();
+        refreshMessageSummary(orders, chatThreads);
+        if (!orders.length && !chatThreads.length) {
+            listEl.innerHTML = `<div class="messages-empty">No progress records or chats yet.</div>`;
             return;
         }
 
-        listEl.innerHTML = orders.map((order) => {
+        const chatThreadMap = new Map(chatThreads.map((t) => [t.threadKey, t]));
+
+        const orderCardsHtml = orders.map((order) => {
             const role = getOrderRole(order);
             const counterparty = role === "seller"
                 ? `Buyer: ${escapeHtml(order.buyerDisplayName || order.buyerUsername)}`
                 : `Seller: ${escapeHtml(order.sellerDisplayName || order.sellerUsername)}`;
-            const escrowText = `${Math.floor(Number(order.escrowKathie) || 0)} KaTHie (frozen until buyer confirms)`;
+            const escrowText = `${Math.floor(Number(order.escrowKathie) || 0)} KaTHie (frozen in system escrow until buyer confirms)`;
             let actionHtml = "";
 
             if (role === "seller" && order.status === ORDER_STATUS.PAID_FROZEN) {
@@ -1237,6 +1791,12 @@
             } else {
                 actionHtml = `<button class="order-btn" disabled>No action now</button>`;
             }
+
+            const orderThreadKey = getDiscussionThreadKey(order.postKey, order.sellerUsername, order.buyerUsername);
+            const hasOrderThread = chatThreadMap.has(orderThreadKey);
+            const chatActionHtml = hasOrderThread
+                ? `<button class="order-btn" onclick='window.openDiscussModalFromThread(${JSON.stringify(orderThreadKey)})'>Open Chat</button>`
+                : "";
 
             return `
                 <div class="order-card">
@@ -1250,10 +1810,36 @@
                         <span>Updated: ${formatTime(order.updatedAt)}</span>
                     </div>
                     <p class="order-note">${getOrderRoleNote(order, role)}</p>
-                    <div class="order-actions">${actionHtml}</div>
+                    <div class="order-actions">${actionHtml}${chatActionHtml}</div>
                 </div>
             `;
         }).join("");
+
+        const chatCardsHtml = chatThreads.map((thread) => {
+            const previewPrefix = thread.latestKind === "system" ? "Update: " : "";
+            const previewText = `${previewPrefix}${thread.previewText || "New chat update"}`;
+            return `
+                <div class="chat-card">
+                    <div class="chat-head">
+                        <h4 class="chat-title">${escapeHtml(thread.postTitle || "Service")}</h4>
+                        <span class="chat-time">${formatTime(thread.updatedAt)}</span>
+                    </div>
+                    <div class="chat-peer">Chat with ${escapeHtml(thread.peerDisplayName || thread.peerUsername || "User")}</div>
+                    <div class="chat-preview">${escapeHtml(previewText)}</div>
+                    <div class="order-actions">
+                        <button class="order-btn primary" onclick='window.openDiscussModalFromThread(${JSON.stringify(thread.threadKey)})'>Open Chat</button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        const orderSection = orders.length
+            ? `<div class="messages-section-title">Order Updates</div>${orderCardsHtml}`
+            : `<div class="messages-section-title">Order Updates</div><div class="messages-empty">No order updates yet.</div>`;
+        const chatSection = chatThreads.length
+            ? `<div class="messages-section-title">Chats</div>${chatCardsHtml}`
+            : `<div class="messages-section-title">Chats</div><div class="messages-empty">No chats yet.</div>`;
+        listEl.innerHTML = `${orderSection}${chatSection}`;
     };
 
     window.updateMessageUi = function() {
@@ -1265,8 +1851,11 @@
             return;
         }
         const seenAt = readMessageSeenAt();
-        const unreadCount = getOrdersForCurrentUser()
+        const unreadOrders = getOrdersForCurrentUser()
             .filter((order) => Number(order.updatedAt || 0) > seenAt).length;
+        const unreadChats = getDiscussionThreadsForCurrentUser()
+            .filter((thread) => Number(thread.updatedAt || 0) > seenAt).length;
+        const unreadCount = unreadOrders + unreadChats;
         if (unreadCount > 0) {
             badgeEl.classList.add('show');
             badgeEl.innerText = unreadCount > 99 ? "99+" : String(unreadCount);
@@ -1356,6 +1945,10 @@
         target.releasedAt = Date.now();
         target.updatedAt = target.releasedAt;
         const escrowAmount = Math.max(0, Math.floor(Number(target.escrowKathie) || 0));
+        if (String(target.payMethod || "") === "escrow_need_service") {
+            const poolBalance = readSystemEscrowPool();
+            writeSystemEscrowPool(poolBalance - escrowAmount);
+        }
         const sellerBalance = readWalletBalanceByUsername(target.sellerUsername);
         writeWalletBalanceByUsername(target.sellerUsername, sellerBalance + escrowAmount);
 
@@ -1727,7 +2320,6 @@
             
             const timeStr = formatTime(post.createdAt);
             const tagInfo = getTypeTagInfo(post.type);
-            const tagText = getTypeTagTextForPost(post, tagInfo.text);
             const isServiceRequest = isServiceRequestPost(post);
             const postKey = getPostStableKey(post, index);
             const flashDeal = activeFlashDeals[postKey];
@@ -1748,11 +2340,14 @@
 
             const cardHTML = `
                 <div class="card" onclick="window.openItemDetail(${index})">
-                    <img src="${post.imageSrc}" class="card-img-top" alt="${post.title}">
-                    ${flashBadgeHTML}
-                    <span class="type-tag ${tagInfo.class}">${tagText}</span>
+                    <div class="card-media">
+                        <img src="${post.imageSrc}" class="card-img-top" alt="${post.title}">
+                        ${badgeHTML}
+                        <span class="type-tag ${tagInfo.class}">${tagInfo.text}</span>
+                        ${flashBadgeHTML}
+                    </div>
                     <div class="card-body">
-                        <h3 class="item-title">${post.title} ${badgeHTML}</h3>
+                        <h3 class="item-title">${post.title}</h3>
                         <div class="post-meta">
                             <span class="location item-loc">Loc: ${post.locName}</span>
                             <span class="post-time item-time">Time: ${timeStr}</span>
@@ -1830,6 +2425,7 @@
         currentDetailPost = post;
         currentItemIsServiceRequest = isServiceRequestPost(post);
         currentItemIsServiceOffer = isServiceOfferPost(post);
+        const isOwnPost = isCurrentUserPostOwner(post);
         
         document.getElementById('detailImg').src = post.imageSrc;
         document.getElementById('detailTitle').innerText = post.title;
@@ -1892,6 +2488,16 @@
             kathieBtn.style.backgroundColor = "#E8F5E9";
             kathieBtn.style.color = "var(--kathie-color)";
         }
+        if (isOwnPost) {
+            fiatBtn.innerText = "Your Post";
+            fiatBtn.disabled = true;
+            fiatBtn.style.backgroundColor = "#eceff1";
+            fiatBtn.style.color = "#607d8b";
+            kathieBtn.innerText = "Unavailable";
+            kathieBtn.disabled = true;
+            kathieBtn.style.backgroundColor = "#eceff1";
+            kathieBtn.style.color = "#607d8b";
+        }
         currentItemSek = finalSek; currentItemKathie = finalKathie;
 
         document.getElementById('detailModal').classList.remove('hidden');
@@ -1909,10 +2515,13 @@
 
     window.closeDetailModal = function() { document.getElementById('detailModal').classList.add('hidden'); };
     window.payFiatFromDetail = function() {
+        if (currentDetailPost && isCurrentUserPostOwner(currentDetailPost)) {
+            alert("You cannot buy your own item or accept your own task.");
+            return;
+        }
         if (currentItemIsServiceRequest) {
-            if (!window.ensureAuthenticated("accept this task")) return;
-            const title = currentDetailPost ? currentDetailPost.title : "this service";
-            alert(`You accepted "${title}". Reward offered: ${currentItemSek} SEK / ${currentItemKathie} KaTHie.`);
+            if (!window.ensureAuthenticated("discuss task details")) return;
+            window.openDiscussModal();
             return;
         }
         if (currentItemIsServiceOffer) {
@@ -1929,10 +2538,13 @@
         window.markDailyTaskProgress("purchase_once", 1);
     };
     window.payKathieFromDetail = function() {
+        if (currentDetailPost && isCurrentUserPostOwner(currentDetailPost)) {
+            alert("You cannot buy your own item or accept your own task.");
+            return;
+        }
         if (currentItemIsServiceRequest) {
             if (!window.ensureAuthenticated("discuss task details")) return;
-            const title = currentDetailPost ? currentDetailPost.title : "this service";
-            alert(`Start chatting with the requester about "${title}" (time, scope, and delivery).`);
+            window.openDiscussModal();
             return;
         }
         if (currentItemIsServiceOffer) {
@@ -2058,6 +2670,11 @@
         e.target.value = `${digits.slice(0, 2)}/${digits.slice(2)}`;
     });
 
+    document.getElementById('discussForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        window.sendDiscussMessage();
+    });
+
     document.getElementById('topupForm').addEventListener('submit', function(e) {
         e.preventDefault();
         if (!window.ensureAuthenticated("top up wallet")) return;
@@ -2173,4 +2790,3 @@
 
 </body>
 </html>
-
