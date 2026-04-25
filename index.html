@@ -26,14 +26,18 @@
         .btn-post { background-color: var(--secondary-color); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
         .btn-bonus { background-color: #E3F2FD; color: var(--primary-color); padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #90CAF9; font-size: 0.95rem; }
         .btn-tasks { background-color: #F3F7EA; color: #3f5e18; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #c6d9a0; font-size: 0.9rem; }
+        .btn-messages { background-color: #FFF6E5; color: #7a4a00; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #f3c26f; font-size: 0.9rem; position: relative; }
         .btn-topup { background-color: #EAF8F2; color: #18633f; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #A7DABF; font-size: 0.9rem; }
         .btn-auth { background-color: #ECEFF1; color: #263238; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #CFD8DC; font-size: 0.9rem; }
         .user-chip { background: #F4F8FF; color: #234; border: 1px solid #C9DBFF; border-radius: 999px; font-size: 0.85rem; padding: 6px 10px; font-weight: 600; }
         .btn-bonus:hover { background-color: #D0E8FD; }
         .btn-tasks:hover { background-color: #EAF2DC; }
+        .btn-messages:hover { background-color: #FFE8C2; }
         .btn-topup:hover { background-color: #D8F1E7; }
         .btn-auth:hover { background-color: #E2E9ED; }
         .btn-post:hover { opacity: 0.8; }
+        .msg-badge { display: none; position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; line-height: 18px; padding: 0 5px; border-radius: 999px; background: #d32f2f; color: white; font-size: 0.72rem; font-weight: 800; text-align: center; box-shadow: 0 2px 6px rgba(211, 47, 47, 0.35); }
+        .msg-badge.show { display: inline-block; }
         
         /* Hero Section */
         .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('edited-image.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 4rem 2rem 5rem 2rem; }
@@ -152,7 +156,7 @@
         .close-btn:hover { color: #000; }
         .detail-img-large { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background-color: #eee;}
         .detail-modal h2 { margin: 0 0 5px 0; color: var(--primary-color); font-size: 1.6rem;}
-        .detail-meta { display: flex; gap: 15px; font-size: 0.95rem; color: #666; margin-bottom: 15px; }
+        .detail-meta { display: flex; gap: 15px; flex-wrap: wrap; font-size: 0.95rem; color: #666; margin-bottom: 15px; }
         .detail-modal p { font-size: 1.05rem; line-height: 1.5; color: #444; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;}
         #detail-map-container { height: 150px; width: 100%; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; z-index: 1;}
         .pricing-box { background-color: #fff; border-radius: 8px; padding: 15px; border: 2px dashed #ddd; }
@@ -198,10 +202,30 @@
         .processing-title { margin: 0 0 6px 0; color: #1d4d74; font-weight: 700; font-size: 1rem; }
         .processing-text { margin: 0 0 12px 0; color: #49657f; font-size: 0.9rem; }
         .btn-complete-pay { width: 100%; background: #1f7a49; color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 700; cursor: pointer; }
+        .messages-modal { max-width: 700px; }
+        .messages-summary { margin: 0 0 10px 0; color: #4f6173; font-size: 0.9rem; }
+        .messages-list { display: grid; gap: 10px; max-height: 62vh; overflow-y: auto; padding-right: 2px; }
+        .order-card { border: 1px solid #dde7f2; border-radius: 10px; background: #fbfdff; padding: 12px; display: grid; gap: 8px; }
+        .order-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+        .order-title { margin: 0; font-size: 1rem; color: #1e3854; }
+        .order-status { font-size: 0.75rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; border: 1px solid #ccd9e8; background: #eef5fc; color: #355876; white-space: nowrap; }
+        .order-status.paid_frozen { background: #fff8e7; border-color: #f3d690; color: #7a4a00; }
+        .order-status.seller_completed { background: #f0f5ff; border-color: #c7d9ff; color: #1f4f99; }
+        .order-status.shipped { background: #e9f7ff; border-color: #bfe0f2; color: #14557a; }
+        .order-status.received { background: #ebf8ef; border-color: #bee2c6; color: #226338; }
+        .order-meta { font-size: 0.84rem; color: #4d5f72; display: flex; flex-wrap: wrap; gap: 10px; }
+        .order-note { margin: 0; font-size: 0.88rem; color: #31495f; }
+        .order-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .order-btn { border: 1px solid #c5d7ea; background: #edf4fb; color: #274867; border-radius: 999px; padding: 7px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+        .order-btn.primary { background: #eaf8f2; border-color: #9fd6b5; color: #1b6d45; }
+        .order-btn.warn { background: #fff2d8; border-color: #f0cb7b; color: #784800; }
+        .order-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .messages-empty { color: #6c7f92; font-size: 0.92rem; background: #f7fafc; border: 1px dashed #cfdbe8; border-radius: 10px; padding: 14px; text-align: center; }
         @media (max-width: 760px) {
             .nav-right { gap: 10px; }
             .btn-bonus { font-size: 0.85rem; padding: 6px 10px; }
             .btn-tasks { font-size: 0.82rem; padding: 6px 10px; }
+            .btn-messages { font-size: 0.82rem; padding: 6px 10px; }
             .btn-topup { font-size: 0.82rem; padding: 6px 10px; }
             .btn-auth { font-size: 0.82rem; padding: 6px 10px; }
             .user-chip { display: none; }
@@ -228,6 +252,7 @@
         </div>
         <button class="btn-topup" onclick="window.openTopupModal()">Top Up</button>
         <button class="btn-tasks" onclick="window.openDailyTasksModal()">Daily Tasks</button>
+        <button class="btn-messages" id="messagesBtn" onclick="window.openMessagesModal()">Messages <span class="msg-badge" id="messagesUnreadBadge">0</span></button>
         <button class="btn-bonus" onclick="window.scrollToBonus()">New User</button>
         <button class="btn-post" onclick="window.openPostModal()">+ Post Request</button>
     </div>
@@ -265,14 +290,16 @@
 
 <div class="container">
     <div class="tabs">
-        <div class="tab active" onclick="window.switchTab('housing')">Home & Living</div>
-        <div class="tab" onclick="window.switchTab('food')">Food & Cooking</div>
-        <div class="tab" onclick="window.switchTab('transport')">Transport & Outdoors</div>
-        <div class="tab" onclick="window.switchTab('study')">Study & Tech</div>
-        <div class="tab" onclick="window.switchTab('lifestyle')">Clothing & Lifestyle</div>
+        <div class="tab active" data-tab="all" onclick="window.switchTab('all')">All</div>
+        <div class="tab" data-tab="housing" onclick="window.switchTab('housing')">Home & Living</div>
+        <div class="tab" data-tab="food" onclick="window.switchTab('food')">Food & Cooking</div>
+        <div class="tab" data-tab="transport" onclick="window.switchTab('transport')">Transport & Outdoors</div>
+        <div class="tab" data-tab="study" onclick="window.switchTab('study')">Study & Tech</div>
+        <div class="tab" data-tab="lifestyle" onclick="window.switchTab('lifestyle')">Clothing & Lifestyle</div>
     </div>
 
-    <div id="housing-section" class="grid tab-content"><div class="empty-state">Loading...</div></div>
+    <div id="all-section" class="grid tab-content"><div class="empty-state">Loading...</div></div>
+    <div id="housing-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
     <div id="food-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
     <div id="transport-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
     <div id="study-section" class="grid tab-content hidden"><div class="empty-state">Loading...</div></div>
@@ -287,6 +314,7 @@
         <div class="detail-meta">
             <span id="detailLoc">Location</span>
             <span id="detailTime">Time</span>
+            <span id="detailUser">User</span>
         </div>
         <p id="detailDesc">Full description goes here.</p>
         <div id="detail-map-container"></div>
@@ -403,6 +431,15 @@
     </div>
 </div>
 
+<div id="messagesModal" class="modal-overlay hidden">
+    <div class="modal messages-modal">
+        <span class="close-btn" onclick="window.closeMessagesModal()">&times;</span>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Service Messages</h2>
+        <p class="messages-summary" id="messagesSummaryText">Orders and escrow updates will appear here.</p>
+        <div class="messages-list" id="messagesList"></div>
+    </div>
+</div>
+
 <div id="topupModal" class="modal-overlay hidden">
     <div class="modal topup-modal">
         <span class="close-btn" onclick="window.closeTopupModal()">&times;</span>
@@ -448,7 +485,8 @@
     const db = getFirestore(app);
 
     const BONUS_AMOUNT = 100;
-    const WALLET_BALANCE_KEY = "dgu_wallet_balance";
+    const WALLET_BALANCE_KEY_PREFIX = "dgu_wallet_balance_v2";
+    const LEGACY_WALLET_BALANCE_KEY = "dgu_wallet_balance";
     const AUTH_SESSION_KEY = "dgu_auth_session";
     const PRESET_USERS = [
         { username: "kth001", password: "123456", displayName: "KTH User 001" },
@@ -463,6 +501,14 @@
     const TOPUP_TOKEN_RATE = 1; // 1 SEK -> 1 KaTHie (simulation)
     const DAILY_TASKS_KEY_PREFIX = "dgu_daily_tasks_v1";
     const FLASH_DEAL_KEY_PREFIX = "dgu_flash_deals_v1";
+    const SERVICE_ORDERS_STORAGE_KEY = "dgu_service_orders_v1";
+    const MESSAGE_SEEN_KEY_PREFIX = "dgu_message_seen_v1";
+    const ORDER_STATUS = {
+        PAID_FROZEN: "paid_frozen",
+        SELLER_COMPLETED: "seller_completed",
+        SHIPPED: "shipped",
+        RECEIVED: "received"
+    };
     const FLASH_DEAL_DISCOUNT_MIN = 30;
     const FLASH_DEAL_DISCOUNT_MAX = 50;
     const FLASH_DEAL_DISCOUNT_STEP = 5;
@@ -473,9 +519,39 @@
     let dailyTaskState = null;
     let pendingTopupAmount = 0;
     let flashDealTicker = null;
+    let serviceOrdersState = [];
 
     function normalizeUsername(value) {
         return String(value || "").trim().toLowerCase();
+    }
+
+    function getWalletStorageKeyByUsername(username) {
+        const userKey = normalizeUsername(username) || "guest";
+        return `${WALLET_BALANCE_KEY_PREFIX}_${userKey}`;
+    }
+
+    function readWalletBalanceByUsername(username) {
+        const storageKey = getWalletStorageKeyByUsername(username);
+        const stored = Number(localStorage.getItem(storageKey));
+        if (Number.isFinite(stored) && stored >= 0) return Math.floor(stored);
+        if ((normalizeUsername(username) || "guest") === "guest") {
+            const legacyStored = Number(localStorage.getItem(LEGACY_WALLET_BALANCE_KEY));
+            if (Number.isFinite(legacyStored) && legacyStored >= 0) {
+                const migrated = Math.floor(legacyStored);
+                localStorage.setItem(storageKey, String(migrated));
+                return migrated;
+            }
+        }
+        return 500;
+    }
+
+    function writeWalletBalanceByUsername(username, nextBalance) {
+        const safeBalance = Math.max(0, Math.floor(Number(nextBalance) || 0));
+        localStorage.setItem(getWalletStorageKeyByUsername(username), String(safeBalance));
+        if (currentUser && normalizeUsername(currentUser.username) === (normalizeUsername(username) || "guest")) {
+            setWalletBalance(safeBalance, true);
+        }
+        return safeBalance;
     }
 
     function setAuthError(message) {
@@ -483,11 +559,17 @@
     }
 
     function loadAuthSession() {
-        const raw = localStorage.getItem(AUTH_SESSION_KEY);
+        const rawFromSession = sessionStorage.getItem(AUTH_SESSION_KEY);
+        const rawFromLegacy = localStorage.getItem(AUTH_SESSION_KEY);
+        const raw = rawFromSession || rawFromLegacy;
         if (!raw) return null;
         try {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.username && parsed.displayName) {
+                if (!rawFromSession && rawFromLegacy) {
+                    sessionStorage.setItem(AUTH_SESSION_KEY, rawFromLegacy);
+                    localStorage.removeItem(AUTH_SESSION_KEY);
+                }
                 return { username: String(parsed.username), displayName: String(parsed.displayName) };
             }
         } catch (_) {}
@@ -496,13 +578,15 @@
 
     function saveAuthSession(user) {
         if (!user) {
+            sessionStorage.removeItem(AUTH_SESSION_KEY);
             localStorage.removeItem(AUTH_SESSION_KEY);
             return;
         }
-        localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({
+        sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({
             username: user.username,
             displayName: user.displayName
         }));
+        localStorage.removeItem(AUTH_SESSION_KEY);
     }
 
     function findPresetUser(username, password) {
@@ -544,14 +628,17 @@
         currentUser = null;
         saveAuthSession(null);
         bonusClaimedThisVisit = false;
+        setWalletBalance(readWalletBalance());
         window.updateAuthUi();
         window.updateBonusUi();
         window.initDailyTasks();
         window.renderPosts();
         setBonusVisibility(true);
         window.closeDailyTasksModal();
+        window.closeMessagesModal();
         window.closeTopupModal();
         window.closePostModal();
+        window.updateMessageUi();
         alert("You have logged out.");
     };
 
@@ -625,10 +712,14 @@
         document.getElementById('dailyTasksModal').classList.add('hidden');
     };
 
+    function getWalletStorageKey() {
+        const userKey = currentUser ? normalizeUsername(currentUser.username) : "guest";
+        return `${WALLET_BALANCE_KEY_PREFIX}_${userKey}`;
+    }
+
     function readWalletBalance() {
-        const stored = Number(localStorage.getItem(WALLET_BALANCE_KEY));
-        if (Number.isFinite(stored) && stored >= 0) return Math.floor(stored);
-        return 500;
+        const username = currentUser ? currentUser.username : "guest";
+        return readWalletBalanceByUsername(username);
     }
 
     function animateWallet() {
@@ -641,7 +732,7 @@
         const safeBalance = Math.max(0, Math.floor(Number(nextBalance) || 0));
         window.currentWalletBalance = safeBalance;
         document.getElementById('wallet-balance').innerText = safeBalance;
-        localStorage.setItem(WALLET_BALANCE_KEY, String(safeBalance));
+        localStorage.setItem(getWalletStorageKey(), String(safeBalance));
         if (shouldAnimate) animateWallet();
     }
 
@@ -717,21 +808,36 @@
         return `idx_${index}`;
     }
 
-    function isServiceType(type) {
-        const normalized = String(type || "").toLowerCase();
-        return normalized === "gig" || normalized === "skill";
-    }
-
     const SERVICE_FLOW_TITLE_OVERRIDES = {
         "urgent: laundry transfer!": "need_service",
+        "5 ikea moving boxes": "offer_service",
+        "need a phillips screwdriver": "need_service",
+        "half bottle of laundry detergent": "offer_service",
         "help carry mattress from t-bana": "need_service",
+        "clas ohlson router": "offer_service",
         "take out my recycling please": "need_service",
+        "lao gan ma & soy sauce (moving out)": "offer_service",
+        "spices bundle": "offer_service",
+        "unopened 1kg barilla pasta": "offer_service",
         "willys grocery run?": "need_service",
+        "need a big pot for corridor dinner": "need_service",
+        "instant noodles (5 packs)": "offer_service",
+        "digital baking scale": "need_service",
+        "sl card valid until sunday": "offer_service",
+        "sl card for 3 hours": "need_service",
         "ikea barkarby carpool (1 seat)": "offer_service",
+        "ikea blue bags (frakta) x3": "offer_service",
+        "used city bike (fixer-upper)": "offer_service",
         "arlanda ride sharing?": "need_service",
+        "calculator for exam!": "need_service",
         "need macbook usb-c charger": "need_service",
+        "pack of a4 paper": "offer_service",
         "need help installing matlab": "need_service",
+        "lab coat (size m) & goggles": "offer_service",
+        "eriksdalsbadet pool card": "offer_service",
         "feed my cat for 2 days": "need_service",
+        "kth-hallen gym card": "offer_service",
+        "navy blue tie for presentation": "need_service",
         "gym spotter for bench press": "need_service"
     };
 
@@ -761,9 +867,7 @@
     }
 
     function resolvePostFlow(post) {
-        if (!post) return "standard";
-        const type = String(post.type || "").toLowerCase();
-        if (!isServiceType(type)) return "standard";
+        if (!post) return "need_service";
 
         const rawFlow = String(post.flow || "").toLowerCase();
         if (isValidServiceFlow(rawFlow)) return rawFlow;
@@ -778,7 +882,7 @@
         const normalized = String(flowValue || "").toLowerCase();
         if (normalized === "offer_service") return "offer_service";
         if (normalized === "need_service") return "need_service";
-        return isServiceType(type) ? "need_service" : "standard";
+        return "need_service";
     }
 
     function isServiceRequestPost(post) {
@@ -787,8 +891,7 @@
     }
 
     function getTypeTagTextForPost(post, fallbackText) {
-        const type = String(post && post.type ? post.type : "").toLowerCase();
-        if (!isServiceType(type)) return fallbackText;
+        if (!post) return fallbackText;
         return isServiceRequestPost(post) ? "Need Service" : "Service Offer";
     }
 
@@ -918,6 +1021,351 @@
         if (flashDealTicker) return;
         flashDealTicker = setInterval(refreshFlashDealCountdowns, 1000);
     }
+
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function isServiceOfferPost(post) {
+        if (!post) return false;
+        return resolvePostFlow(post) === "offer_service";
+    }
+
+    function resolvePostOwner(post, fallbackSeed = 0) {
+        const safeSeed = Math.abs(Math.floor(Number(fallbackSeed) || 0));
+        const fallbackUser = PRESET_USERS[safeSeed % PRESET_USERS.length];
+        const ownerUsername = normalizeUsername(post && post.ownerUsername) || normalizeUsername(fallbackUser.username);
+        let ownerDisplayName = String((post && post.ownerDisplayName) || "").trim();
+        if (!ownerDisplayName) {
+            const matched = PRESET_USERS.find((u) => normalizeUsername(u.username) === ownerUsername);
+            ownerDisplayName = matched ? matched.displayName : fallbackUser.displayName;
+        }
+        return { ownerUsername, ownerDisplayName };
+    }
+
+    function loadServiceOrdersFromStorage() {
+        const raw = localStorage.getItem(SERVICE_ORDERS_STORAGE_KEY);
+        if (!raw) return [];
+        try {
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return [];
+            return parsed.filter((row) => row && row.id && row.sellerUsername && row.buyerUsername);
+        } catch (_) {
+            return [];
+        }
+    }
+
+    function saveServiceOrdersToStorage(orders) {
+        localStorage.setItem(SERVICE_ORDERS_STORAGE_KEY, JSON.stringify(Array.isArray(orders) ? orders : []));
+    }
+
+    function refreshServiceOrdersState() {
+        serviceOrdersState = loadServiceOrdersFromStorage();
+        return serviceOrdersState;
+    }
+
+    function getMessageSeenStorageKey() {
+        const userKey = currentUser ? normalizeUsername(currentUser.username) : "guest";
+        return `${MESSAGE_SEEN_KEY_PREFIX}_${userKey}`;
+    }
+
+    function readMessageSeenAt() {
+        const raw = Number(localStorage.getItem(getMessageSeenStorageKey()));
+        if (!Number.isFinite(raw) || raw <= 0) return 0;
+        return raw;
+    }
+
+    function markMessagesSeenNow() {
+        if (!currentUser) return;
+        localStorage.setItem(getMessageSeenStorageKey(), String(Date.now()));
+    }
+
+    function isMessagesModalOpen() {
+        const modal = document.getElementById('messagesModal');
+        return modal && !modal.classList.contains('hidden');
+    }
+
+    function getOrdersForCurrentUser() {
+        if (!currentUser) return [];
+        const userKey = normalizeUsername(currentUser.username);
+        return refreshServiceOrdersState()
+            .filter((order) => order.sellerUsername === userKey || order.buyerUsername === userKey)
+            .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0));
+    }
+
+    function getOrderStatusText(status) {
+        switch (status) {
+            case ORDER_STATUS.PAID_FROZEN: return "Paid (Escrow Frozen)";
+            case ORDER_STATUS.SELLER_COMPLETED: return "Seller Completed";
+            case ORDER_STATUS.SHIPPED: return "Seller Shipped";
+            case ORDER_STATUS.RECEIVED: return "Buyer Confirmed";
+            default: return "Processing";
+        }
+    }
+
+    function getOrderRole(order) {
+        if (!currentUser || !order) return "guest";
+        const userKey = normalizeUsername(currentUser.username);
+        if (order.sellerUsername === userKey) return "seller";
+        if (order.buyerUsername === userKey) return "buyer";
+        return "guest";
+    }
+
+    function getOrderRoleNote(order, role) {
+        if (!order) return "";
+        if (role === "seller") {
+            if (order.status === ORDER_STATUS.PAID_FROZEN) return "Your service was purchased. Complete the task, then click ship.";
+            if (order.status === ORDER_STATUS.SELLER_COMPLETED) return "Task marked complete. Click ship to notify the buyer.";
+            if (order.status === ORDER_STATUS.SHIPPED) return "Shipped. Waiting for buyer confirmation to release funds.";
+            if (order.status === ORDER_STATUS.RECEIVED) return `Funds released. +${Math.floor(Number(order.escrowKathie) || 0)} KaTHie credited to your wallet.`;
+        }
+        if (role === "buyer") {
+            if (order.status === ORDER_STATUS.PAID_FROZEN) return "Payment is frozen in escrow until delivery is confirmed.";
+            if (order.status === ORDER_STATUS.SELLER_COMPLETED) return "Seller completed the service and is preparing shipment.";
+            if (order.status === ORDER_STATUS.SHIPPED) return "Seller has shipped. Please confirm receipt when done.";
+            if (order.status === ORDER_STATUS.RECEIVED) return "You confirmed receipt. Escrow has been released to the seller.";
+        }
+        return "Order update available.";
+    }
+
+    function createServiceOrderFromCurrentDetail(payMethod) {
+        if (!currentUser || !currentDetailPost || !isServiceOfferPost(currentDetailPost)) return null;
+        const buyerUsername = normalizeUsername(currentUser.username);
+        const sellerUsername = normalizeUsername(currentDetailPost.ownerUsername);
+        if (!sellerUsername) {
+            alert("Seller account information is missing.");
+            return null;
+        }
+        if (buyerUsername === sellerUsername) {
+            alert("You cannot purchase your own service.");
+            return null;
+        }
+
+        const escrowKathie = Math.max(1, Math.floor(Number(currentItemKathie) || Number(currentItemSek) || 1));
+        if (payMethod === "kathie") {
+            if (window.currentWalletBalance < escrowKathie) {
+                alert(`Not enough points. Need ${escrowKathie}, available ${window.currentWalletBalance}.`);
+                return null;
+            }
+            setWalletBalance(window.currentWalletBalance - escrowKathie, true);
+        }
+
+        const now = Date.now();
+        const order = {
+            id: `ord_${now}_${Math.floor(Math.random() * 100000)}`,
+            postKey: String(currentDetailPost.postKey || `legacy_${now}`),
+            postTitle: String(currentDetailPost.title || "Service"),
+            sellerUsername,
+            sellerDisplayName: String(currentDetailPost.ownerDisplayName || sellerUsername),
+            buyerUsername,
+            buyerDisplayName: String(currentUser.displayName || buyerUsername),
+            payMethod: payMethod === "sek" ? "sek" : "kathie",
+            paidSek: Math.max(1, Math.floor(Number(currentItemSek) || 1)),
+            paidKathie: Math.max(0, Math.floor(Number(currentItemKathie) || 0)),
+            escrowKathie,
+            status: ORDER_STATUS.PAID_FROZEN,
+            escrowState: "frozen",
+            createdAt: now,
+            updatedAt: now,
+            releasedAt: null
+        };
+
+        const orders = refreshServiceOrdersState();
+        orders.push(order);
+        saveServiceOrdersToStorage(orders);
+        serviceOrdersState = orders;
+        window.markDailyTaskProgress("purchase_once", 1);
+        markMessagesSeenNow();
+        window.updateMessageUi();
+        if (isMessagesModalOpen()) window.renderMessages();
+        return order;
+    }
+
+    function refreshMessageSummary(orders) {
+        const summaryEl = document.getElementById('messagesSummaryText');
+        if (!summaryEl) return;
+        if (!currentUser) {
+            summaryEl.innerText = "Please login to view service messages.";
+            return;
+        }
+        const userKey = normalizeUsername(currentUser.username);
+        const sellerTodo = orders.filter((o) =>
+            o.sellerUsername === userKey &&
+            (o.status === ORDER_STATUS.PAID_FROZEN || o.status === ORDER_STATUS.SELLER_COMPLETED)
+        ).length;
+        const buyerTodo = orders.filter((o) =>
+            o.buyerUsername === userKey &&
+            o.status === ORDER_STATUS.SHIPPED
+        ).length;
+        summaryEl.innerText = `Seller todo: ${sellerTodo} | Buyer confirmations: ${buyerTodo}`;
+    }
+
+    window.renderMessages = function() {
+        const listEl = document.getElementById('messagesList');
+        if (!listEl) return;
+        if (!currentUser) {
+            listEl.innerHTML = `<div class="messages-empty">Login to check service orders and escrow status.</div>`;
+            refreshMessageSummary([]);
+            return;
+        }
+        const orders = getOrdersForCurrentUser();
+        refreshMessageSummary(orders);
+        if (!orders.length) {
+            listEl.innerHTML = `<div class="messages-empty">No service orders yet.</div>`;
+            return;
+        }
+
+        listEl.innerHTML = orders.map((order) => {
+            const role = getOrderRole(order);
+            const counterparty = role === "seller"
+                ? `Buyer: ${escapeHtml(order.buyerDisplayName || order.buyerUsername)}`
+                : `Seller: ${escapeHtml(order.sellerDisplayName || order.sellerUsername)}`;
+            const escrowText = `${Math.floor(Number(order.escrowKathie) || 0)} KaTHie (frozen until buyer confirms)`;
+            let actionHtml = "";
+
+            if (role === "seller" && order.status === ORDER_STATUS.PAID_FROZEN) {
+                actionHtml = `<button class="order-btn primary" onclick="window.sellerMarkServiceCompleted('${order.id}')">Mark Completed</button>`;
+            } else if (role === "seller" && order.status === ORDER_STATUS.SELLER_COMPLETED) {
+                actionHtml = `<button class="order-btn warn" onclick="window.sellerShipService('${order.id}')">Ship Service</button>`;
+            } else if (role === "buyer" && order.status === ORDER_STATUS.SHIPPED) {
+                actionHtml = `<button class="order-btn primary" onclick="window.buyerConfirmReceived('${order.id}')">Confirm Received</button>`;
+            } else {
+                actionHtml = `<button class="order-btn" disabled>No action now</button>`;
+            }
+
+            return `
+                <div class="order-card">
+                    <div class="order-head">
+                        <h3 class="order-title">${escapeHtml(order.postTitle || "Service")}</h3>
+                        <span class="order-status ${escapeHtml(order.status)}">${getOrderStatusText(order.status)}</span>
+                    </div>
+                    <div class="order-meta">
+                        <span>${counterparty}</span>
+                        <span>Escrow: ${escrowText}</span>
+                        <span>Updated: ${formatTime(order.updatedAt)}</span>
+                    </div>
+                    <p class="order-note">${getOrderRoleNote(order, role)}</p>
+                    <div class="order-actions">${actionHtml}</div>
+                </div>
+            `;
+        }).join("");
+    };
+
+    window.updateMessageUi = function() {
+        const badgeEl = document.getElementById('messagesUnreadBadge');
+        if (!badgeEl) return;
+        if (!currentUser) {
+            badgeEl.classList.remove('show');
+            badgeEl.innerText = "0";
+            return;
+        }
+        const seenAt = readMessageSeenAt();
+        const unreadCount = getOrdersForCurrentUser()
+            .filter((order) => Number(order.updatedAt || 0) > seenAt).length;
+        if (unreadCount > 0) {
+            badgeEl.classList.add('show');
+            badgeEl.innerText = unreadCount > 99 ? "99+" : String(unreadCount);
+        } else {
+            badgeEl.classList.remove('show');
+            badgeEl.innerText = "0";
+        }
+    };
+
+    window.openMessagesModal = function() {
+        if (!window.ensureAuthenticated("open messages")) return;
+        document.getElementById('messagesModal').classList.remove('hidden');
+        window.renderMessages();
+        markMessagesSeenNow();
+        window.updateMessageUi();
+    };
+
+    window.closeMessagesModal = function() {
+        document.getElementById('messagesModal').classList.add('hidden');
+    };
+
+    window.sellerMarkServiceCompleted = function(orderId) {
+        if (!window.ensureAuthenticated("mark service completed")) return;
+        const sellerKey = normalizeUsername(currentUser.username);
+        const orders = refreshServiceOrdersState();
+        const target = orders.find((row) => row.id === orderId);
+        if (!target) return;
+        if (target.sellerUsername !== sellerKey) {
+            alert("Only the seller can do this action.");
+            return;
+        }
+        if (target.status !== ORDER_STATUS.PAID_FROZEN) {
+            alert("Current order status does not allow this action.");
+            return;
+        }
+        target.status = ORDER_STATUS.SELLER_COMPLETED;
+        target.updatedAt = Date.now();
+        saveServiceOrdersToStorage(orders);
+        serviceOrdersState = orders;
+        markMessagesSeenNow();
+        window.renderMessages();
+        window.updateMessageUi();
+        alert("Marked as completed. Next step: click ship.");
+    };
+
+    window.sellerShipService = function(orderId) {
+        if (!window.ensureAuthenticated("ship this service")) return;
+        const sellerKey = normalizeUsername(currentUser.username);
+        const orders = refreshServiceOrdersState();
+        const target = orders.find((row) => row.id === orderId);
+        if (!target) return;
+        if (target.sellerUsername !== sellerKey) {
+            alert("Only the seller can do this action.");
+            return;
+        }
+        if (target.status !== ORDER_STATUS.SELLER_COMPLETED) {
+            alert("Please mark the service completed first.");
+            return;
+        }
+        target.status = ORDER_STATUS.SHIPPED;
+        target.updatedAt = Date.now();
+        saveServiceOrdersToStorage(orders);
+        serviceOrdersState = orders;
+        markMessagesSeenNow();
+        window.renderMessages();
+        window.updateMessageUi();
+        alert("Shipped. Buyer has been notified to confirm receipt.");
+    };
+
+    window.buyerConfirmReceived = function(orderId) {
+        if (!window.ensureAuthenticated("confirm receipt")) return;
+        const buyerKey = normalizeUsername(currentUser.username);
+        const orders = refreshServiceOrdersState();
+        const target = orders.find((row) => row.id === orderId);
+        if (!target) return;
+        if (target.buyerUsername !== buyerKey) {
+            alert("Only the buyer can confirm receipt.");
+            return;
+        }
+        if (target.status !== ORDER_STATUS.SHIPPED) {
+            alert("Seller has not shipped yet.");
+            return;
+        }
+
+        target.status = ORDER_STATUS.RECEIVED;
+        target.escrowState = "released";
+        target.releasedAt = Date.now();
+        target.updatedAt = target.releasedAt;
+        const escrowAmount = Math.max(0, Math.floor(Number(target.escrowKathie) || 0));
+        const sellerBalance = readWalletBalanceByUsername(target.sellerUsername);
+        writeWalletBalanceByUsername(target.sellerUsername, sellerBalance + escrowAmount);
+
+        saveServiceOrdersToStorage(orders);
+        serviceOrdersState = orders;
+        markMessagesSeenNow();
+        window.renderMessages();
+        window.updateMessageUi();
+        alert(`Receipt confirmed. Escrow released: +${escrowAmount} KaTHie to seller wallet.`);
+    };
 
     function createDefaultDailyTaskState(dateKey) {
         const state = { dateKey, tasks: {} };
@@ -1091,12 +1539,14 @@
         bonusSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
+    currentUser = loadAuthSession();
+    refreshServiceOrdersState();
     window.currentWalletBalance = readWalletBalance();
     setWalletBalance(window.currentWalletBalance);
-    currentUser = loadAuthSession();
     window.updateAuthUi();
     window.updateBonusUi();
     window.initDailyTasks();
+    window.updateMessageUi();
     setBonusVisibility(true);
     
     // Placeholder image when no photo is provided
@@ -1108,7 +1558,7 @@
     const testData = [
         { cat: 'housing', type: 'gig', title: 'URGENT: Laundry transfer!', locName: 'Lappis', sek: 30, kathie: 60, lat: 59.3663, lng: 18.0583, img: noPhotoImg, desc: 'Stuck at uni! Can someone please move my clothes from washer 2 to the dryer? My slot ends in 10 mins!' },
         { cat: 'housing', type: 'buy', title: '5 IKEA moving boxes', locName: 'Teknikringen', sek: 40, kathie: 80, lat: 59.3496, lng: 18.0706, img: 'https://images.unsplash.com/photo-1589935447067-5531094415d1?w=400', desc: 'Used once for moving in. Normal cardboard boxes.' },
-        { cat: 'housing', type: 'rent', title: 'Need a Phillips screwdriver', locName: 'Osquldas vag', sek: 0, kathie: 15, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1550985543-f47f38aeeecf?w=400', desc: 'Just need it for 10 minutes to assemble a chair. Will pick up and return.' },
+        { cat: 'housing', type: 'rent', title: 'Need a Phillips screwdriver', locName: 'Osquldas vag', sek: 8, kathie: 15, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1550985543-f47f38aeeecf?w=400', desc: 'Just need it for 10 minutes to assemble a chair. Will pick up and return.' },
         { cat: 'housing', type: 'buy', title: 'Half bottle of Laundry Detergent', locName: 'Lappis', sek: 15, kathie: 30, lat: 59.366, lng: 18.058, img: noPhotoImg, desc: 'Via Color liquid. Moving out tomorrow, taking whatever I cannot pack.' },
         { cat: 'housing', type: 'gig', title: 'Help carry mattress from T-bana', locName: 'Universitetet Station', sek: 50, kathie: 100, lat: 59.3654, lng: 18.0543, img: noPhotoImg, desc: 'Bought a mattress on Facebook. Need 1 person to help me carry it 500m to my building.' },
         { cat: 'housing', type: 'buy', title: 'Clas Ohlson Router', locName: 'Kista', sek: 100, kathie: 200, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?w=400', desc: 'Works perfectly. Comes with power cable.' },
@@ -1187,38 +1637,11 @@
         window.renderPosts();
     };
 
-    // 👇 --- 新增：搜索和回车触发逻辑 --- 👇
-window.applySearch = function() {
-    const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
-    
-    const searchTerm = searchInput.value.toLowerCase().trim();
-    // 你的代码里帖子所在的区域使用了 grid 和 tab-content
-    const tabContents = document.querySelectorAll('.tab-content'); 
-    
-    tabContents.forEach(container => {
-        const posts = container.querySelectorAll('.card'); // 获取所有帖子卡片
-        posts.forEach(post => {
-            const postText = post.innerText.toLowerCase();
-            if (postText.includes(searchTerm)) {
-                post.style.display = ""; // 匹配成功，显示
-            } else {
-                post.style.display = "none"; // 匹配失败，隐藏
-            }
-        });
-    });
-};
-
-// 让用户在搜索框按回车也能直接触发搜索
-const searchInputEl = document.getElementById('searchInput');
-if(searchInputEl) {
-    searchInputEl.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            window.applySearch();
-        }
-    });
-}
-// 👆 --- 新增代码结束 --- 👆
+    window.applySearch = function() {
+        const inputEl = document.getElementById('searchInput');
+        window.activeSearchQuery = String(inputEl ? inputEl.value : "").trim();
+        window.renderPosts();
+    };
 
     window.handleSearchInputKey = function(event) {
         if (event.key === "Enter") {
@@ -1229,6 +1652,7 @@ if(searchInputEl) {
 // Core rendering function with search filtering
     window.renderPosts = function() {
         const containers = {
+            'all': document.getElementById('all-section'),
             'housing': document.getElementById('housing-section'),
             'food': document.getElementById('food-section'),
             'transport': document.getElementById('transport-section'),
@@ -1239,6 +1663,7 @@ if(searchInputEl) {
         Object.values(containers).forEach(c => c.innerHTML = '');
 
         const processedTestData = testData.map((item, index) => {
+            const owner = resolvePostOwner(item, index);
             return {
                 ...item,
                 category: item.cat, 
@@ -1247,15 +1672,22 @@ if(searchInputEl) {
                 createdAt: Date.now() - (index * 45 * 60000), 
                 isTest: true,
                 flow: resolvePostFlow(item),
-                postKey: `test_${index}`
+                postKey: `test_${index}`,
+                ownerUsername: owner.ownerUsername,
+                ownerDisplayName: owner.ownerDisplayName
             };
         });
 
-        const normalizedLivePosts = liveFirebasePosts.map((item, liveIndex) => ({
-            ...item,
-            flow: resolvePostFlow(item),
-            postKey: item.id ? `live_${item.id}` : `live_idx_${liveIndex}`
-        }));
+        const normalizedLivePosts = liveFirebasePosts.map((item, liveIndex) => {
+            const owner = resolvePostOwner(item, liveIndex + 1000);
+            return {
+                ...item,
+                flow: resolvePostFlow(item),
+                postKey: item.id ? `live_${item.id}` : `live_idx_${liveIndex}`,
+                ownerUsername: owner.ownerUsername,
+                ownerDisplayName: owner.ownerDisplayName
+            };
+        });
 
         window.allPosts = [...normalizedLivePosts, ...processedTestData];
         const activeFlashDeals = buildFlashDealsForCurrentUser(window.allPosts);
@@ -1275,7 +1707,7 @@ if(searchInputEl) {
         };
 
         // Track rendered cards in each category
-        let renderedCount = { housing: 0, food: 0, transport: 0, study: 0, lifestyle: 0 };
+        let renderedCount = { all: 0, housing: 0, food: 0, transport: 0, study: 0, lifestyle: 0 };
 
         window.allPosts.forEach((post, index) => {
             // Search filter: title-only with case-insensitive fuzzy matching
@@ -1286,8 +1718,7 @@ if(searchInputEl) {
                                 
             if (!matchSearch) return; // Skip items that do not match search
             const normalizedFlow = resolvePostFlow(post);
-            const matchFlowFilter = activeFlowFilter === "all" ||
-                (isServiceType(post.type) && normalizedFlow === activeFlowFilter);
+            const matchFlowFilter = activeFlowFilter === "all" || normalizedFlow === activeFlowFilter;
             if (!matchFlowFilter) return;
 
             const isNew = (Date.now() - post.createdAt) < (24 * 60 * 60 * 1000); 
@@ -1296,6 +1727,7 @@ if(searchInputEl) {
             
             const timeStr = formatTime(post.createdAt);
             const tagInfo = getTypeTagInfo(post.type);
+            const tagText = getTypeTagTextForPost(post, tagInfo.text);
             const isServiceRequest = isServiceRequestPost(post);
             const postKey = getPostStableKey(post, index);
             const flashDeal = activeFlashDeals[postKey];
@@ -1318,7 +1750,7 @@ if(searchInputEl) {
                 <div class="card" onclick="window.openItemDetail(${index})">
                     <img src="${post.imageSrc}" class="card-img-top" alt="${post.title}">
                     ${flashBadgeHTML}
-                    <span class="type-tag ${tagInfo.class}">${tagInfo.text}</span>
+                    <span class="type-tag ${tagInfo.class}">${tagText}</span>
                     <div class="card-body">
                         <h3 class="item-title">${post.title} ${badgeHTML}</h3>
                         <div class="post-meta">
@@ -1333,6 +1765,10 @@ if(searchInputEl) {
                     </div>
                 </div>
             `;
+            if (containers.all) {
+                containers.all.insertAdjacentHTML('beforeend', cardHTML);
+                renderedCount.all++;
+            }
             if(containers[post.category]) {
                 containers[post.category].insertAdjacentHTML('beforeend', cardHTML);
                 renderedCount[post.category]++;
@@ -1343,13 +1779,29 @@ if(searchInputEl) {
         Object.keys(containers).forEach(cat => {
             if(renderedCount[cat] === 0) {
                 if (searchQuery) {
-                    containers[cat].innerHTML = `<div class="empty-state">No matching results for "<b>${searchQuery}</b>" in this category.</div>`;
+                    if (cat === "all") {
+                        containers[cat].innerHTML = `<div class="empty-state">No matching results for "<b>${searchQuery}</b>".</div>`;
+                    } else {
+                        containers[cat].innerHTML = `<div class="empty-state">No matching results for "<b>${searchQuery}</b>" in this category.</div>`;
+                    }
                 } else if (activeFlowFilter === "need_service") {
-                    containers[cat].innerHTML = '<div class="empty-state">No "Need Service" posts in this category yet.</div>';
+                    if (cat === "all") {
+                        containers[cat].innerHTML = '<div class="empty-state">No "Need Service" posts yet.</div>';
+                    } else {
+                        containers[cat].innerHTML = '<div class="empty-state">No "Need Service" posts in this category yet.</div>';
+                    }
                 } else if (activeFlowFilter === "offer_service") {
-                    containers[cat].innerHTML = '<div class="empty-state">No "Service Offer" posts in this category yet.</div>';
+                    if (cat === "all") {
+                        containers[cat].innerHTML = '<div class="empty-state">No "Service Offer" posts yet.</div>';
+                    } else {
+                        containers[cat].innerHTML = '<div class="empty-state">No "Service Offer" posts in this category yet.</div>';
+                    }
                 } else {
-                    containers[cat].innerHTML = '<div class="empty-state">No items here yet. Be the first to post!</div>';
+                    if (cat === "all") {
+                        containers[cat].innerHTML = '<div class="empty-state">No items yet. Be the first to post!</div>';
+                    } else {
+                        containers[cat].innerHTML = '<div class="empty-state">No items here yet. Be the first to post!</div>';
+                    }
                 }
             }
         });
@@ -1361,30 +1813,31 @@ if(searchInputEl) {
     window.switchTab = function(tabId) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-        
-        const tabs = document.querySelectorAll('.tab');
-        if(tabId === 'housing') tabs[0].classList.add('active');
-        if(tabId === 'food') tabs[1].classList.add('active');
-        if(tabId === 'transport') tabs[2].classList.add('active');
-        if(tabId === 'study') tabs[3].classList.add('active');
-        if(tabId === 'lifestyle') tabs[4].classList.add('active');
-        
-        document.getElementById(tabId + '-section').classList.remove('hidden');
+
+        const safeTabId = document.getElementById(`${tabId}-section`) ? tabId : 'all';
+        document.querySelectorAll('.tab[data-tab]').forEach((tabEl) => {
+            tabEl.classList.toggle('active', tabEl.getAttribute('data-tab') === safeTabId);
+        });
+        document.getElementById(`${safeTabId}-section`).classList.remove('hidden');
     };
 
     let detailMap = null, detailMarker = null;
     let currentItemSek = 0, currentItemKathie = 0;
-    let currentDetailPost = null, currentItemIsServiceRequest = false;
+    let currentDetailPost = null, currentItemIsServiceRequest = false, currentItemIsServiceOffer = false;
 
     window.openItemDetail = function(postIndex) {
         const post = window.allPosts[postIndex];
         currentDetailPost = post;
         currentItemIsServiceRequest = isServiceRequestPost(post);
+        currentItemIsServiceOffer = isServiceOfferPost(post);
         
         document.getElementById('detailImg').src = post.imageSrc;
         document.getElementById('detailTitle').innerText = post.title;
         document.getElementById('detailLoc').innerText = post.locName;
         document.getElementById('detailTime').innerText = formatTime(post.createdAt);
+        const ownerName = String(post.ownerDisplayName || "Unknown User").trim();
+        const ownerId = normalizeUsername(post.ownerUsername || "");
+        document.getElementById('detailUser').innerText = ownerId ? `User: ${ownerName} (@${ownerId})` : `User: ${ownerName}`;
         document.getElementById('detailDesc').innerText = post.desc;
         const postKey = getPostStableKey(post, postIndex);
         const activeFlashDeals = buildFlashDealsForCurrentUser(window.allPosts || []);
@@ -1418,6 +1871,16 @@ if(searchInputEl) {
             kathieBtn.disabled = false;
             kathieBtn.style.backgroundColor = "#E3F2FD";
             kathieBtn.style.color = "#0D47A1";
+        } else if (currentItemIsServiceOffer) {
+            fiatBtn.innerText = "Buy Service (SEK)";
+            fiatBtn.disabled = false;
+            fiatBtn.style.backgroundColor = "#fff7e8";
+            fiatBtn.style.color = "#7a4a00";
+
+            kathieBtn.innerText = "Buy Service (KaTHie)";
+            kathieBtn.disabled = false;
+            kathieBtn.style.backgroundColor = "#E8F5E9";
+            kathieBtn.style.color = "var(--kathie-color)";
         } else {
             fiatBtn.innerText = "Pay SEK";
             fiatBtn.disabled = false;
@@ -1452,6 +1915,15 @@ if(searchInputEl) {
             alert(`You accepted "${title}". Reward offered: ${currentItemSek} SEK / ${currentItemKathie} KaTHie.`);
             return;
         }
+        if (currentItemIsServiceOffer) {
+            if (!window.ensureAuthenticated("buy this service")) return;
+            alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`);
+            const createdOrder = createServiceOrderFromCurrentDetail("sek");
+            if (!createdOrder) return;
+            window.closeDetailModal();
+            alert(`Order created. Funds are frozen in escrow and seller has been notified.`);
+            return;
+        }
         if (!window.ensureAuthenticated("pay with SEK")) return;
         alert(`Taking you to Swish/Card payment for ${currentItemSek} SEK...`);
         window.markDailyTaskProgress("purchase_once", 1);
@@ -1461,6 +1933,14 @@ if(searchInputEl) {
             if (!window.ensureAuthenticated("discuss task details")) return;
             const title = currentDetailPost ? currentDetailPost.title : "this service";
             alert(`Start chatting with the requester about "${title}" (time, scope, and delivery).`);
+            return;
+        }
+        if (currentItemIsServiceOffer) {
+            if (!window.ensureAuthenticated("buy this service")) return;
+            const createdOrder = createServiceOrderFromCurrentDetail("kathie");
+            if (!createdOrder) return;
+            window.closeDetailModal();
+            alert(`Order created. ${createdOrder.escrowKathie} KaTHie is frozen in escrow until buyer confirms receipt.`);
             return;
         }
         if (!window.ensureAuthenticated("pay with KaTHie")) return;
@@ -1631,9 +2111,11 @@ if(searchInputEl) {
         setAuthError("");
         currentUser = { username: existingUser.username, displayName: existingUser.displayName };
         saveAuthSession(currentUser);
+        setWalletBalance(readWalletBalance());
         window.updateAuthUi();
         window.initDailyTasks();
         window.renderPosts();
+        window.updateMessageUi();
         document.getElementById('authForm').reset();
         window.closeAuthModal();
         alert(`Welcome, ${currentUser.displayName}!`);
@@ -1669,6 +2151,8 @@ if(searchInputEl) {
             lat: selectedLat, lng: selectedLng,
             sek: parsedSek,
             kathie: parsedKathie,
+            ownerUsername: normalizeUsername(currentUser.username),
+            ownerDisplayName: currentUser.displayName,
             imageSrc: currentCompressedImage,
             createdAt: Date.now()
         };
@@ -1676,18 +2160,6 @@ if(searchInputEl) {
         try {
             await addDoc(collection(db, "posts"), newPostData);
             window.markDailyTaskProgress("post_once", 1);
-            // 👇 --- 从这里开始是你新增的清空表单代码 --- 👇
-            document.getElementById('itemTitle').value = '';
-            document.getElementById('itemDesc').value = '';
-            document.getElementById('itemSek').value = '';
-            document.getElementById('itemKathie').value = '';
-            document.getElementById('itemLoc').value = '';
-            const imgPreview = document.getElementById('imagePreview');
-            if(imgPreview) imgPreview.src = '';
-            if (typeof currentCompressedImage !== 'undefined') {
-                currentCompressedImage = null; 
-            }
-            // 👆 --- 新增代码结束 --- 👆
             window.closePostModal();
             alert('Success! Your post is now live.');
         } catch (error) {
@@ -1701,11 +2173,4 @@ if(searchInputEl) {
 
 </body>
 </html>
-
-
-
-
-
-
-
 
