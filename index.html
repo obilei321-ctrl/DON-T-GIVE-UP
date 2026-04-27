@@ -626,6 +626,8 @@
     const SYSTEM_ESCROW_POOL_KEY = "dgu_system_escrow_pool_v1";
     const DISCUSSIONS_STORAGE_KEY = "dgu_discussions_v1";
     const MESSAGE_SEEN_KEY_PREFIX = "dgu_message_seen_v1";
+    const MESSAGE_REALTIME_POLL_MS = 1200;
+    const MESSAGE_SYNC_CHANNEL_NAME = "dgu_message_sync_v1";
     const ORDER_STATUS = {
         PAID_FROZEN: "paid_frozen",
         SELLER_COMPLETED: "seller_completed",
@@ -644,6 +646,14 @@
     let flashDealTicker = null;
     let serviceOrdersState = [];
     let currentDiscussContext = null;
+    let messageRealtimePoll = null;
+    let messageSyncChannel = null;
+    let messageRealtimeStarted = false;
+    let lastOrdersStorageSnapshot = null;
+    let lastDiscussionsStorageSnapshot = null;
+    let lastWalletStorageKey = null;
+    let lastWalletStorageSnapshot = null;
+    let lastEscrowPoolSnapshot = null;
 
     function normalizeUsername(value) {
         return String(value || "").trim().toLowerCase();
@@ -673,8 +683,9 @@
         const safeBalance = Math.max(0, Math.floor(Number(nextBalance) || 0));
         localStorage.setItem(getWalletStorageKeyByUsername(username), String(safeBalance));
         if (currentUser && normalizeUsername(currentUser.username) === (normalizeUsername(username) || "guest")) {
-            setWalletBalance(safeBalance, true);
+            applyWalletBalanceUi(safeBalance, true);
         }
+        broadcastMessageRealtimeSync("wallet_updated");
         return safeBalance;
     }
 
@@ -687,6 +698,7 @@
     function writeSystemEscrowPool(nextAmount) {
         const safeAmount = Math.max(0, Math.floor(Number(nextAmount) || 0));
         localStorage.setItem(SYSTEM_ESCROW_POOL_KEY, String(safeAmount));
+        broadcastMessageRealtimeSync("escrow_pool_updated");
         return safeAmount;
     }
 
@@ -781,6 +793,7 @@
         window.closeTopupModal();
         window.closePostModal();
         window.updateMessageUi();
+        refreshMessageRealtimeCache(true);
         alert("You have logged out.");
     };
 
@@ -866,16 +879,24 @@
 
     function animateWallet() {
         const walletUi = document.getElementById('user-wallet');
+        if (!walletUi) return;
         walletUi.classList.add('bump');
         setTimeout(() => walletUi.classList.remove('bump'), 200);
     }
 
-    function setWalletBalance(nextBalance, shouldAnimate = false) {
+    function applyWalletBalanceUi(nextBalance, shouldAnimate = false) {
         const safeBalance = Math.max(0, Math.floor(Number(nextBalance) || 0));
         window.currentWalletBalance = safeBalance;
-        document.getElementById('wallet-balance').innerText = safeBalance;
-        localStorage.setItem(getWalletStorageKey(), String(safeBalance));
+        const balanceEl = document.getElementById('wallet-balance');
+        if (balanceEl) balanceEl.innerText = safeBalance;
         if (shouldAnimate) animateWallet();
+        return safeBalance;
+    }
+
+    function setWalletBalance(nextBalance, shouldAnimate = false) {
+        const safeBalance = applyWalletBalanceUi(nextBalance, shouldAnimate);
+        localStorage.setItem(getWalletStorageKey(), String(safeBalance));
+        broadcastMessageRealtimeSync("wallet_updated");
     }
 
     function getTodayKey() {
@@ -1204,6 +1225,7 @@
 
     function saveServiceOrdersToStorage(orders) {
         localStorage.setItem(SERVICE_ORDERS_STORAGE_KEY, JSON.stringify(Array.isArray(orders) ? orders : []));
+        broadcastMessageRealtimeSync("orders_updated");
     }
 
     function refreshServiceOrdersState() {
@@ -1225,6 +1247,7 @@
     function markMessagesSeenNow() {
         if (!currentUser) return;
         localStorage.setItem(getMessageSeenStorageKey(), String(Date.now()));
+        broadcastMessageRealtimeSync("messages_seen_updated");
     }
 
     function isMessagesModalOpen() {
@@ -1246,6 +1269,89 @@
 
     function saveDiscussionState(state) {
         localStorage.setItem(DISCUSSIONS_STORAGE_KEY, JSON.stringify(state && typeof state === "object" ? state : {}));
+        broadcastMessageRealtimeSync("discussions_updated");
+    }
+
+    function broadcastMessageRealtimeSync(reason = "state_updated") {
+        if (!messageSyncChannel) return;
+        try {
+            messageSyncChannel.postMessage({
+                type: "message_state_sync",
+                reason: String(reason || "state_updated"),
+                at: Date.now()
+            });
+        } catch (_) {}
+    }
+
+    function refreshMessageRealtimeCache(force = false) {
+        const rawOrders = localStorage.getItem(SERVICE_ORDERS_STORAGE_KEY) || "";
+        const rawDiscussions = localStorage.getItem(DISCUSSIONS_STORAGE_KEY) || "";
+        const walletStorageKey = getWalletStorageKey();
+        const rawWallet = localStorage.getItem(walletStorageKey) || "";
+        const rawEscrowPool = localStorage.getItem(SYSTEM_ESCROW_POOL_KEY) || "";
+        if (
+            !force &&
+            rawOrders === lastOrdersStorageSnapshot &&
+            rawDiscussions === lastDiscussionsStorageSnapshot &&
+            walletStorageKey === lastWalletStorageKey &&
+            rawWallet === lastWalletStorageSnapshot &&
+            rawEscrowPool === lastEscrowPoolSnapshot
+        ) {
+            return;
+        }
+
+        lastOrdersStorageSnapshot = rawOrders;
+        lastDiscussionsStorageSnapshot = rawDiscussions;
+        lastWalletStorageKey = walletStorageKey;
+        lastWalletStorageSnapshot = rawWallet;
+        lastEscrowPoolSnapshot = rawEscrowPool;
+        refreshServiceOrdersState();
+        const latestWallet = readWalletBalance();
+        if (Number(latestWallet) !== Number(window.currentWalletBalance)) {
+            applyWalletBalanceUi(latestWallet, true);
+        }
+        window.updateMessageUi();
+        if (isMessagesModalOpen()) window.renderMessages();
+        if (currentDiscussContext) window.renderDiscussThread();
+    }
+
+    function handleMessageStorageEvent(event) {
+        const key = String((event && event.key) || "");
+        if (!key) {
+            refreshMessageRealtimeCache(true);
+            return;
+        }
+        if (
+            key === SERVICE_ORDERS_STORAGE_KEY ||
+            key === DISCUSSIONS_STORAGE_KEY ||
+            key === getWalletStorageKey() ||
+            key === SYSTEM_ESCROW_POOL_KEY ||
+            key.startsWith(MESSAGE_SEEN_KEY_PREFIX)
+        ) {
+            refreshMessageRealtimeCache(true);
+        }
+    }
+
+    function startMessageRealtimeSync() {
+        if (!messageRealtimeStarted) {
+            messageRealtimeStarted = true;
+            window.addEventListener("storage", handleMessageStorageEvent);
+
+            if (typeof BroadcastChannel !== "undefined") {
+                messageSyncChannel = new BroadcastChannel(MESSAGE_SYNC_CHANNEL_NAME);
+                messageSyncChannel.onmessage = (event) => {
+                    const data = event && event.data;
+                    if (data && data.type === "message_state_sync") {
+                        refreshMessageRealtimeCache(true);
+                    }
+                };
+            }
+
+            messageRealtimePoll = setInterval(() => {
+                refreshMessageRealtimeCache(false);
+            }, MESSAGE_REALTIME_POLL_MS);
+        }
+        refreshMessageRealtimeCache(true);
     }
 
     function getDiscussionThreadKey(postKey, usernameA, usernameB) {
@@ -1561,18 +1667,18 @@
         if (role === "seller") {
             if (order.status === ORDER_STATUS.PAID_FROZEN) {
                 return isNeedRequestOrder
-                    ? "You accepted this request. Complete the task, then click ship."
-                    : "Your service was purchased. Complete the task, then click ship.";
-            }
-            if (order.status === ORDER_STATUS.SELLER_COMPLETED) {
-                return isNeedRequestOrder
-                    ? "You marked this request as completed. Click ship to notify the requester."
-                    : "Task marked complete. Click ship to notify the buyer.";
+                    ? "You accepted this request. Ship first, then mark completed."
+                    : "Your service was purchased. Ship first, then mark completed.";
             }
             if (order.status === ORDER_STATUS.SHIPPED) {
                 return isNeedRequestOrder
-                    ? "Marked as shipped. Waiting for requester confirmation to release funds."
-                    : "Shipped. Waiting for buyer confirmation to release funds.";
+                    ? "Marked as shipped. Next step: mark completed to unlock buyer confirmation."
+                    : "Shipped. Next step: mark completed to unlock buyer confirmation.";
+            }
+            if (order.status === ORDER_STATUS.SELLER_COMPLETED) {
+                return isNeedRequestOrder
+                    ? "You marked this request as completed. Waiting for requester confirmation to release funds."
+                    : "Task marked complete. Waiting for buyer confirmation to release funds.";
             }
             if (order.status === ORDER_STATUS.RECEIVED) return `Funds released. +${Math.floor(Number(order.escrowKathie) || 0)} KaTHie credited to your wallet.`;
         }
@@ -1582,15 +1688,15 @@
                     ? "Your reward payment was deducted and frozen in system escrow until the helper delivers."
                     : "Payment is frozen in escrow until delivery is confirmed.";
             }
-            if (order.status === ORDER_STATUS.SELLER_COMPLETED) {
-                return isNeedRequestOrder
-                    ? "Helper completed the task and is preparing shipment."
-                    : "Seller completed the service and is preparing shipment.";
-            }
             if (order.status === ORDER_STATUS.SHIPPED) {
                 return isNeedRequestOrder
-                    ? "Helper has shipped. Please confirm receipt when done."
-                    : "Seller has shipped. Please confirm receipt when done.";
+                    ? "Helper has shipped. Waiting for final completion update."
+                    : "Seller has shipped. Waiting for final completion update.";
+            }
+            if (order.status === ORDER_STATUS.SELLER_COMPLETED) {
+                return isNeedRequestOrder
+                    ? "Helper marked completed. Please confirm receipt when done."
+                    : "Seller marked completed. Please confirm receipt when done.";
             }
             if (order.status === ORDER_STATUS.RECEIVED) return "You confirmed receipt. Escrow has been released to the seller.";
         }
@@ -1747,11 +1853,11 @@
         const userKey = normalizeUsername(currentUser.username);
         const sellerTodo = orders.filter((o) =>
             o.sellerUsername === userKey &&
-            (o.status === ORDER_STATUS.PAID_FROZEN || o.status === ORDER_STATUS.SELLER_COMPLETED)
+            (o.status === ORDER_STATUS.PAID_FROZEN || o.status === ORDER_STATUS.SHIPPED)
         ).length;
         const buyerTodo = orders.filter((o) =>
             o.buyerUsername === userKey &&
-            o.status === ORDER_STATUS.SHIPPED
+            o.status === ORDER_STATUS.SELLER_COMPLETED
         ).length;
         summaryEl.innerText = `Seller todo: ${sellerTodo} | Buyer confirmations: ${buyerTodo} | Chats: ${chatThreads.length}`;
     }
@@ -1783,10 +1889,10 @@
             let actionHtml = "";
 
             if (role === "seller" && order.status === ORDER_STATUS.PAID_FROZEN) {
-                actionHtml = `<button class="order-btn primary" onclick="window.sellerMarkServiceCompleted('${order.id}')">Mark Completed</button>`;
-            } else if (role === "seller" && order.status === ORDER_STATUS.SELLER_COMPLETED) {
                 actionHtml = `<button class="order-btn warn" onclick="window.sellerShipService('${order.id}')">Ship Service</button>`;
-            } else if (role === "buyer" && order.status === ORDER_STATUS.SHIPPED) {
+            } else if (role === "seller" && order.status === ORDER_STATUS.SHIPPED) {
+                actionHtml = `<button class="order-btn primary" onclick="window.sellerMarkServiceCompleted('${order.id}')">Mark Completed</button>`;
+            } else if (role === "buyer" && order.status === ORDER_STATUS.SELLER_COMPLETED) {
                 actionHtml = `<button class="order-btn primary" onclick="window.buyerConfirmReceived('${order.id}')">Confirm Received</button>`;
             } else {
                 actionHtml = `<button class="order-btn" disabled>No action now</button>`;
@@ -1887,8 +1993,8 @@
             alert("Only the seller can do this action.");
             return;
         }
-        if (target.status !== ORDER_STATUS.PAID_FROZEN) {
-            alert("Current order status does not allow this action.");
+        if (target.status !== ORDER_STATUS.SHIPPED) {
+            alert("Please ship first, then mark completed.");
             return;
         }
         target.status = ORDER_STATUS.SELLER_COMPLETED;
@@ -1898,7 +2004,7 @@
         markMessagesSeenNow();
         window.renderMessages();
         window.updateMessageUi();
-        alert("Marked as completed. Next step: click ship.");
+        alert("Marked as completed. Buyer can now confirm receipt.");
     };
 
     window.sellerShipService = function(orderId) {
@@ -1911,8 +2017,8 @@
             alert("Only the seller can do this action.");
             return;
         }
-        if (target.status !== ORDER_STATUS.SELLER_COMPLETED) {
-            alert("Please mark the service completed first.");
+        if (target.status !== ORDER_STATUS.PAID_FROZEN) {
+            alert("Current order status does not allow shipping.");
             return;
         }
         target.status = ORDER_STATUS.SHIPPED;
@@ -1922,7 +2028,7 @@
         markMessagesSeenNow();
         window.renderMessages();
         window.updateMessageUi();
-        alert("Shipped. Buyer has been notified to confirm receipt.");
+        alert("Shipped. Next step: mark completed.");
     };
 
     window.buyerConfirmReceived = function(orderId) {
@@ -1935,8 +2041,8 @@
             alert("Only the buyer can confirm receipt.");
             return;
         }
-        if (target.status !== ORDER_STATUS.SHIPPED) {
-            alert("Seller has not shipped yet.");
+        if (target.status !== ORDER_STATUS.SELLER_COMPLETED) {
+            alert("Seller has not marked this order completed yet.");
             return;
         }
 
@@ -2140,6 +2246,7 @@
     window.updateBonusUi();
     window.initDailyTasks();
     window.updateMessageUi();
+    startMessageRealtimeSync();
     setBonusVisibility(true);
     
     // Placeholder image used when an image URL is missing or unreachable
@@ -2756,6 +2863,7 @@
         window.initDailyTasks();
         window.renderPosts();
         window.updateMessageUi();
+        refreshMessageRealtimeCache(true);
         document.getElementById('authForm').reset();
         window.closeAuthModal();
         alert(`Welcome, ${currentUser.displayName}!`);
