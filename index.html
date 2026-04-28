@@ -29,7 +29,8 @@
         .btn-messages { background-color: #FFF6E5; color: #7a4a00; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #f3c26f; font-size: 0.9rem; position: relative; }
         .btn-topup { background-color: #EAF8F2; color: #18633f; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #A7DABF; font-size: 0.9rem; }
         .btn-auth { background-color: #ECEFF1; color: #263238; padding: 8px 14px; border-radius: 20px; font-weight: bold; text-decoration: none; cursor: pointer; border: 1px solid #CFD8DC; font-size: 0.9rem; }
-        .user-chip { background: #F4F8FF; color: #234; border: 1px solid #C9DBFF; border-radius: 999px; font-size: 0.85rem; padding: 6px 10px; font-weight: 600; }
+        .user-chip { background: #F4F8FF; color: #234; border: 1px solid #C9DBFF; border-radius: 999px; font-size: 0.85rem; padding: 6px 10px; font-weight: 600; cursor: pointer; }
+        .user-chip:hover { background: #e8f1ff; }
         .btn-bonus:hover { background-color: #D0E8FD; }
         .btn-tasks:hover { background-color: #EAF2DC; }
         .btn-messages:hover { background-color: #FFE8C2; }
@@ -222,7 +223,20 @@
         .processing-text { margin: 0 0 12px 0; color: #49657f; font-size: 0.9rem; }
         .btn-complete-pay { width: 100%; background: #1f7a49; color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 700; cursor: pointer; }
         .messages-modal { max-width: 700px; }
+        .messages-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .messages-summary { margin: 0 0 10px 0; color: #4f6173; font-size: 0.9rem; }
+        .btn-clear-progress {
+            border: 1px solid #f0cb7b;
+            background: #fff2d8;
+            color: #784800;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-clear-progress:hover { opacity: 0.92; }
         .messages-list { display: grid; gap: 10px; max-height: 62vh; overflow-y: auto; padding-right: 2px; }
         .messages-section-title {
             margin: 2px 0 0 0;
@@ -268,6 +282,73 @@
         }
         .chat-time { font-size: 0.76rem; color: #6d8298; }
         .messages-empty { color: #6c7f92; font-size: 0.92rem; background: #f7fafc; border: 1px dashed #cfdbe8; border-radius: 10px; padding: 14px; text-align: center; }
+        .my-posts-modal { max-width: 680px; }
+        .my-posts-summary { margin: 0 0 12px 0; color: #4f6173; font-size: 0.9rem; }
+        .my-posts-groups { display: grid; gap: 12px; }
+        .my-posts-group {
+            border: 1px solid #dbe7f4;
+            border-radius: 10px;
+            background: #fbfdff;
+            padding: 10px;
+        }
+        .my-posts-group h3 {
+            margin: 0 0 8px 0;
+            color: #244a6d;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+        .my-posts-list { display: grid; gap: 6px; }
+        .my-post-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .my-post-link {
+            flex: 1;
+            border: 1px solid #d8e4ef;
+            background: #f4f9fd;
+            color: #1f4668;
+            border-radius: 8px;
+            padding: 8px 10px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .my-post-link:hover { background: #e9f3fb; }
+        .my-post-actions { display: flex; gap: 6px; }
+        .my-post-action-btn {
+            border: 1px solid #ccd9e8;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .my-post-action-btn.edit {
+            background: #edf5fc;
+            color: #274867;
+            border-color: #c5d7ea;
+        }
+        .my-post-action-btn.delete {
+            background: #fff1f0;
+            color: #a1261d;
+            border-color: #f0c2bf;
+        }
+        .my-post-action-btn:hover { opacity: 0.92; }
+        .my-posts-empty {
+            color: #6b8096;
+            background: #f8fbfe;
+            border: 1px dashed #d2deea;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.88rem;
+        }
+        .edit-post-modal { max-width: 640px; }
+        .edit-post-subtitle { margin: 0 0 12px 0; color: #5a6f84; font-size: 0.9rem; }
+        .edit-post-error { color: #c62828; min-height: 1.1em; margin-top: 8px; font-size: 0.88rem; }
         .discuss-modal { max-width: 700px; }
         .discuss-participants { margin: 0 0 10px 0; color: #4d6075; font-size: 0.9rem; }
         .discuss-thread {
@@ -349,7 +430,7 @@
 <header>
     <a href="#" class="logo">DON'T GIVE UP</a>
     <div class="nav-right">
-        <span class="user-chip" id="authUserChip">Guest</span>
+        <span class="user-chip" id="authUserChip" title="View my posts" onclick="window.openMyPostsModal()">Guest</span>
         <button class="btn-auth" id="authActionBtn" onclick="window.handleAuthAction()">Login</button>
         <div class="wallet" id="user-wallet" title="Your Community Credits">
             Credits <span id="wallet-balance">500</span> KaTHie
@@ -367,7 +448,7 @@
     <p class="desc">The All-in-One Service Platform for the KTH Community</p>
 </section>
 
-<section class="bonus-section" id="new-user-bonus">
+<section class="bonus-section hidden" id="new-user-bonus">
     <div class="bonus-card">
         <button class="bonus-close-btn" id="bonusCloseBtn" onclick="window.closeBonusPopup()" aria-label="Close bonus popup" title="Close bonus popup">&times;</button>
         <div class="bonus-copy">
@@ -520,6 +601,89 @@
     </div>
 </div>
 
+<div id="myPostsModal" class="modal-overlay hidden">
+    <div class="modal my-posts-modal">
+        <span class="close-btn" onclick="window.closeMyPostsModal()">&times;</span>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">My Published Posts</h2>
+        <p class="my-posts-summary" id="myPostsSummaryText">Your posts are grouped by service direction.</p>
+        <div class="my-posts-groups">
+            <div class="my-posts-group">
+                <h3>Need Service</h3>
+                <div class="my-posts-list" id="myNeedPostsList"></div>
+            </div>
+            <div class="my-posts-group">
+                <h3>Service Offer</h3>
+                <div class="my-posts-list" id="myOfferPostsList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editPostModal" class="modal-overlay hidden">
+    <div class="modal edit-post-modal">
+        <span class="close-btn" onclick="window.closeEditPostModal()">&times;</span>
+        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Edit Post</h2>
+        <p class="edit-post-subtitle">Update all fields on this page, then save once.</p>
+        <form id="editPostForm">
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Scenario</label>
+                    <select id="editItemCategory" required>
+                        <option value="housing">Home & Living</option>
+                        <option value="food">Food & Cooking</option>
+                        <option value="transport">Transport & Outdoors</option>
+                        <option value="study">Study & Tech</option>
+                        <option value="lifestyle">Clothing & Lifestyle</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Type</label>
+                    <select id="editItemType" required>
+                        <option value="rent">Item Rental</option>
+                        <option value="buy">Second-Hand</option>
+                        <option value="gig">Micro-Gig (Help needed)</option>
+                        <option value="skill">Skill Exchange</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Service Direction</label>
+                <select id="editItemFlow" required>
+                    <option value="need_service">Need service (I pay helper)</option>
+                    <option value="offer_service">Offer service (buyer pays me)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="editItemTitle" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="editItemDesc" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="editItemLoc" required>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Price (SEK)</label>
+                    <input type="number" id="editItemSek" min="1" step="1" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Price (KaTHie Credits)</label>
+                    <input type="number" id="editItemKathie" min="0" step="1" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="window.closeEditPostModal()">Cancel</button>
+                <button type="submit" class="btn-submit" id="editPostSubmitBtn">Save Changes</button>
+            </div>
+            <div class="edit-post-error" id="editPostError"></div>
+        </form>
+    </div>
+</div>
+
 <div id="dailyTasksModal" class="modal-overlay hidden">
     <div class="modal daily-modal">
         <span class="close-btn" onclick="window.closeDailyTasksModal()">&times;</span>
@@ -538,7 +702,10 @@
 <div id="messagesModal" class="modal-overlay hidden">
     <div class="modal messages-modal">
         <span class="close-btn" onclick="window.closeMessagesModal()">&times;</span>
-        <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Progress Center</h2>
+        <div class="messages-head">
+            <h2 style="margin-top:0; margin-bottom: 6px; color: var(--primary-color);">Progress Center</h2>
+            <button type="button" class="btn-clear-progress" onclick="window.clearMyProgress()">Clear All</button>
+        </div>
         <p class="messages-summary" id="messagesSummaryText">Orders, escrow updates, and chats will appear here.</p>
         <div class="messages-list" id="messagesList"></div>
     </div>
@@ -590,7 +757,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDJkfbQ9IPEkALSJwd5n0cXa74emO75idk",
@@ -607,13 +774,23 @@
 
     const BONUS_AMOUNT = 100;
     const WALLET_BALANCE_KEY_PREFIX = "dgu_wallet_balance_v2";
+    const BONUS_CLAIMED_KEY_PREFIX = "dgu_new_user_bonus_claimed_v1";
+    const BONUS_POPUP_SEEN_KEY_PREFIX = "dgu_new_user_bonus_popup_seen_v1";
     const LEGACY_WALLET_BALANCE_KEY = "dgu_wallet_balance";
     const AUTH_SESSION_KEY = "dgu_auth_session";
     const PRESET_USERS = [
         { username: "kth001", password: "123456", displayName: "KTH User 001" },
         { username: "kth002", password: "123456", displayName: "KTH User 002" },
-        { username: "kth003", password: "123456", displayName: "KTH User 003" }
+        { username: "kth003", password: "123456", displayName: "KTH User 003" },
+        { username: "kth004", password: "123456", displayName: "KTH User 004" },
+        { username: "kth005", password: "123456", displayName: "KTH User 005" },
+        { username: "kth006", password: "123456", displayName: "KTH User 006" },
+        { username: "kth007", password: "123456", displayName: "KTH User 007" },
+        { username: "kth008", password: "123456", displayName: "KTH User 008" },
+        { username: "kth009", password: "123456", displayName: "KTH User 009" },
+        { username: "kth010", password: "123456", displayName: "KTH User 010" }
     ];
+    const LEGACY_DEFAULT_POST_OWNER_USERNAMES = ["kth001", "kth002", "kth003"];
     const DAILY_TASKS = [
         { id: "post_once", name: "Publish One Post", desc: "Successfully publish 1 post today", reward: 20, target: 1 },
         { id: "checkin_once", name: "Daily Check-in", desc: "Tap check-in once today", reward: 10, target: 1 },
@@ -640,7 +817,6 @@
     const FLASH_DEAL_DURATION_MIN_MINUTES = 30;
     const FLASH_DEAL_DURATION_MAX_MINUTES = 120;
     let currentUser = null;
-    let bonusClaimedThisVisit = false;
     let dailyTaskState = null;
     let pendingTopupAmount = 0;
     let flashDealTicker = null;
@@ -654,6 +830,7 @@
     let lastWalletStorageKey = null;
     let lastWalletStorageSnapshot = null;
     let lastEscrowPoolSnapshot = null;
+    let currentEditingPostKey = "";
 
     function normalizeUsername(value) {
         return String(value || "").trim().toLowerCase();
@@ -662,6 +839,40 @@
     function getWalletStorageKeyByUsername(username) {
         const userKey = normalizeUsername(username) || "guest";
         return `${WALLET_BALANCE_KEY_PREFIX}_${userKey}`;
+    }
+
+    function getBonusClaimedStorageKeyByUsername(username) {
+        const userKey = normalizeUsername(username) || "guest";
+        return `${BONUS_CLAIMED_KEY_PREFIX}_${userKey}`;
+    }
+
+    function getBonusPopupSeenStorageKeyByUsername(username) {
+        const userKey = normalizeUsername(username) || "guest";
+        return `${BONUS_POPUP_SEEN_KEY_PREFIX}_${userKey}`;
+    }
+
+    function isBonusClaimedByUsername(username) {
+        const userKey = normalizeUsername(username);
+        if (!userKey) return false;
+        return localStorage.getItem(getBonusClaimedStorageKeyByUsername(userKey)) === "1";
+    }
+
+    function markBonusClaimedByUsername(username) {
+        const userKey = normalizeUsername(username);
+        if (!userKey) return;
+        localStorage.setItem(getBonusClaimedStorageKeyByUsername(userKey), "1");
+    }
+
+    function hasBonusPopupBeenShownByUsername(username) {
+        const userKey = normalizeUsername(username);
+        if (!userKey) return false;
+        return localStorage.getItem(getBonusPopupSeenStorageKeyByUsername(userKey)) === "1";
+    }
+
+    function markBonusPopupShownByUsername(username) {
+        const userKey = normalizeUsername(username);
+        if (!userKey) return;
+        localStorage.setItem(getBonusPopupSeenStorageKeyByUsername(userKey), "1");
     }
 
     function readWalletBalanceByUsername(username) {
@@ -759,6 +970,171 @@
         btn.innerText = "Login";
     };
 
+    function findPostIndexByPostKey(postKey) {
+        const targetKey = String(postKey || "");
+        if (!targetKey || !Array.isArray(window.allPosts)) return -1;
+        for (let i = 0; i < window.allPosts.length; i++) {
+            if (getPostStableKey(window.allPosts[i], i) === targetKey) return i;
+        }
+        return -1;
+    }
+
+    function parseTestPostIndexFromPostKey(postKey) {
+        const match = String(postKey || "").match(/^test_(\d+)$/);
+        if (!match) return -1;
+        const parsed = Number(match[1]);
+        return Number.isFinite(parsed) ? parsed : -1;
+    }
+
+    function findPostByPostKeyForEdit(postKey) {
+        const index = findPostIndexByPostKey(postKey);
+        if (index < 0) return null;
+        return window.allPosts[index] || null;
+    }
+
+    function setEditPostError(message) {
+        const el = document.getElementById('editPostError');
+        if (!el) return;
+        el.innerText = message || "";
+    }
+
+    function renderMyPostsGroup(listElementId, posts) {
+        const listEl = document.getElementById(listElementId);
+        if (!listEl) return;
+        if (!Array.isArray(posts) || !posts.length) {
+            listEl.innerHTML = '<div class="my-posts-empty">No posts in this group yet.</div>';
+            return;
+        }
+        listEl.innerHTML = posts.map((post) => `
+            <div class="my-post-row">
+                <button type="button" class="my-post-link" onclick='window.openMyPostFromList(${JSON.stringify(String(post.postKey || ""))})'>
+                    ${escapeHtml(post.title || "Untitled Post")}
+                </button>
+                <div class="my-post-actions">
+                    <button type="button" class="my-post-action-btn edit" onclick='window.editMyPost(${JSON.stringify(String(post.postKey || ""))})'>Edit</button>
+                    <button type="button" class="my-post-action-btn delete" onclick='window.deleteMyPost(${JSON.stringify(String(post.postKey || ""))})'>Delete</button>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    window.openMyPostFromList = function(postKey) {
+        const targetKey = String(postKey || "");
+        if (!targetKey || !Array.isArray(window.allPosts)) {
+            alert("Post not found.");
+            return;
+        }
+        let targetIndex = -1;
+        for (let i = 0; i < window.allPosts.length; i++) {
+            if (getPostStableKey(window.allPosts[i], i) === targetKey) {
+                targetIndex = i;
+                break;
+            }
+        }
+        if (targetIndex < 0) {
+            alert("This post is no longer available.");
+            return;
+        }
+        window.closeMyPostsModal();
+        window.openItemDetail(targetIndex);
+    };
+
+    window.editMyPost = function(postKey) {
+        if (!window.ensureAuthenticated("edit your post")) return;
+        const post = findPostByPostKeyForEdit(postKey);
+        if (!post || !isCurrentUserPostOwner(post)) {
+            alert("You can only edit your own post.");
+            return;
+        }
+        currentEditingPostKey = String(postKey || "");
+        setEditPostError("");
+        document.getElementById('editItemCategory').value = String(post.category || "housing");
+        document.getElementById('editItemType').value = String(post.type || "rent");
+        document.getElementById('editItemFlow').value = resolvePostFlow(post);
+        document.getElementById('editItemTitle').value = String(post.title || "");
+        document.getElementById('editItemDesc').value = String(post.desc || "");
+        document.getElementById('editItemLoc').value = String(post.locName || "");
+        document.getElementById('editItemSek').value = String(normalizeSekValue(post.sek));
+        document.getElementById('editItemKathie').value = String(Math.max(0, Math.floor(Number(post.kathie) || 0)));
+        document.getElementById('editPostModal').classList.remove('hidden');
+    };
+
+    window.closeEditPostModal = function() {
+        document.getElementById('editPostModal').classList.add('hidden');
+        currentEditingPostKey = "";
+        setEditPostError("");
+    };
+
+    window.deleteMyPost = async function(postKey) {
+        if (!window.ensureAuthenticated("delete your post")) return;
+        const postIndex = findPostIndexByPostKey(postKey);
+        if (postIndex < 0) {
+            alert("Post not found.");
+            return;
+        }
+        const post = window.allPosts[postIndex];
+        if (!post || !isCurrentUserPostOwner(post)) {
+            alert("You can only delete your own post.");
+            return;
+        }
+
+        const ok = confirm(`Delete this post?\n\n${String(post.title || "Untitled Post")}`);
+        if (!ok) return;
+
+        try {
+            if (post.id) {
+                await deleteDoc(doc(db, "posts", String(post.id)));
+                liveFirebasePosts = liveFirebasePosts.filter((row) => String(row.id || "") !== String(post.id));
+            } else {
+                const testIndex = parseTestPostIndexFromPostKey(post.postKey);
+                if (testIndex < 0 || !testData[testIndex]) {
+                    alert("This post cannot be deleted.");
+                    return;
+                }
+                testData.splice(testIndex, 1);
+            }
+
+            window.renderPosts();
+            window.openMyPostsModal();
+            alert("Post deleted.");
+        } catch (error) {
+            console.error("Failed to delete post:", error);
+            alert("Failed to delete post. Please try again.");
+        }
+    };
+
+    window.openMyPostsModal = function() {
+        if (!window.ensureAuthenticated("view your published posts")) return;
+        const myUserKey = normalizeUsername(currentUser.username);
+        const allPosts = Array.isArray(window.allPosts) ? window.allPosts : [];
+        const myNeedPosts = [];
+        const myOfferPosts = [];
+
+        allPosts.forEach((post, index) => {
+            if (normalizeUsername(post && post.ownerUsername) !== myUserKey) return;
+            const row = {
+                postKey: getPostStableKey(post, index),
+                title: String((post && post.title) || "Untitled Post")
+            };
+            if (resolvePostFlow(post) === "offer_service") {
+                myOfferPosts.push(row);
+                return;
+            }
+            myNeedPosts.push(row);
+        });
+
+        const totalCount = myNeedPosts.length + myOfferPosts.length;
+        document.getElementById('myPostsSummaryText').innerText =
+            `Total ${totalCount} post(s). Click title to open, or use Edit/Delete on the right.`;
+        renderMyPostsGroup('myNeedPostsList', myNeedPosts);
+        renderMyPostsGroup('myOfferPostsList', myOfferPosts);
+        document.getElementById('myPostsModal').classList.remove('hidden');
+    };
+
+    window.closeMyPostsModal = function() {
+        document.getElementById('myPostsModal').classList.add('hidden');
+    };
+
     window.openAuthModal = function() {
         setAuthError("");
         document.getElementById('authModal').classList.remove('hidden');
@@ -780,18 +1156,19 @@
     window.logout = function() {
         currentUser = null;
         saveAuthSession(null);
-        bonusClaimedThisVisit = false;
         setWalletBalance(readWalletBalance());
         window.updateAuthUi();
         window.updateBonusUi();
         window.initDailyTasks();
         window.renderPosts();
-        setBonusVisibility(true);
+        setBonusVisibility(false);
         window.closeDailyTasksModal();
         window.closeMessagesModal();
         window.closeDiscussModal();
         window.closeTopupModal();
         window.closePostModal();
+        window.closeMyPostsModal();
+        window.closeEditPostModal();
         window.updateMessageUi();
         refreshMessageRealtimeCache(true);
         alert("You have logged out.");
@@ -1196,7 +1573,10 @@
 
     function resolvePostOwner(post, fallbackSeed = 0) {
         const safeSeed = Math.abs(Math.floor(Number(fallbackSeed) || 0));
-        const fallbackUser = PRESET_USERS[safeSeed % PRESET_USERS.length];
+        const fallbackUsername = LEGACY_DEFAULT_POST_OWNER_USERNAMES[safeSeed % LEGACY_DEFAULT_POST_OWNER_USERNAMES.length];
+        const fallbackUser =
+            PRESET_USERS.find((u) => normalizeUsername(u.username) === normalizeUsername(fallbackUsername)) ||
+            PRESET_USERS[0];
         const ownerUsername = normalizeUsername(post && post.ownerUsername) || normalizeUsername(fallbackUser.username);
         let ownerDisplayName = String((post && post.ownerDisplayName) || "").trim();
         if (!ownerDisplayName) {
@@ -1979,6 +2359,48 @@
         window.updateMessageUi();
     };
 
+    window.clearMyProgress = function() {
+        if (!window.ensureAuthenticated("clear progress")) return;
+        const myOrders = getOrdersForCurrentUser();
+        const myThreads = getDiscussionThreadsForCurrentUser();
+        if (!myOrders.length && !myThreads.length) {
+            alert("No progress records to clear.");
+            return;
+        }
+
+        const ok = confirm("Clear all your progress records? This removes your order updates and chats.");
+        if (!ok) return;
+
+        const userKey = normalizeUsername(currentUser.username);
+
+        const nextOrders = refreshServiceOrdersState().filter((order) =>
+            order.sellerUsername !== userKey && order.buyerUsername !== userKey
+        );
+        saveServiceOrdersToStorage(nextOrders);
+        serviceOrdersState = nextOrders;
+
+        const discussionState = loadDiscussionState();
+        Object.keys(discussionState).forEach((threadKey) => {
+            const parsed = parseDiscussionThreadKey(threadKey);
+            if (parsed && parsed.participants.includes(userKey)) {
+                delete discussionState[threadKey];
+            }
+        });
+        saveDiscussionState(discussionState);
+
+        if (currentDiscussContext) {
+            const parsedCurrent = parseDiscussionThreadKey(currentDiscussContext.threadKey);
+            if (parsedCurrent && parsedCurrent.participants.includes(userKey)) {
+                window.closeDiscussModal();
+            }
+        }
+
+        markMessagesSeenNow();
+        window.renderMessages();
+        window.updateMessageUi();
+        alert("Progress cleared.");
+    };
+
     window.closeMessagesModal = function() {
         document.getElementById('messagesModal').classList.add('hidden');
     };
@@ -2190,7 +2612,18 @@
     };
 
     function isBonusClaimed() {
-        return bonusClaimedThisVisit;
+        if (!currentUser) return false;
+        return isBonusClaimedByUsername(currentUser.username);
+    }
+
+    function hasBonusPopupBeenShown() {
+        if (!currentUser) return false;
+        return hasBonusPopupBeenShownByUsername(currentUser.username);
+    }
+
+    function markBonusPopupShown() {
+        if (!currentUser) return;
+        markBonusPopupShownByUsername(currentUser.username);
     }
 
     function setBonusVisibility(isVisible) {
@@ -2201,6 +2634,12 @@
     window.updateBonusUi = function() {
         const claimBtn = document.getElementById('claimBonusBtn');
         const statusEl = document.getElementById('bonusStatus');
+        if (!currentUser) {
+            claimBtn.disabled = true;
+            claimBtn.innerText = "Login to Claim +100 KaTHie";
+            statusEl.innerText = "Status: Login Required";
+            return;
+        }
         if (isBonusClaimed()) {
             claimBtn.disabled = true;
             claimBtn.innerText = "Already Claimed";
@@ -2216,14 +2655,24 @@
         setBonusVisibility(false);
     };
 
+    function maybeShowBonusPopupAfterLogin() {
+        if (!currentUser || isBonusClaimed() || hasBonusPopupBeenShown()) {
+            setBonusVisibility(false);
+            return;
+        }
+        setBonusVisibility(true);
+        markBonusPopupShown();
+    }
+
     window.claimNewUserBonus = function() {
         if (!window.ensureAuthenticated("claim the bonus")) return;
         if (isBonusClaimed()) {
             window.updateBonusUi();
-            alert("This welcome bonus has already been claimed on this device.");
+            alert("This welcome bonus has already been claimed for this account.");
             return;
         }
-        bonusClaimedThisVisit = true;
+        markBonusClaimedByUsername(currentUser.username);
+        markBonusPopupShown();
         setWalletBalance(window.currentWalletBalance + BONUS_AMOUNT, true);
         window.updateBonusUi();
         alert("Welcome! You received 100 KaTHie.");
@@ -2231,6 +2680,11 @@
     };
 
     window.scrollToBonus = function() {
+        window.updateBonusUi();
+        if (currentUser && isBonusClaimed()) {
+            alert("This welcome bonus has already been claimed for this account.");
+            return;
+        }
         const bonusSection = document.getElementById('new-user-bonus');
         if (bonusSection.classList.contains('hidden')) {
             setBonusVisibility(true);
@@ -2247,7 +2701,7 @@
     window.initDailyTasks();
     window.updateMessageUi();
     startMessageRealtimeSync();
-    setBonusVisibility(true);
+    maybeShowBonusPopupAfterLogin();
     
     // Placeholder image used when an image URL is missing or unreachable
     const noPhotoImg = 'https://placehold.co/600x400/eeeeee/888888?text=No+Photo+Uploaded';
@@ -2267,7 +2721,7 @@
     }
 
 // ==========================================
-    // Auto-generated realistic MVP seed data (30 items) - 图片已补全
+    // Auto-generated realistic MVP seed data (30 items) - 闂備焦鎮堕崕杈ㄦ櫠閼恒儲娅犻柡宓苯鏅犻梺鑹板亹椤忣剚寰勯幇顒傤槯?
     // ==========================================
     const testData = [
         // Housing
@@ -2308,7 +2762,29 @@
         { cat: 'lifestyle', type: 'gig', title: 'Feed my cat for 2 days', locName: 'Lappis', sek: 100, kathie: 200, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400', desc: 'Need someone in Lappis to pop in once a day to feed Leo and clean his box.' },
         { cat: 'lifestyle', type: 'rent', title: 'KTH-Hallen Gym Card', locName: 'KTH-Hallen', sek: 30, kathie: 60, lat: 59.351, lng: 18.072, img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400', desc: 'Not going to the gym today, you can borrow my card for the evening.' },
         { cat: 'lifestyle', type: 'rent', title: 'Navy Blue Tie for presentation', locName: 'Main Campus', sek: 15, kathie: 30, lat: 59.347, lng: 18.073, img: 'assets/navy-blue-tie.png', desc: 'Have a formal presentation at 13:00 and forgot a tie. Just need it for an hour.' },
-        { cat: 'lifestyle', type: 'skill', title: 'Gym Spotter for Bench Press', locName: 'KTH-Hallen', sek: 0, kathie: 10, lat: 59.351, lng: 18.072, img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400', desc: 'Going for a PR today at 17:00. Need someone to spot me for 5 mins.' }
+        { cat: 'lifestyle', type: 'skill', title: 'Gym Spotter for Bench Press', locName: 'KTH-Hallen', sek: 0, kathie: 10, lat: 59.351, lng: 18.072, img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400', desc: 'Going for a PR today at 17:00. Need someone to spot me for 5 mins.' },
+
+        // Published set for kth004 - kth010 (need + offer, image library links)
+        { cat: 'study', type: 'skill', flow: 'need_service', title: 'Need help fixing unstable WiFi on my Windows laptop', locName: 'KTH Library', sek: 60, kathie: 120, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?w=400', desc: 'Campus WiFi keeps disconnecting every few minutes. Need someone to troubleshoot drivers and network settings for around 20 minutes.', ownerUsername: 'kth004', ownerDisplayName: 'KTH User 004' },
+        { cat: 'study', type: 'skill', flow: 'offer_service', title: 'Offer CV and LinkedIn review for internship applications', locName: 'Main Campus', sek: 40, kathie: 80, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400', desc: 'Can review your CV and LinkedIn profile and give practical edits for internship applications.', ownerUsername: 'kth004', ownerDisplayName: 'KTH User 004' },
+
+        { cat: 'housing', type: 'rent', flow: 'need_service', title: 'Need a drill or screwdriver to fix shelf', locName: 'Lappis', sek: 20, kathie: 40, lat: 59.366, lng: 18.058, img: 'https://images.pexels.com/photos/8923961/pexels-photo-8923961.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=1000&fm=png', desc: 'My shelf is loose and I need tools for around 30 minutes. I will return immediately after use.', ownerUsername: 'kth005', ownerDisplayName: 'KTH User 005' },
+        { cat: 'transport', type: 'skill', flow: 'offer_service', title: 'Offer bike tire pump and quick patch help', locName: 'Teknikringen', sek: 25, kathie: 50, lat: 59.349, lng: 18.070, img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400', desc: 'I have a pump and patch kit. Can help with basic bike tire inflation and quick puncture fixes.', ownerUsername: 'kth005', ownerDisplayName: 'KTH User 005' },
+
+        { cat: 'study', type: 'skill', flow: 'need_service', title: 'Need help resolving Git merge conflicts', locName: 'Main Campus', sek: 70, kathie: 140, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400', desc: 'Our group project branch is blocked by merge conflicts. Need someone experienced with Git to guide me through it.', ownerUsername: 'kth006', ownerDisplayName: 'KTH User 006' },
+        { cat: 'study', type: 'skill', flow: 'offer_service', title: 'Offer MATLAB install and license troubleshooting', locName: 'KTH Library', sek: 55, kathie: 110, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400', desc: 'Can help troubleshoot MATLAB installation and common license or activation errors on student laptops.', ownerUsername: 'kth006', ownerDisplayName: 'KTH User 006' },
+
+        { cat: 'food', type: 'gig', flow: 'need_service', title: 'Need grocery pickup from Willys because of fever', locName: 'Lappis', sek: 35, kathie: 70, lat: 59.366, lng: 18.058, img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400', desc: 'I am sick and cannot go out. Need someone to buy milk and bread from Willys and drop them off.', ownerUsername: 'kth007', ownerDisplayName: 'KTH User 007' },
+        { cat: 'transport', type: 'gig', flow: 'offer_service', title: 'Offer Arlanda ride share on Friday morning', locName: 'KTH Entrance', sek: 80, kathie: 160, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=400', desc: 'Heading to Arlanda early Friday. One seat available for ride share and split cost.', ownerUsername: 'kth007', ownerDisplayName: 'KTH User 007' },
+
+        { cat: 'study', type: 'rent', flow: 'need_service', title: 'Need a USB C hub for today presentation', locName: 'Main Campus', sek: 30, kathie: 60, lat: 59.347, lng: 18.073, img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400', desc: 'My laptop only has USB C and I need HDMI output for a presentation this afternoon.', ownerUsername: 'kth008', ownerDisplayName: 'KTH User 008' },
+        { cat: 'study', type: 'skill', flow: 'offer_service', title: 'Offer Python and Pandas debugging one hour', locName: 'KTH Library', sek: 65, kathie: 130, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400', desc: 'Can help debug Python assignments, data cleaning logic, and pandas workflows for about one hour.', ownerUsername: 'kth008', ownerDisplayName: 'KTH User 008' },
+
+        { cat: 'study', type: 'rent', flow: 'need_service', title: 'Need an HDMI or DP cable for external monitor', locName: 'Kista', sek: 25, kathie: 50, lat: 59.404, lng: 17.955, img: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400', desc: 'I need a monitor cable for an online interview setup today. Borrow for a few hours only.', ownerUsername: 'kth009', ownerDisplayName: 'KTH User 009' },
+        { cat: 'lifestyle', type: 'gig', flow: 'offer_service', title: 'Offer corridor kitchen clean up help 40 mins', locName: 'Osquldas vag', sek: 35, kathie: 70, lat: 59.349, lng: 18.068, img: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400', desc: 'Can help clean and organize a shared corridor kitchen quickly before evening.', ownerUsername: 'kth009', ownerDisplayName: 'KTH User 009' },
+
+        { cat: 'lifestyle', type: 'gig', flow: 'need_service', title: 'Need a gym spotter for bench press PR', locName: 'KTH-Hallen', sek: 20, kathie: 40, lat: 59.351, lng: 18.072, img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400', desc: 'Training tonight and need someone to spot my bench sets for safety.', ownerUsername: 'kth010', ownerDisplayName: 'KTH User 010' },
+        { cat: 'study', type: 'skill', flow: 'offer_service', title: 'Offer laptop cleanup and speed up service', locName: 'KTH Library', sek: 50, kathie: 100, lat: 59.348, lng: 18.072, img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400', desc: 'Can help clean startup apps, free disk space, and improve basic laptop performance.', ownerUsername: 'kth010', ownerDisplayName: 'KTH User 010' }
     ];
 
     let liveFirebasePosts = [];
@@ -2860,6 +3336,8 @@
         saveAuthSession(currentUser);
         setWalletBalance(readWalletBalance());
         window.updateAuthUi();
+        window.updateBonusUi();
+        maybeShowBonusPopupAfterLogin();
         window.initDailyTasks();
         window.renderPosts();
         window.updateMessageUi();
@@ -2867,6 +3345,106 @@
         document.getElementById('authForm').reset();
         window.closeAuthModal();
         alert(`Welcome, ${currentUser.displayName}!`);
+    });
+
+    document.getElementById('editPostForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!window.ensureAuthenticated("edit your post")) return;
+        setEditPostError("");
+        const submitBtn = document.getElementById('editPostSubmitBtn');
+        const originalText = submitBtn.innerText;
+
+        try {
+            if (!currentEditingPostKey) {
+                setEditPostError("No post selected for editing.");
+                return;
+            }
+            const post = findPostByPostKeyForEdit(currentEditingPostKey);
+            if (!post || !isCurrentUserPostOwner(post)) {
+                setEditPostError("You can only edit your own post.");
+                return;
+            }
+
+            const nextCategory = String(document.getElementById('editItemCategory').value || "").trim();
+            const nextType = String(document.getElementById('editItemType').value || "").trim();
+            const nextFlow = normalizeFlowValue(nextType, document.getElementById('editItemFlow').value);
+            const nextTitle = String(document.getElementById('editItemTitle').value || "").trim();
+            const nextDesc = String(document.getElementById('editItemDesc').value || "").trim();
+            const nextLocName = String(document.getElementById('editItemLoc').value || "").trim();
+            const nextSek = Math.floor(Number(document.getElementById('editItemSek').value));
+            const nextKathie = Math.floor(Number(document.getElementById('editItemKathie').value));
+
+            if (!nextTitle) {
+                setEditPostError("Title cannot be empty.");
+                return;
+            }
+            if (!nextDesc) {
+                setEditPostError("Description cannot be empty.");
+                return;
+            }
+            if (!nextLocName) {
+                setEditPostError("Location cannot be empty.");
+                return;
+            }
+            if (!Number.isFinite(nextSek) || nextSek < 1) {
+                setEditPostError("SEK price must be at least 1.");
+                return;
+            }
+            if (!Number.isFinite(nextKathie) || nextKathie < 0) {
+                setEditPostError("KaTHie price must be 0 or greater.");
+                return;
+            }
+
+            const updates = {
+                category: nextCategory,
+                type: nextType,
+                flow: nextFlow,
+                title: nextTitle,
+                desc: nextDesc,
+                locName: nextLocName,
+                sek: nextSek,
+                kathie: nextKathie
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Saving...";
+
+            if (post.id) {
+                await updateDoc(doc(db, "posts", String(post.id)), updates);
+                const liveIndex = liveFirebasePosts.findIndex((row) => String(row.id || "") === String(post.id));
+                if (liveIndex >= 0) {
+                    liveFirebasePosts[liveIndex] = { ...liveFirebasePosts[liveIndex], ...updates };
+                }
+            } else {
+                const testIndex = parseTestPostIndexFromPostKey(post.postKey);
+                if (testIndex < 0 || !testData[testIndex]) {
+                    setEditPostError("This post cannot be edited.");
+                    return;
+                }
+                testData[testIndex] = {
+                    ...testData[testIndex],
+                    cat: updates.category,
+                    type: updates.type,
+                    flow: updates.flow,
+                    title: updates.title,
+                    desc: updates.desc,
+                    locName: updates.locName,
+                    sek: updates.sek,
+                    kathie: updates.kathie
+                };
+            }
+
+            window.renderPosts();
+            window.closeEditPostModal();
+            window.openMyPostsModal();
+            alert("Post updated.");
+        } catch (error) {
+            console.error("Failed to edit post:", error);
+            setEditPostError("Failed to edit post. Please try again.");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
     });
 
     document.getElementById('postForm').addEventListener('submit', async function(e) {
@@ -2921,3 +3499,4 @@
 
 </body>
 </html>
+
